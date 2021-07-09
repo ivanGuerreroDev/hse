@@ -1,8 +1,13 @@
 import React, {Component} from 'react';
-import {TextInput, TouchableOpacity, View, StyleSheet} from 'react-native';
+import {
+  TextInput,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  Keyboard,
+} from 'react-native';
 import {Divider, Input, CheckBox, Text} from 'react-native-elements';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {AuthStackParamList} from 'components/Types/navigations';
 import {
   GetUserCommandOutput,
   InitiateAuthCommandOutput,
@@ -11,21 +16,18 @@ import {connect} from 'react-redux';
 import {SaveUser, IUser} from 'state/user/types';
 import {saveUser} from 'state/user/actions';
 import {validate, format, clean} from 'rut.js';
-// Utils
-import {getUserPool} from 'utils';
-// Wrapper
-import {getUser, signIn} from './cognito/cognito-wrapper';
-// Componentd
+
+import {getUser, signIn} from '../cognito/cognito-wrapper';
 import Layaut from 'components/Auth/Layaut';
+import {AuthStackParamList} from 'components/Types/navigations';
 
 type Props = {
-  navigation: StackNavigationProp<AuthStackParamList, 'SignIn'>;
+  navigation: StackNavigationProp<AuthStackParamList>;
   saveUser: SaveUser;
 };
 
 class SignIn extends Component<Props> {
   state = {
-    message: ' ',
     messageStyle: styles.messageHidden,
 
     rutempresa: '',
@@ -33,6 +35,7 @@ class SignIn extends Component<Props> {
     password: '',
     showpassword: true,
     remember: false,
+
     // Validation
     Errorutempresa: '',
     Errorusername: '',
@@ -70,76 +73,67 @@ class SignIn extends Component<Props> {
     if (!this.validationData()) {
       return;
     }
+    Keyboard.dismiss();
     new Promise(async (resolve: (value: IUser) => void, reject) => {
       try {
-        let userpool = await getUserPool(
+        let signin: InitiateAuthCommandOutput = await signIn(
           clean(this.state.rutempresa.slice(0, -1)),
+          this.state.username,
+          this.state.password,
         );
-        console.log(userpool.errorType);
-
-        if (!userpool.errorType) {
-          let signin: InitiateAuthCommandOutput = await signIn(
-            userpool.ClientId,
-            this.state.username,
-            this.state.password,
-          );
-
-          if (signin.ChallengeName === 'NEW_PASSWORD_REQUIRED') {
-            console.log('cambio de clave por primer inicio');
-          }
-          if (signin.ChallengeName) {
-            reject('Challenge required');
-          }
-          if (signin.AuthenticationResult?.AccessToken) {
-            let accessToken: string = signin.AuthenticationResult.AccessToken;
-            let userData: GetUserCommandOutput = await getUser(accessToken);
-            if (userData.Username) {
-              let user: IUser = {
-                Username: userData.Username,
-                UserTokens: signin.AuthenticationResult,
-              };
-              resolve(user);
-            }
-          }
-          reject('unknown');
-        } else {
-          this.setState({
-            message: 'Tus credenciales son incorrectas',
-            messageStyle: styles.messageVisible,
+        console.log(signin);
+        if (signin.ChallengeName === 'NEW_PASSWORD_REQUIRED') {
+          this.props.navigation.navigate('ForceChangePass', {
+            rutempresa: clean(this.state.rutempresa.slice(0, -1)),
+            username: this.state.username,
+            session: signin.Session,
           });
+          this.setState({password: ''});
+        }
+        /*   if (signin.ChallengeName) {
+          resolve();
+        } */
+        if (signin.AuthenticationResult?.AccessToken) {
+          let accessToken: string = signin.AuthenticationResult.AccessToken;
+          let userData: GetUserCommandOutput = await getUser(accessToken);
+          if (userData.Username) {
+            let user: IUser = {
+              Empresa: clean(this.state.rutempresa.slice(0, -1)),
+              Username: userData.Username,
+              UserTokens: signin.AuthenticationResult,
+            };
+            resolve(user);
+          }
         }
       } catch (err) {
         reject(err);
       }
     })
       .then(result => {
+        console.log(result);
+
         this.props.saveUser(result, this.state.remember);
       })
       .catch(err => {
         console.warn(JSON.stringify(err));
-        console.log(err.name);
         switch (err.name) {
           case 'NotAuthorizedException':
             this.setState({
-              message: 'Tus credenciales son incorrectas',
               messageStyle: styles.messageVisible,
             });
             break;
           case 'InvalidParameterException':
             this.setState({
-              message: 'Tus credenciales son incorrectas',
               messageStyle: styles.messageVisible,
             });
             break;
           case 'UserNotFoundException':
             this.setState({
-              message: 'Tus credenciales son incorrectas',
               messageStyle: styles.messageVisible,
             });
             break;
           default:
             this.setState({
-              message: '¡Ha ocurrido un error!',
               messageStyle: styles.messageVisible,
             });
             break;
@@ -167,14 +161,17 @@ class SignIn extends Component<Props> {
     return (
       <Layaut>
         <View style={styles.container}>
-          {<Divider color="transparent" width={20} />}
+          {<Divider color="transparent" width={40} />}
 
           <Input
             autoCapitalize="none"
-            placeholder="Rut Empresa (12345678-9)"
+            placeholder="RUT Empresa (12345678-9)"
             errorMessage={this.state.Errorutempresa}
             onSubmitEditing={() => inputPasswordRef?.focus()}
-            onChangeText={rutempresa => this.setState({rutempresa})}
+            onChangeText={rutempresa =>
+              this.setState({rutempresa, Errorutempresa: ''})
+            }
+            label={this.state.rutempresa ? 'RUT Empresa (12345678-9)' : ''}
             value={this.state.rutempresa ? format(this.state.rutempresa) : ''}
           />
           <Input
@@ -184,9 +181,11 @@ class SignIn extends Component<Props> {
             errorMessage={this.state.Errorusername}
             onSubmitEditing={() => inputPasswordRef?.focus()}
             onChangeText={username => this.setState({username})}
+            label={this.state.username ? 'Usuario' : ''}
             value={this.state.username}
           />
           <Input
+            selectionColor="red"
             ref={ref => (inputPasswordRef = ref)}
             autoCapitalize="none"
             secureTextEntry={this.state.showpassword}
@@ -195,6 +194,7 @@ class SignIn extends Component<Props> {
             onChangeText={password => this.setState({password})}
             value={this.state.password}
             rightIcon={securePassIcon}
+            label={this.state.password ? 'Contraseña' : ''}
             rightIconContainerStyle={{alignContent: 'center'}}
           />
         </View>
@@ -216,7 +216,6 @@ class SignIn extends Component<Props> {
           </TouchableOpacity>
         </View>
 
-        <Text style={this.state.messageStyle}>{this.state.message}</Text>
         <Text style={this.state.messageStyle}>Credenciales Incorrectas.</Text>
 
         <View style={styles.goContainer}>
@@ -249,6 +248,7 @@ const styles = StyleSheet.create({
   },
   messageVisible: {
     textAlign: 'center',
+    fontSize: 13,
     color: 'red',
   },
   rememberContainer: {
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
     marginLeft: 35,
     marginRight: 35,
     padding: 6,
-    paddingBottom: 50,
+    paddingBottom: 20,
   },
   buttonText: {
     justifyContent: 'center',

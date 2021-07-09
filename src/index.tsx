@@ -10,6 +10,8 @@ import {connect} from 'react-redux';
 import {RootState} from 'state/store/store';
 import {forgiveUser, saveUser} from 'state/user/actions';
 import {ForgiveUser, IUser, SaveUser} from 'state/user/types';
+// Libs
+import {getUserPool} from 'utils';
 // Views
 import Auth from 'views/Auth/index';
 import Home from 'views/Home/index';
@@ -27,11 +29,10 @@ type Props = {
 class Index extends Component<Props> {
   constructor(props: Props) {
     super(props);
-
     if (props.rememberUser && props.rememberUser.UserTokens.RefreshToken) {
       refreshToken(
-        props.rememberUser.Username,
         props.rememberUser.UserTokens.RefreshToken,
+        props.rememberUser.Empresa,
       )
         .then(result => {
           if (props.rememberUser) {

@@ -12,30 +12,31 @@ import Config from 'react-native-config';
 /* import CriptoJS from 'crypto-js'; */
 import 'react-native-get-random-values';
 import 'react-native-url-polyfill/auto';
+import {getUserPool} from 'utils';
 
 const provider = new CognitoIdentityProvider({
   region: Config.Region,
 });
 
-/* const hashSecret = (message: string) => {
-  return CriptoJS.HmacSHA256(message, Config.COGNITO_SECRET_HASH).toString(
-    CriptoJS.enc.Base64,
-  );
-}; */
-
 export const confirmResetPassword = async (
   confirmationCode: string,
+  empresa: string,
   username: string,
   password: string,
 ) => {
-  const command: ConfirmForgotPasswordCommandInput = {
-    ClientId: Config.COGNITO_CLIENT_ID,
-    ConfirmationCode: confirmationCode,
-    Username: username,
-    Password: password,
-  };
-
-  return await provider.confirmForgotPassword(command);
+  let pool = await getUserPool(empresa);
+  if (!pool.errorType) {
+    const command: ConfirmForgotPasswordCommandInput = {
+      ClientId: pool.ClientId,
+      ConfirmationCode: confirmationCode,
+      Username: username,
+      Password: password,
+    };
+    let result = await provider.confirmForgotPassword(command);
+    console.log('cambio de clave', result);
+    return result;
+  }
+  return;
 };
 
 export const getUser = async (accessToken: string) => {
@@ -46,10 +47,11 @@ export const getUser = async (accessToken: string) => {
   return await provider.getUser(command);
 };
 
-export const refreshToken = async (username: string, refreshToken: string) => {
+export const refreshToken = async (refreshToken: string, empresa: string) => {
+  let pool = await getUserPool(empresa);
   const command: InitiateAuthCommandInput = {
     AuthFlow: AuthFlowType.REFRESH_TOKEN_AUTH,
-    ClientId: Config.COGNITO_CLIENT_ID,
+    ClientId: pool.ClientId,
     AuthParameters: {
       REFRESH_TOKEN: refreshToken,
     },
@@ -58,39 +60,50 @@ export const refreshToken = async (username: string, refreshToken: string) => {
   return await provider.initiateAuth(command);
 };
 
-export const resetPassword = async (username: string) => {
-  const command: ForgotPasswordCommandInput = {
-    ClientId: Config.COGNITO_CLIENT_ID,
-    Username: username,
-  };
+export const resetPassword = async (username: string, empresa: string) => {
+  let pool = await getUserPool(empresa);
+  if (!pool.errorType) {
+    const command: ForgotPasswordCommandInput = {
+      ClientId: pool.ClientId,
+      Username: username,
+    };
 
-  return await provider.forgotPassword(command);
+    return await provider.forgotPassword(command);
+  }
+  return;
 };
 
 export const respondNewPassword = async (
+  session: string | undefined,
+  empresa: string,
   username: string,
-  password: string,
+  newpassword: string,
 ) => {
+  let pool = await getUserPool(empresa);
   const command: RespondToAuthChallengeCommandInput = {
-    ClientId: Config.COGNITO_CLIENT_ID,
     ChallengeName: ChallengeNameType.NEW_PASSWORD_REQUIRED,
+    ClientId: pool.ClientId,
+    Session: session,
     ChallengeResponses: {
       USERNAME: username,
-      PASSwORD: password,
+      NEW_PASSWORD: newpassword,
     },
   };
+  let result = await provider.respondToAuthChallenge(command);
+  console.log(result);
 
-  return await provider.respondToAuthChallenge(command);
+  return result;
 };
 
 export const signIn = async (
-  clientid: string,
+  empresa: string,
   username: string,
   password: string,
 ) => {
+  let pool = await getUserPool(empresa);
   const command: InitiateAuthCommandInput = {
     AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
-    ClientId: clientid,
+    ClientId: pool.ClientId,
     AuthParameters: {
       USERNAME: username,
       PASSWORD: password,

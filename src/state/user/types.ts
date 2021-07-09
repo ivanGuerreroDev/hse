@@ -7,6 +7,7 @@ import {
 //#region State interface
 
 export interface IUser {
+  Empresa: string;
   Username: string;
   UserTokens: AuthenticationResultType;
 }
