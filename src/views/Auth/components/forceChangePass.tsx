@@ -26,31 +26,32 @@ class forceChangePass extends Component<Props> {
     showpassword: true,
     securePass: true,
 
-    Errorpassword: '',
+    Errornewpassword: '',
+    ErrconfirmNewPass: '',
   };
 
   validationData() {
     this.setState({
-      Errorpassword: '',
+      Errornewpassword: '',
       ErrconfirmNewPass: '',
     });
     let isvalid = true;
 
     if (!this.state.newPass) {
-      this.setState({Errpassword: 'La nueva contreaseña es requrida'});
+      this.setState({Errornewpassword: 'La nueva contraseña es requrida'});
       isvalid = false;
     }
     if (this.state.newPass) {
       if (this.state.newPass.length < 6) {
         this.setState({
-          Errpassword: 'La contreaseña debe tener al menos 6 caracteres',
+          Errornewpassword: 'La contraseña debe tener al menos 6 caracteres',
         });
         isvalid = false;
       }
     }
     if (!this.state.confirmNewPass) {
       this.setState({
-        ErrconfirmNewPass: 'La confirmación de contraseña es requerida',
+        Errorpassword: 'La confirmación de contraseña es requerida',
       });
 
       isvalid = false;
@@ -144,7 +145,7 @@ class forceChangePass extends Component<Props> {
             autoCapitalize="none"
             secureTextEntry={this.state.showpassword}
             placeholder={'Contraseña'}
-            errorMessage={this.state.Errorpassword}
+            errorMessage={this.state.Errornewpassword}
             onChangeText={newPass => this.setState({newPass})}
             value={this.state.newPass}
             rightIcon={securePassIcon}
@@ -156,7 +157,7 @@ class forceChangePass extends Component<Props> {
             autoCapitalize="none"
             secureTextEntry={this.state.showpassword}
             placeholder="Confirmar Contraseña"
-            errorMessage={this.state.Errorpassword}
+            errorMessage={this.state.ErrconfirmNewPass}
             onChangeText={confirmNewPass => this.setState({confirmNewPass})}
             value={this.state.confirmNewPass}
             rightIcon={securePassIcon}

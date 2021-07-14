@@ -10,9 +10,10 @@ import {connect} from 'react-redux';
 import {RootState} from 'state/store/store';
 import {forgiveUser, saveUser} from 'state/user/actions';
 import {ForgiveUser, IUser, SaveUser} from 'state/user/types';
-// Libs
-import {getUserPool} from 'utils';
-// Views
+
+import {View, StyleSheet} from 'react-native';
+import LottieView from 'lottie-react-native';
+
 import Auth from 'views/Auth/index';
 import Home from 'views/Home/index';
 
@@ -27,9 +28,17 @@ type Props = {
 };
 
 class Index extends Component<Props> {
+  state = {
+    isLoading: true,
+    isValidate: true,
+  };
+
   constructor(props: Props) {
     super(props);
+    console.log('constructor');
+
     if (props.rememberUser && props.rememberUser.UserTokens.RefreshToken) {
+      console.log('dentro if');
       refreshToken(
         props.rememberUser.UserTokens.RefreshToken,
         props.rememberUser.Empresa,
@@ -52,9 +61,16 @@ class Index extends Component<Props> {
         })
         .catch(err => {
           props.forgiveUser();
+        })
+        .finally(() => {
+          this.setState({isValidate: false});
         });
+    } else {
+      console.log('else');
+      this.state.isValidate = false;
     }
   }
+
   render() {
     const AuthNavigator = (
       <AuthStack.Navigator headerMode="none">
@@ -69,7 +85,20 @@ class Index extends Component<Props> {
     );
 
     const Navigator = this.props.currentUser ? AppNavigator : AuthNavigator;
-    return <NavigationContainer>{Navigator}</NavigationContainer>;
+
+    if (this.state.isLoading || this.state.isValidate) {
+      return (
+        <View style={styles.lottie}>
+          <LottieView
+            style={{width: 200, height: 120}}
+            source={require('../android/app/src/main/assets/lottie_hse.json')}
+            autoPlay
+            loop={false}
+            onAnimationFinish={() => this.setState({isLoading: false})}
+          />
+        </View>
+      );
+    } else return <NavigationContainer>{Navigator}</NavigationContainer>;
   }
 }
 
@@ -86,3 +115,13 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Index);
+
+const styles = StyleSheet.create({
+  lottie: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    flex: 1,
+    padding: 20,
+    marginTop: 240,
+  },
+});

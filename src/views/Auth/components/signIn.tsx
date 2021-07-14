@@ -81,7 +81,6 @@ class SignIn extends Component<Props> {
           this.state.username,
           this.state.password,
         );
-        console.log(signin);
         if (signin.ChallengeName === 'NEW_PASSWORD_REQUIRED') {
           this.props.navigation.navigate('ForceChangePass', {
             rutempresa: clean(this.state.rutempresa.slice(0, -1)),
@@ -111,7 +110,6 @@ class SignIn extends Component<Props> {
     })
       .then(result => {
         console.log(result);
-
         this.props.saveUser(result, this.state.remember);
       })
       .catch(err => {
@@ -274,7 +272,7 @@ const styles = StyleSheet.create({
     marginLeft: 35,
     marginRight: 35,
     padding: 6,
-    paddingBottom: 20,
+    paddingBottom: 50,
   },
   buttonText: {
     justifyContent: 'center',

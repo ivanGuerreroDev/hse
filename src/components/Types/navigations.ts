@@ -1,5 +1,10 @@
 export type AuthStackParamList = {
   SignIn: undefined;
+  ForceChangePass: {
+    rutempresa: string;
+    username: string;
+    session: string | undefined;
+  };
   forgotPassword: undefined;
   ConfirmPassRecovery: {
     rutempresa: string;
@@ -7,11 +12,10 @@ export type AuthStackParamList = {
     destination: string;
   };
   EndPassRecovery: undefined;
-  ForceChangePass: {
-    rutempresa: string;
-    username: string;
-    session: string | undefined;
-  };
+};
+
+export type MainFrameStackParamList = {
+  Home: undefined;
 };
 
 export type RootAuthStackParamList = {
