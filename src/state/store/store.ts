@@ -17,6 +17,7 @@ const config = {
   storage,
   whitelist: [
     'formularios',
+    'resources',
     'user'
   ],
 };

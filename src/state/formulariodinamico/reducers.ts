@@ -1,11 +1,18 @@
-import { FORMULARIOS_ACTIONS, FormulariosAction, FormulariosState } from './types';
+import {
+  FormulariosAction,
+  FormulariosState,
+  ResourcesState,
+  ResourcesAction,
+  RESOURCES_ACTIONS,
+  FORMULARIOS_ACTIONS
+} from './types';
 
-const initialState: FormulariosState = {
+const initialFormulariosState: FormulariosState = {
   formularios: []
 };
 
 export const formulariosReducer = (
-  state: FormulariosState = initialState,
+  state: FormulariosState = initialFormulariosState,
   action: FormulariosAction
 ): FormulariosState => {
   switch (action.type) {
@@ -18,6 +25,30 @@ export const formulariosReducer = (
           formulario
         ]
       }
+
+    default:
+      return state;
+  }
+};
+
+const initialResourcesState: ResourcesState = {
+  resources: []
+};
+
+export const resourcesReducer = (
+  state: ResourcesState = initialResourcesState,
+  action: ResourcesAction
+): ResourcesState => {
+  switch (action.type) {
+    case RESOURCES_ACTIONS.SAVE_RESOURCE:
+      const { resource } = action.payload;
+
+      return {
+        resources: [
+          ...state.resources,
+          resource
+        ]
+      };
 
     default:
       return state;
