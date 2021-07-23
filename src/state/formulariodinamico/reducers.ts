@@ -4,8 +4,79 @@ import {
   ResourcesState,
   ResourcesAction,
   RESOURCES_ACTIONS,
-  FORMULARIOS_ACTIONS
+  FORMULARIOS_ACTIONS,
+  DocumentosState,
+  DocumentosAction,
+  DOCUMENTOS_ACTIONS,
+  ChangeStatusDocumentoAction,
+  DeleteDocumentoAction
 } from './types';
+
+const initialDocumentosState: DocumentosState = {
+  documentos: [],
+  editing: undefined
+}
+
+export const documentosReducer = (
+  state: DocumentosState = initialDocumentosState,
+  action: DocumentosAction
+): DocumentosState => {
+  switch (action.type) {
+    case DOCUMENTOS_ACTIONS.CANCELEDIT_DOCUMENTO:
+      return {
+        ...state,
+        editing: undefined
+      };
+
+    case DOCUMENTOS_ACTIONS.CHANGESTATUS_DOCUMENTO: {
+      let { id, status } = action.payload;
+
+      return {
+        ...state,
+        documentos: [
+          ...state.documentos
+        ]
+      };
+    }
+
+    case DOCUMENTOS_ACTIONS.DELETE_DOCUMENTO: {
+      let { id } = action.payload;
+
+      return {
+        ...state,
+        documentos: [
+          ...state.documentos
+        ]
+      };
+    }
+
+    case DOCUMENTOS_ACTIONS.LOAD_DOCUMENTO: {
+      let { documento } = action.payload;
+
+      return {
+        ...state,
+        editing: documento
+      };
+    }
+
+    case DOCUMENTOS_ACTIONS.SAVE_DOCUMENTO: {
+      if (state.editing) {
+        return {
+          documentos: [
+            ...state.documentos,
+            state.editing
+          ],
+          editing: undefined
+        };
+      }
+      else
+        return state;
+    }
+
+    default:
+      return state;
+  }
+};
 
 const initialFormulariosState: FormulariosState = {
   formularios: []

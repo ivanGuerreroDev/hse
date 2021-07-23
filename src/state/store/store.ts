@@ -16,6 +16,7 @@ const config = {
   key: 'root',
   storage,
   whitelist: [
+    'documentos',
     'formularios',
     'resources',
     'user'
