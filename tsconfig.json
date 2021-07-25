@@ -13,7 +13,8 @@
     "target": "esnext",
     "baseUrl": ".",
     "paths": {
-      "*": ["src/*"]
+      "*": ["src/*"],
+      "@Types/*":["src/components/Types/*"]
     }
   },
   "exclude": [

@@ -1,18 +1,7 @@
 import { AnyAction } from 'redux';
+import { IDocumento, IFormulario, IResource} from '@Types/formulariodinamico';
 
 //#region State Interface
-
-export interface IDocumento extends IFormulario {
-
-}
-
-export interface IFormulario {
-
-}
-
-export interface IResource {
-
-}
 
 export interface DocumentosState {
   documentos: IDocumento[],

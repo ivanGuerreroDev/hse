@@ -7,9 +7,6 @@ import {
   DeleteDocumentoAction,
   DOCUMENTOS_ACTIONS,
   FORMULARIOS_ACTIONS,
-  IDocumento,
-  IFormulario,
-  IResource,
   LoadDocumento,
   LoadDocumentoAction,
   RESOURCES_ACTIONS,
@@ -20,6 +17,7 @@ import {
   SaveResource,
   SaveResourceAction
 } from './types';
+import { IDocumento, IFormulario, IResource } from '@Types/formulariodinamico';
 
 export const cancelEditDocumento: CancelEditDocumento = (): CancelEditDocumentoAction => {
   let action: CancelEditDocumentoAction = {
