@@ -1,14 +1,10 @@
 import {
-  CancelEditDocumento,
-  CancelEditDocumentoAction,
   ChangeStatusDocumento,
   ChangeStatusDocumentoAction,
   DeleteDocumento,
   DeleteDocumentoAction,
   DOCUMENTOS_ACTIONS,
   FORMULARIOS_ACTIONS,
-  LoadDocumento,
-  LoadDocumentoAction,
   RESOURCES_ACTIONS,
   SaveDocumento,
   SaveDocumentoAction,
@@ -18,14 +14,6 @@ import {
   SaveResourceAction
 } from './types';
 import { IDocumento, IFormulario, IResource } from '@Types/formulariodinamico';
-
-export const cancelEditDocumento: CancelEditDocumento = (): CancelEditDocumentoAction => {
-  let action: CancelEditDocumentoAction = {
-    type: DOCUMENTOS_ACTIONS.CANCELEDIT_DOCUMENTO
-  };
-
-  return action;
-};
 
 export const changeStatusDocumento: ChangeStatusDocumento = (
   id: number,
@@ -55,22 +43,14 @@ export const deleteDocumento: DeleteDocumento = (
   return action;
 };
 
-export const loadDocumento: LoadDocumento = (
+export const saveDocumento: SaveDocumento = (
   documento: IDocumento
-): LoadDocumentoAction => {
-  let action: LoadDocumentoAction = {
-    type: DOCUMENTOS_ACTIONS.LOAD_DOCUMENTO,
+): SaveDocumentoAction => {
+  let action: SaveDocumentoAction = {
+    type: DOCUMENTOS_ACTIONS.SAVE_DOCUMENTO,
     payload: {
       documento
     }
-  };
-
-  return action;
-};
-
-export const saveDocumento: SaveDocumento = (): SaveDocumentoAction => {
-  let action: SaveDocumentoAction = {
-    type: DOCUMENTOS_ACTIONS.SAVE_DOCUMENTO
   };
 
   return action;

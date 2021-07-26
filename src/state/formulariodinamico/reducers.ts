@@ -9,12 +9,12 @@ import {
   DocumentosAction,
   DOCUMENTOS_ACTIONS,
   ChangeStatusDocumentoAction,
-  DeleteDocumentoAction
+  DeleteDocumentoAction,
+  SaveDocumentoAction
 } from './types';
 
 const initialDocumentosState: DocumentosState = {
-  documentos: [],
-  editing: undefined
+  documentos: []
 }
 
 export const documentosReducer = (
@@ -22,14 +22,8 @@ export const documentosReducer = (
   action: DocumentosAction
 ): DocumentosState => {
   switch (action.type) {
-    case DOCUMENTOS_ACTIONS.CANCELEDIT_DOCUMENTO:
-      return {
-        ...state,
-        editing: undefined
-      };
-
     case DOCUMENTOS_ACTIONS.CHANGESTATUS_DOCUMENTO: {
-      let { id, status } = action.payload;
+      let { id, status } = (action as ChangeStatusDocumentoAction).payload;
 
       return {
         ...state,
@@ -40,37 +34,24 @@ export const documentosReducer = (
     }
 
     case DOCUMENTOS_ACTIONS.DELETE_DOCUMENTO: {
-      let { id } = action.payload;
+      let { id } = (action as DeleteDocumentoAction).payload;
 
       return {
-        ...state,
         documentos: [
           ...state.documentos
         ]
       };
     }
 
-    case DOCUMENTOS_ACTIONS.LOAD_DOCUMENTO: {
-      let { documento } = action.payload;
+    case DOCUMENTOS_ACTIONS.SAVE_DOCUMENTO: {
+      let { documento } = (action as SaveDocumentoAction).payload;
 
       return {
-        ...state,
-        editing: documento
+        documentos: [
+          ...state.documentos,
+          documento
+        ]
       };
-    }
-
-    case DOCUMENTOS_ACTIONS.SAVE_DOCUMENTO: {
-      if (state.editing) {
-        return {
-          documentos: [
-            ...state.documentos,
-            state.editing
-          ],
-          editing: undefined
-        };
-      }
-      else
-        return state;
     }
 
     default:
