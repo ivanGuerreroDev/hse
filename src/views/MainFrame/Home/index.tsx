@@ -1,23 +1,18 @@
 import React, {Component} from 'react';
-import {
-  View,
-} from 'react-native';
+import {createStackNavigator} from '@react-navigation/stack';
+
+import menu from './components/menu';
+
+const Stack = createStackNavigator();
+
 class Home extends Component {
   render() {
     return (
-                  <View style={styles.cardFooter}>
-                  </View>
+      <Stack.Navigator headerMode="none">
+        <Stack.Screen name="Menu" component={menu} />
+      </Stack.Navigator>
     );
   }
 }
 
 export default Home;
-
-const styles = StyleSheet.create({
-  cardFooter: {
-    paddingTop: 20,
-    paddingHorizontal: 16,
-    borderTopLeftRadius: 1,
-    borderTopRightRadius: 1,
-  },
-});

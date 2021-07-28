@@ -4,7 +4,7 @@ import {Divider, Text} from 'react-native-elements';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {AuthStackParamList} from 'components/Types/navigations';
 
-import Layout from 'components/Auth/Layaut';
+import Layout from 'components/Layauts/Auth';
 
 type Props = {
   navigation: StackNavigationProp<AuthStackParamList, 'EndPassRecovery'>;

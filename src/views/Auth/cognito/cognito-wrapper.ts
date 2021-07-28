@@ -7,9 +7,9 @@ import {
   GetUserCommandInput,
   InitiateAuthCommandInput,
   RespondToAuthChallengeCommandInput,
+  AdminUserGlobalSignOutCommandInput,
 } from '@aws-sdk/client-cognito-identity-provider';
 import Config from 'react-native-config';
-/* import CriptoJS from 'crypto-js'; */
 import 'react-native-get-random-values';
 import 'react-native-url-polyfill/auto';
 import {getUserPool} from 'utils';
@@ -33,7 +33,6 @@ export const confirmResetPassword = async (
       Password: password,
     };
     let result = await provider.confirmForgotPassword(command);
-    console.log('cambio de clave', result);
     return result;
   }
   return;
@@ -111,4 +110,21 @@ export const signIn = async (
   };
 
   return await provider.initiateAuth(command);
+};
+export const signOut = async (
+  empresa: string | undefined,
+  username: string | undefined,
+) => {
+  if (empresa && username) {
+    let pool = await getUserPool(empresa);
+    const command: AdminUserGlobalSignOutCommandInput = {
+      Username: username,
+      UserPoolId: pool.UserPoolId,
+    };
+    let result = await provider.adminUserGlobalSignOut(command);
+    console.log(command);
+
+    return result;
+  }
+  return;
 };

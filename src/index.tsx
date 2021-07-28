@@ -10,12 +10,13 @@ import {connect} from 'react-redux';
 import {RootState} from 'state/store/store';
 import {forgiveUser, saveUser} from 'state/user/actions';
 import {ForgiveUser, IUser, SaveUser} from 'state/user/types';
+import Lottie from 'components/Lottie/lottie';
 
 import {View, StyleSheet} from 'react-native';
 import LottieView from 'lottie-react-native';
 
-import Auth from 'views/Auth/index';
-import Home from 'views/Home/index';
+import Auth from 'views/Auth';
+import MainFrame from 'views/MainFrame';
 
 const AuthStack = createStackNavigator<RootAuthStackParamList>();
 const MainStack = createStackNavigator<RootMainStackParamList>();
@@ -25,6 +26,7 @@ type Props = {
   rememberUser: IUser | undefined;
   forgiveUser: ForgiveUser;
   saveUser: SaveUser;
+  isLoading: boolean;
 };
 
 class Index extends Component<Props> {
@@ -35,10 +37,8 @@ class Index extends Component<Props> {
 
   constructor(props: Props) {
     super(props);
-    console.log('constructor');
 
     if (props.rememberUser && props.rememberUser.UserTokens.RefreshToken) {
-      console.log('dentro if');
       refreshToken(
         props.rememberUser.UserTokens.RefreshToken,
         props.rememberUser.Empresa,
@@ -79,14 +79,15 @@ class Index extends Component<Props> {
     );
 
     const AppNavigator = (
-      <MainStack.Navigator>
-        <MainStack.Screen name="MainFrame" component={Home} />
+      <MainStack.Navigator headerMode="none">
+        <MainStack.Screen name="MainFrame" component={MainFrame} />
       </MainStack.Navigator>
     );
+    console.log(this.props.currentUser);
 
     const Navigator = this.props.currentUser ? AppNavigator : AuthNavigator;
 
-    if (this.state.isLoading || this.state.isValidate) {
+    if (this.state.isLoading /* || this.state.isValidate */) {
       return (
         <View style={styles.lottie}>
           <LottieView

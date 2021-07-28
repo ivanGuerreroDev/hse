@@ -1,8 +1,5 @@
 import {AnyAction} from 'redux';
-import {
-  AttributeType,
-  AuthenticationResultType,
-} from '@aws-sdk/client-cognito-identity-provider';
+import {AuthenticationResultType} from '@aws-sdk/client-cognito-identity-provider';
 
 //#region State interface
 
