@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, StyleSheet, View} from 'react-native';
+import {TouchableOpacity, StyleSheet, View, ScrollView} from 'react-native';
 import {Divider, Header, Image, Input, Text} from 'react-native-elements';
 //Cognito
 import {signOut} from 'views/Auth/cognito/cognito-wrapper';
@@ -37,59 +37,62 @@ class ChangePass extends Component<Props> {
           }
           statusBarProps={{barStyle: 'light-content'}}
         />
-        <View style={styles.subContainer}>
-          <View>
-            <Text style={styles.title}>Cambia tu contraseña</Text>
-          </View>
-          <View style={styles.containerInput}>
-            <Input
-              autoCapitalize="none"
-              label={'Escribe tu contraseña actual'}
-              value={this.state.Password}
-              labelStyle={styles.inputLabel}
-              inputStyle={styles.inputStyle}
-              errorStyle={styles.inputError}
-            />
-            <Divider color="transparent" width={40} />
-            <Input
-              autoCapitalize="none"
-              label={'Escribe tu nueva contraseña'}
-              value={this.state.NewPassword}
-              labelStyle={styles.inputLabel}
-              inputStyle={styles.inputStyle}
-              errorStyle={styles.inputError}
-            />
-            <Input
-              autoCapitalize="none"
-              label={'Confirma tu nueva contraseña'}
-              value={this.state.ConfirmNewPassword}
-              labelStyle={styles.inputLabel}
-              inputStyle={styles.inputStyle}
-              errorStyle={styles.inputError}
-            />
-          </View>
-          <View style={styles.containerButtons}>
-            <View style={{...styles.buttons, backgroundColor: '#F2F2F266'}}>
-              <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                <Text style={{...styles.buttonText, color: '#FDAE01'}}>
-                  Cancelar
-                </Text>
-              </TouchableOpacity>
+        <ScrollView>
+          <View style={styles.subContainer}>
+            <View>
+              <Text style={styles.title}>Cambia tu contraseña</Text>
             </View>
-            <View
-              style={{
-                ...styles.buttons,
-                marginLeft: 30,
-                backgroundColor: '#FDAE01',
-              }}>
-              <TouchableOpacity>
-                <Text style={{...styles.buttonText, color: '#FFFFFF'}}>
-                  Guardar
-                </Text>
-              </TouchableOpacity>
+            <View style={styles.containerInput}>
+              <Input
+                autoCapitalize="none"
+                label={'Escribe tu contraseña actual'}
+                value={this.state.Password}
+                labelStyle={styles.inputLabel}
+                inputStyle={styles.inputStyle}
+                errorStyle={styles.inputError}
+              />
+              <Divider color="transparent" width={40} />
+              <Input
+                autoCapitalize="none"
+                label={'Escribe tu nueva contraseña'}
+                value={this.state.NewPassword}
+                labelStyle={styles.inputLabel}
+                inputStyle={styles.inputStyle}
+                errorStyle={styles.inputError}
+              />
+              <Input
+                autoCapitalize="none"
+                label={'Confirma tu nueva contraseña'}
+                value={this.state.ConfirmNewPassword}
+                labelStyle={styles.inputLabel}
+                inputStyle={styles.inputStyle}
+                errorStyle={styles.inputError}
+              />
+            </View>
+            <View style={styles.containerButtons}>
+              <View style={{...styles.buttons, backgroundColor: '#F2F2F266'}}>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.goBack()}>
+                  <Text style={{...styles.buttonText, color: '#FDAE01'}}>
+                    Cancelar
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  ...styles.buttons,
+                  marginLeft: 30,
+                  backgroundColor: '#FDAE01',
+                }}>
+                <TouchableOpacity>
+                  <Text style={{...styles.buttonText, color: '#FFFFFF'}}>
+                    Guardar
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
+        </ScrollView>
       </View>
     );
   }

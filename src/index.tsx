@@ -26,7 +26,6 @@ type Props = {
   rememberUser: IUser | undefined;
   forgiveUser: ForgiveUser;
   saveUser: SaveUser;
-  isLoading: boolean;
 };
 
 class Index extends Component<Props> {
