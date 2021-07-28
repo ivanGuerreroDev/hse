@@ -119,8 +119,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(Index);
 
 const styles = StyleSheet.create({
   lottie: {
-    backgroundColor: '#fff',
-    borderRadius: 20,
     flex: 1,
     padding: 20,
     marginTop: 240,
