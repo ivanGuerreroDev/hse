@@ -7,6 +7,7 @@ import {
   GetUserCommandInput,
   InitiateAuthCommandInput,
   RespondToAuthChallengeCommandInput,
+  ChangePasswordCommandInput,
   AdminUserGlobalSignOutCommandInput,
 } from '@aws-sdk/client-cognito-identity-provider';
 import Config from 'react-native-config';
@@ -17,27 +18,7 @@ import {getUserPool} from 'utils';
 const provider = new CognitoIdentityProvider({
   region: Config.Region,
 });
-
-export const confirmResetPassword = async (
-  confirmationCode: string,
-  empresa: string,
-  username: string,
-  password: string,
-) => {
-  let pool = await getUserPool(empresa);
-  if (!pool.errorType) {
-    const command: ConfirmForgotPasswordCommandInput = {
-      ClientId: pool.ClientId,
-      ConfirmationCode: confirmationCode,
-      Username: username,
-      Password: password,
-    };
-    let result = await provider.confirmForgotPassword(command);
-    return result;
-  }
-  return;
-};
-
+// Users
 export const getUser = async (accessToken: string) => {
   const command: GetUserCommandInput = {
     AccessToken: accessToken,
@@ -58,7 +39,26 @@ export const refreshToken = async (refreshToken: string, empresa: string) => {
 
   return await provider.initiateAuth(command);
 };
-
+// Password
+export const confirmResetPassword = async (
+  confirmationCode: string,
+  empresa: string,
+  username: string,
+  password: string,
+) => {
+  let pool = await getUserPool(empresa);
+  if (!pool.errorType) {
+    const command: ConfirmForgotPasswordCommandInput = {
+      ClientId: pool.ClientId,
+      ConfirmationCode: confirmationCode,
+      Username: username,
+      Password: password,
+    };
+    let result = await provider.confirmForgotPassword(command);
+    return result;
+  }
+  return;
+};
 export const resetPassword = async (username: string, empresa: string) => {
   let pool = await getUserPool(empresa);
   if (!pool.errorType) {
@@ -88,12 +88,26 @@ export const respondNewPassword = async (
       NEW_PASSWORD: newpassword,
     },
   };
-  let result = await provider.respondToAuthChallenge(command);
-  console.log(result);
 
-  return result;
+  return await provider.respondToAuthChallenge(command);
 };
 
+export const changePassword = async (
+  accessToken: string | undefined,
+  password: string,
+  newpassword: string,
+) => {
+  if (accessToken) {
+    const command: ChangePasswordCommandInput = {
+      AccessToken: accessToken,
+      PreviousPassword: password,
+      ProposedPassword: newpassword,
+    };
+    return await provider.changePassword(command);
+  }
+  return;
+};
+//Sign
 export const signIn = async (
   empresa: string,
   username: string,

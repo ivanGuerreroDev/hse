@@ -4,7 +4,7 @@ import {
   BottomTabBarOptions,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
-import {MainFrameStackParamList} from 'components/Types/navigations';
+import {MainFrameStackParamList} from 'utils/navigations';
 
 import Home from './Home';
 import Documents from './Documents';
@@ -126,6 +126,7 @@ class MainFrame extends Component {
 }
 
 const tabBarOptions: BottomTabBarOptions = {
+  keyboardHidesTabBar: true,
   activeTintColor: '#FDAE01',
   inactiveTintColor: '#000000',
   style: {

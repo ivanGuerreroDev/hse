@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
 import {View, StyleSheet} from 'react-native';
 import LottieView from 'lottie-react-native';
-
 // import isLoading from 'src'
 
 type Props = {
-  isLoading: boolean;
+  onAnimationFinish: () => void;
 };
 class Lottie extends Component<Props> {
   render() {
@@ -16,7 +15,7 @@ class Lottie extends Component<Props> {
           source={require('../../../android/app/src/main/assets/lottie_hse.json')}
           autoPlay
           loop={false}
-          onAnimationFinish={() => this.setState({isLoading: false})}
+          onAnimationFinish={this.props.onAnimationFinish}
         />
       </View>
     );
@@ -27,7 +26,6 @@ export default Lottie;
 
 const styles = StyleSheet.create({
   lottie: {
-    backgroundColor: '#fff',
     borderRadius: 20,
     flex: 1,
     padding: 20,

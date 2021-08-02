@@ -62,12 +62,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   footer: {
+    paddingTop: 10,
     alignItems: 'center',
-    flex: 0,
+    flex: 1,
+    justifyContent: 'flex-end',
   },
   footerLogo: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    /*     flexDirection: 'row', */
+    /*     justifyContent: 'flex-end', */
     width: 200,
     height: 60,
   },

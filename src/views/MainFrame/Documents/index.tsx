@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Text, View} from 'react-native';
 
-import Layout from 'components/Layauts/MainFrame';
+import Layout from 'views/MainFrame/components/layauts';
 
 class Documents extends Component {
   render() {

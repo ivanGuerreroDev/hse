@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import {TextInput, TouchableOpacity, View, StyleSheet} from 'react-native';
 import {Divider, Input, Text} from 'react-native-elements';
+//Cognito
+import {respondNewPassword} from 'views/Auth/cognito/cognito-wrapper';
+//Navigation
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {AuthStackParamList} from 'utils/navigations';
 
-import {respondNewPassword} from 'views/Auth/cognito/cognito-wrapper';
-import {AuthStackParamList} from 'components/Types/navigations';
-
-import Layout from 'components/Layauts/Auth';
+import Layout from 'views/Auth/components/layauts';
 
 type Props = {
   navigation: StackNavigationProp<AuthStackParamList, 'SignIn'>;
@@ -81,7 +82,7 @@ class forceChangePass extends Component<Props> {
         this.props.navigation.navigate('SignIn');
       })
       .catch(err => {
-        console.warn(err);
+        // console.warn(err);
         switch (err.name) {
           case 'InvalidParameterException':
             this.setState({

@@ -4,16 +4,13 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {
   RootAuthStackParamList,
   RootMainStackParamList,
-} from 'components/Types/navigations';
+} from 'utils/navigations';
 import {refreshToken} from 'views/Auth/cognito/cognito-wrapper';
 import {connect} from 'react-redux';
 import {RootState} from 'state/store/store';
 import {forgiveUser, saveUser} from 'state/user/actions';
 import {ForgiveUser, IUser, SaveUser} from 'state/user/types';
-import Lottie from 'components/Lottie/lottie';
-
-import {View, StyleSheet} from 'react-native';
-import LottieView from 'lottie-react-native';
+import Lottie from 'components/Lottie/Lottie';
 
 import Auth from 'views/Auth';
 import MainFrame from 'views/MainFrame';
@@ -52,7 +49,6 @@ class Index extends Component<Props> {
                 IdToken: result.AuthenticationResult?.IdToken,
               },
             };
-
             props.saveUser(user, true);
           } else {
             props.forgiveUser();
@@ -65,7 +61,6 @@ class Index extends Component<Props> {
           this.setState({isValidate: false});
         });
     } else {
-      console.log('else');
       this.state.isValidate = false;
     }
   }
@@ -82,21 +77,12 @@ class Index extends Component<Props> {
         <MainStack.Screen name="MainFrame" component={MainFrame} />
       </MainStack.Navigator>
     );
-    console.log(this.props.currentUser);
 
     const Navigator = this.props.currentUser ? AppNavigator : AuthNavigator;
 
-    if (this.state.isLoading /* || this.state.isValidate */) {
+    if (this.state.isLoading || this.state.isValidate) {
       return (
-        <View style={styles.lottie}>
-          <LottieView
-            style={{width: 200, height: 120}}
-            source={require('../android/app/src/main/assets/lottie_hse.json')}
-            autoPlay
-            loop={false}
-            onAnimationFinish={() => this.setState({isLoading: false})}
-          />
-        </View>
+        <Lottie onAnimationFinish={() => this.setState({isLoading: false})} />
       );
     } else return <NavigationContainer>{Navigator}</NavigationContainer>;
   }
@@ -115,11 +101,3 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Index);
-
-const styles = StyleSheet.create({
-  lottie: {
-    flex: 1,
-    padding: 20,
-    marginTop: 240,
-  },
-});

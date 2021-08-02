@@ -8,8 +8,8 @@ import {
   Image,
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {MainFrameStackParamList} from 'components/Types/navigations';
-import Layout from 'components/Layauts/MainFrame';
+import {MainFrameStackParamList} from 'utils/navigations';
+import Layout from 'views/MainFrame/components/layauts';
 import Menus from 'components/Assets/Menu/MenuBd';
 
 type Props = {
@@ -26,29 +26,35 @@ class Menu extends Component<Props> {
             keyExtractor={item => item.id}
             data={Menus}
             renderItem={({item}) => {
-              let backgroundColor = '#FFFFFF';
-              let color = '#808080';
-
+              let tintColor;
+              let opacity = 1;
+              let navigate = '';
+              if (!item.estado) {
+                tintColor = '#808080';
+                opacity = 0.7;
+              } else {
+                navigate = item.nombre;
+              }
               return (
                 <TouchableOpacity
-                  style={{
-                    ...styles.card,
-                    backgroundColor,
-                  }}
-                  onPress={() => {
-                    this.props.navigation.navigate(item.Nombre);
-                  }}>
+                  style={{...styles.card, opacity}}
+                  /* onPress={() => {
+                    item.estado &&
+                      item.navigate === 'Menu' &&
+                      this.props.navigation.navigate(item.nombre);
+                  }} */
+                >
                   <View style={styles.cardHeader}></View>
 
                   <Image
-                    style={styles.cardImage}
+                    style={{...styles.cardImage, tintColor}}
                     source={item.image}
                     resizeMode={'contain'}
                   />
 
                   <View style={styles.cardFooter}>
                     <View style={styles.aling}>
-                      <Text style={{...styles.text, color}}>{item.Nombre}</Text>
+                      <Text style={{...styles.text}}>{item.nombre}</Text>
                     </View>
                   </View>
                 </TouchableOpacity>
@@ -73,6 +79,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   card: {
+    backgroundColor: '#FFFFFF',
     flexBasis: '42%',
     marginVertical: 5,
     marginHorizontal: 5,
@@ -106,6 +113,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignContent: 'center',
     fontFamily: 'PTSans-Bold',
+    fontWeight: 'bold',
+    color: '#808080',
   },
   aling: {
     alignItems: 'center',

@@ -18,8 +18,8 @@ import {saveUser} from 'state/user/actions';
 import {validate, format, clean} from 'rut.js';
 
 import {getUser, signIn} from '../cognito/cognito-wrapper';
-import Layaut from 'components/Layauts/Auth';
-import {AuthStackParamList} from 'components/Types/navigations';
+import Layaut from 'views/Auth/components/layauts';
+import {AuthStackParamList} from 'utils/navigations';
 
 type Props = {
   navigation: StackNavigationProp<AuthStackParamList>;
@@ -109,11 +109,9 @@ class SignIn extends Component<Props> {
       }
     })
       .then(result => {
-        console.log(result);
         this.props.saveUser(result, this.state.remember);
       })
       .catch(err => {
-        console.warn(JSON.stringify(err));
         switch (err.name) {
           case 'NotAuthorizedException':
             this.setState({
@@ -249,7 +247,7 @@ const styles = StyleSheet.create({
   container: {
     marginLeft: 35,
     marginRight: 35,
-    paddingTop: 0,
+    /*     paddingTop: 0, */
   },
   messageHidden: {
     textAlign: 'center',
@@ -283,7 +281,7 @@ const styles = StyleSheet.create({
     marginLeft: 35,
     marginRight: 35,
     padding: 6,
-    paddingBottom: 50,
+    /*  paddingBottom: 50, */
   },
   buttonText: {
     justifyContent: 'center',

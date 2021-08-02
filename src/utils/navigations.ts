@@ -17,9 +17,6 @@ export type AuthStackParamList = {
 export type MainFrameStackParamList = {
   Home: undefined;
   Menu: undefined;
-  Capacitaciones: undefined;
-  Inspecciones: undefined;
-  Observaciones: undefined;
 
   Documents: undefined;
   Notifications: undefined;

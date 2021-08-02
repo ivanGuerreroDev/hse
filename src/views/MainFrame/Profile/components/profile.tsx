@@ -8,20 +8,20 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Avatar, Input} from 'react-native-elements';
-//Cognito
-import {signOut} from 'views/Auth/cognito/cognito-wrapper';
 //Redux
 import {connect} from 'react-redux';
 import {RootState} from 'state/store/store';
-import {IUser} from 'state/user/types';
+import {forgiveUser} from 'state/user/actions';
+import {IUser, ForgiveUser} from 'state/user/types';
 //Navigation
 import {StackNavigationProp} from '@react-navigation/stack';
-import {MainFrameStackParamList} from 'components/Types/navigations';
+import {MainFrameStackParamList} from 'utils/navigations';
 
-import Layout from 'components/Layauts/MainFrame';
+import Layout from 'views/MainFrame/components/layauts';
 
 type Props = {
   currentUser: IUser | undefined;
+  forgiveUser: ForgiveUser;
   navigation: StackNavigationProp<MainFrameStackParamList>;
 };
 class Profile extends Component<Props> {
@@ -36,16 +36,16 @@ class Profile extends Component<Props> {
   render() {
     return (
       <Layout>
-        <ScrollView>
-          <View style={styles.avatar}>
-            <Avatar
-              size="large"
-              source={require('components/Assets/Profile/icono_foto.png')}
-            />
-            <Text style={styles.userText}>{this.state.Nombre}</Text>
-            <Text>{this.state.Correo}</Text>
-          </View>
+        <View style={styles.avatar}>
+          <Avatar
+            size="large"
+            source={require('components/Assets/Profile/icono_foto.png')}
+          />
+          <Text style={styles.userText}>{this.state.Nombre}</Text>
+          <Text>{this.state.Correo}</Text>
+        </View>
 
+        <ScrollView>
           <View style={styles.container}>
             <View>
               <Text style={styles.title}>Información Personal</Text>
@@ -119,13 +119,7 @@ class Profile extends Component<Props> {
               </TouchableOpacity>
             </View>
             <View style={{...styles.buttons, marginTop: 10}}>
-              <TouchableOpacity
-                onPress={() =>
-                  signOut(
-                    this.props.currentUser?.Empresa,
-                    this.props.currentUser?.Username,
-                  )
-                }>
+              <TouchableOpacity onPress={() => this.props.forgiveUser()}>
                 <Text style={styles.buttonText}>Cerrar Sesión</Text>
               </TouchableOpacity>
             </View>
@@ -142,16 +136,21 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-export default connect(mapStateToProps)(Profile);
+const mapDispatchToProps = {
+  forgiveUser,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);
 
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
-    marginBottom: 96,
+    marginBottom: 250,
   },
   containerInput: {},
   avatar: {
     paddingTop: 15,
+    paddingBottom: 10,
     alignItems: 'center',
     backgroundColor: '#F2F2F266',
   },

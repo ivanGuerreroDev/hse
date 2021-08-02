@@ -3,10 +3,10 @@ import {TextInput, TouchableOpacity, View, StyleSheet} from 'react-native';
 import {Divider, Icon, Input, Text} from 'react-native-elements';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {AuthStackParamList} from 'components/Types/navigations';
+import {AuthStackParamList} from 'utils/navigations';
 import {confirmResetPassword} from 'views/Auth/cognito/cognito-wrapper';
 
-import Layout from 'components/Layauts/Auth';
+import Layout from 'views/Auth/components/layauts';
 
 type Props = {
   navigation: StackNavigationProp<AuthStackParamList, 'ConfirmPassRecovery'>;
@@ -123,8 +123,6 @@ class ConfirmPassRecovery extends Component<Props> {
   }
 
   render() {
-    console.log(this.props.route.params.rutempresa);
-
     let inputPasswordRef: TextInput | null;
 
     let securePassIcon = (
