@@ -16,6 +16,13 @@ export type AuthStackParamList = {
 
 export type MainFrameStackParamList = {
   Home: undefined;
+  Menu: undefined;
+
+  Documents: undefined;
+  Notifications: undefined;
+
+  Profile: undefined;
+  changePass: undefined;
 };
 
 export type RootAuthStackParamList = {

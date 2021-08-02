@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import {TextInput, TouchableOpacity, View, StyleSheet} from 'react-native';
 import {Divider, Input, Text} from 'react-native-elements';
+//Cognito
+import {respondNewPassword} from 'views/Auth/cognito/cognito-wrapper';
+//Navigation
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {AuthStackParamList} from 'utils/navigations';
 
-import {respondNewPassword} from 'views/Auth/cognito/cognito-wrapper';
-import {AuthStackParamList} from 'components/Types/navigations';
-
-import Layout from 'components/Auth/Layaut';
+import Layout from 'views/Auth/components/layauts';
 
 type Props = {
   navigation: StackNavigationProp<AuthStackParamList, 'SignIn'>;
@@ -81,7 +82,7 @@ class forceChangePass extends Component<Props> {
         this.props.navigation.navigate('SignIn');
       })
       .catch(err => {
-        console.warn(err);
+        // console.warn(err);
         switch (err.name) {
           case 'InvalidParameterException':
             this.setState({
@@ -151,6 +152,10 @@ class forceChangePass extends Component<Props> {
             rightIcon={securePassIcon}
             label={this.state.newPass ? 'Contraseña' : ''}
             rightIconContainerStyle={{width: 60}}
+            labelStyle={styles.inputLabel}
+            inputContainerStyle={styles.inputContainer}
+            errorStyle={styles.inputError}
+            inputStyle={styles.inputStyle}
           />
           <Input
             ref={ref => (inputPasswordRef = ref)}
@@ -163,6 +168,10 @@ class forceChangePass extends Component<Props> {
             rightIcon={securePassIcon}
             label={this.state.confirmNewPass ? 'Comfirmar Contraseña' : ''}
             rightIconContainerStyle={{width: 60}}
+            labelStyle={styles.inputLabel}
+            inputContainerStyle={styles.inputContainer}
+            errorStyle={styles.inputError}
+            inputStyle={styles.inputStyle}
           />
           <Divider color="transparent" width={30} />
           <View style={styles.goContainer}>
@@ -231,5 +240,27 @@ export const styles = StyleSheet.create({
     fontSize: 17,
     marginRight: 20,
     color: '#fff',
+  },
+  inputLabel: {
+    paddingLeft: 5,
+    fontSize: 10,
+    color: '#00000099',
+    opacity: 1,
+    fontFamily: 'Roboto-Regular',
+  },
+  inputContainer: {
+    borderWidth: 1,
+    borderColor: '#0000001F',
+    borderRadius: 4,
+    opacity: 1,
+  },
+  inputError: {
+    paddingTop: 0,
+    marginTop: 0,
+  },
+  inputStyle: {
+    paddingLeft: 15,
+    fontSize: 15,
+    fontFamily: 'Roboto-Medium',
   },
 });

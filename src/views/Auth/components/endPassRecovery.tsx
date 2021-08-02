@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import {TouchableOpacity, View, StyleSheet} from 'react-native';
 import {Divider, Text} from 'react-native-elements';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {AuthStackParamList} from 'components/Types/navigations';
+import {AuthStackParamList} from 'utils/navigations';
 
-import Layout from 'components/Auth/Layaut';
+import Layout from 'views/Auth/components/layauts';
 
 type Props = {
   navigation: StackNavigationProp<AuthStackParamList, 'EndPassRecovery'>;

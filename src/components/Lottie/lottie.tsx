@@ -1,23 +1,21 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import LottieView from 'lottie-react-native';
+// import isLoading from 'src'
 
-class Lottie extends Component {
+type Props = {
+  onAnimationFinish: () => void;
+};
+class Lottie extends Component<Props> {
   render() {
     return (
-      <View
-        style={{
-          backgroundColor: '#fff',
-          borderRadius: 20,
-          flex: 1,
-          padding: 20,
-          marginTop: 280,
-        }}>
+      <View style={styles.lottie}>
         <LottieView
           style={{width: 200, height: 120}}
-          source={require('lottie')}
+          source={require('../../../android/app/src/main/assets/lottie_hse.json')}
           autoPlay
           loop={false}
+          onAnimationFinish={this.props.onAnimationFinish}
         />
       </View>
     );
@@ -25,3 +23,12 @@ class Lottie extends Component {
 }
 
 export default Lottie;
+
+const styles = StyleSheet.create({
+  lottie: {
+    borderRadius: 20,
+    flex: 1,
+    padding: 20,
+    marginTop: 240,
+  },
+});

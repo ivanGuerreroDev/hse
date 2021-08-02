@@ -4,9 +4,9 @@ import {Divider, Input, Text} from 'react-native-elements';
 import {validate, format, clean} from 'rut.js';
 import {StackNavigationProp} from '@react-navigation/stack';
 
-import {AuthStackParamList} from 'components/Types/navigations';
+import {AuthStackParamList} from 'utils/navigations';
 import {resetPassword} from '../cognito/cognito-wrapper';
-import Layout from 'components/Auth/Layaut';
+import Layout from 'views/Auth/components/layauts';
 
 type Props = {
   navigation: StackNavigationProp<AuthStackParamList, 'forgotPassword'>;
@@ -127,6 +127,10 @@ class ForgotPassword extends Component<Props> {
             }
             label={this.state.rutempresa ? 'RUT Empresa (12345678-9)' : ''}
             value={this.state.rutempresa ? format(this.state.rutempresa) : ''}
+            labelStyle={styles.inputLabel}
+            inputContainerStyle={styles.inputContainer}
+            errorStyle={styles.inputError}
+            inputStyle={styles.inputStyle}
           />
 
           <Input
@@ -137,15 +141,17 @@ class ForgotPassword extends Component<Props> {
             onChangeText={username => this.setState({username})}
             label={this.state.username ? 'Correo electrónico' : ''}
             value={this.state.username}
+            labelStyle={styles.inputLabel}
+            inputContainerStyle={styles.inputContainer}
+            errorStyle={styles.inputError}
+            inputStyle={styles.inputStyle}
           />
           <View style={styles.goSignIn}>
             <TouchableOpacity
               onPress={() => {
                 this.props.navigation.navigate('SignIn');
               }}>
-              <Text style={styles.buttonText}>
-                Volver al inicio de sesiónl{' '}
-              </Text>
+              <Text style={styles.buttonText}>Volver al inicio de sesión</Text>
             </TouchableOpacity>
           </View>
 
@@ -153,7 +159,7 @@ class ForgotPassword extends Component<Props> {
             <TouchableOpacity
               style={styles.goButton}
               onPress={() => this.onSubmit()}>
-              <Text style={styles.goText}>Restablece tu contraseña</Text>
+              <Text style={styles.goText}>RESTABLECE TU CONTRASEÑA</Text>
             </TouchableOpacity>
           </View>
 
@@ -213,10 +219,32 @@ export const styles = StyleSheet.create({
     height: 40,
   },
   goText: {
-    fontWeight: 'bold',
+    letterSpacing: 1.25,
+    fontWeight: '700',
     alignSelf: 'center',
-    fontSize: 17,
-    marginRight: 20,
+    fontSize: 16,
     color: '#fff',
+  },
+  inputLabel: {
+    paddingLeft: 5,
+    fontSize: 10,
+    color: '#00000099',
+    opacity: 1,
+    fontFamily: 'Roboto-Regular',
+  },
+  inputContainer: {
+    borderWidth: 1,
+    borderColor: '#0000001F',
+    borderRadius: 4,
+    opacity: 1,
+  },
+  inputError: {
+    paddingTop: 0,
+    marginTop: 0,
+  },
+  inputStyle: {
+    paddingLeft: 15,
+    fontSize: 15,
+    fontFamily: 'Roboto-Medium',
   },
 });

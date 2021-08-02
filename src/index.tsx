@@ -4,18 +4,16 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {
   RootAuthStackParamList,
   RootMainStackParamList,
-} from 'components/Types/navigations';
+} from 'utils/navigations';
 import {refreshToken} from 'views/Auth/cognito/cognito-wrapper';
 import {connect} from 'react-redux';
 import {RootState} from 'state/store/store';
 import {forgiveUser, saveUser} from 'state/user/actions';
 import {ForgiveUser, IUser, SaveUser} from 'state/user/types';
+import Lottie from 'components/Lottie/Lottie';
 
-import {View, StyleSheet} from 'react-native';
-import LottieView from 'lottie-react-native';
-
-import Auth from 'views/Auth/index';
-import Home from 'views/Home/index';
+import Auth from 'views/Auth';
+import MainFrame from 'views/MainFrame';
 
 const AuthStack = createStackNavigator<RootAuthStackParamList>();
 const MainStack = createStackNavigator<RootMainStackParamList>();
@@ -35,10 +33,8 @@ class Index extends Component<Props> {
 
   constructor(props: Props) {
     super(props);
-    console.log('constructor');
 
     if (props.rememberUser && props.rememberUser.UserTokens.RefreshToken) {
-      console.log('dentro if');
       refreshToken(
         props.rememberUser.UserTokens.RefreshToken,
         props.rememberUser.Empresa,
@@ -53,7 +49,6 @@ class Index extends Component<Props> {
                 IdToken: result.AuthenticationResult?.IdToken,
               },
             };
-
             props.saveUser(user, true);
           } else {
             props.forgiveUser();
@@ -66,7 +61,6 @@ class Index extends Component<Props> {
           this.setState({isValidate: false});
         });
     } else {
-      console.log('else');
       this.state.isValidate = false;
     }
   }
@@ -79,8 +73,8 @@ class Index extends Component<Props> {
     );
 
     const AppNavigator = (
-      <MainStack.Navigator>
-        <MainStack.Screen name="MainFrame" component={Home} />
+      <MainStack.Navigator headerMode="none">
+        <MainStack.Screen name="MainFrame" component={MainFrame} />
       </MainStack.Navigator>
     );
 
@@ -88,15 +82,7 @@ class Index extends Component<Props> {
 
     if (this.state.isLoading || this.state.isValidate) {
       return (
-        <View style={styles.lottie}>
-          <LottieView
-            style={{width: 200, height: 120}}
-            source={require('../android/app/src/main/assets/lottie_hse.json')}
-            autoPlay
-            loop={false}
-            onAnimationFinish={() => this.setState({isLoading: false})}
-          />
-        </View>
+        <Lottie onAnimationFinish={() => this.setState({isLoading: false})} />
       );
     } else return <NavigationContainer>{Navigator}</NavigationContainer>;
   }
@@ -115,13 +101,3 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Index);
-
-const styles = StyleSheet.create({
-  lottie: {
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    flex: 1,
-    padding: 20,
-    marginTop: 240,
-  },
-});

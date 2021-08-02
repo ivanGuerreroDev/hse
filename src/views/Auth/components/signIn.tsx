@@ -18,8 +18,8 @@ import {saveUser} from 'state/user/actions';
 import {validate, format, clean} from 'rut.js';
 
 import {getUser, signIn} from '../cognito/cognito-wrapper';
-import Layaut from 'components/Auth/Layaut';
-import {AuthStackParamList} from 'components/Types/navigations';
+import Layaut from 'views/Auth/components/layauts';
+import {AuthStackParamList} from 'utils/navigations';
 
 type Props = {
   navigation: StackNavigationProp<AuthStackParamList>;
@@ -109,11 +109,9 @@ class SignIn extends Component<Props> {
       }
     })
       .then(result => {
-        console.log(result);
         this.props.saveUser(result, this.state.remember);
       })
       .catch(err => {
-        console.warn(JSON.stringify(err));
         switch (err.name) {
           case 'NotAuthorizedException':
             this.setState({
@@ -159,7 +157,7 @@ class SignIn extends Component<Props> {
     return (
       <Layaut>
         <View style={styles.container}>
-          {<Divider color="transparent" width={40} />}
+          <Divider color="transparent" width={40} />
 
           <Input
             autoCapitalize="none"
@@ -171,6 +169,10 @@ class SignIn extends Component<Props> {
             }
             label={this.state.rutempresa ? 'RUT Empresa (12345678-9)' : ''}
             value={this.state.rutempresa ? format(this.state.rutempresa) : ''}
+            labelStyle={styles.inputLabel}
+            inputContainerStyle={styles.inputContainer}
+            errorStyle={styles.inputError}
+            inputStyle={styles.inputStyle}
           />
           <Input
             autoCapitalize="none"
@@ -181,9 +183,12 @@ class SignIn extends Component<Props> {
             onChangeText={username => this.setState({username})}
             label={this.state.username ? 'Usuario' : ''}
             value={this.state.username}
+            labelStyle={styles.inputLabel}
+            inputContainerStyle={styles.inputContainer}
+            errorStyle={styles.inputError}
+            inputStyle={styles.inputStyle}
           />
           <Input
-            selectionColor="red"
             ref={ref => (inputPasswordRef = ref)}
             autoCapitalize="none"
             secureTextEntry={this.state.showpassword}
@@ -193,7 +198,11 @@ class SignIn extends Component<Props> {
             value={this.state.password}
             rightIcon={securePassIcon}
             label={this.state.password ? 'Contraseña' : ''}
-            rightIconContainerStyle={{alignContent: 'center'}}
+            rightIconContainerStyle={{width: 60}}
+            labelStyle={styles.inputLabel}
+            inputContainerStyle={styles.inputContainer}
+            errorStyle={styles.inputError}
+            inputStyle={styles.inputStyle}
           />
         </View>
         <View style={styles.rememberContainer}>
@@ -220,7 +229,7 @@ class SignIn extends Component<Props> {
           <TouchableOpacity
             style={styles.goButton}
             onPress={() => this.onSubmit()}>
-            <Text style={styles.goText}>Ingresar</Text>
+            <Text style={styles.goText}>INGRESAR</Text>
           </TouchableOpacity>
         </View>
       </Layaut>
@@ -238,7 +247,7 @@ const styles = StyleSheet.create({
   container: {
     marginLeft: 35,
     marginRight: 35,
-    paddingTop: 0,
+    /*     paddingTop: 0, */
   },
   messageHidden: {
     textAlign: 'center',
@@ -272,7 +281,7 @@ const styles = StyleSheet.create({
     marginLeft: 35,
     marginRight: 35,
     padding: 6,
-    paddingBottom: 50,
+    /*  paddingBottom: 50, */
   },
   buttonText: {
     justifyContent: 'center',
@@ -281,15 +290,37 @@ const styles = StyleSheet.create({
   },
   goButton: {
     backgroundColor: '#FDAE01',
-    borderRadius: 8,
+    borderRadius: 4,
     justifyContent: 'center',
     height: 40,
   },
   goText: {
-    fontWeight: 'bold',
+    letterSpacing: 1.25,
+    fontWeight: '700',
     alignSelf: 'center',
-    fontSize: 20,
-    marginRight: 20,
+    fontSize: 16,
     color: '#fff',
+  },
+  inputLabel: {
+    paddingLeft: 5,
+    fontSize: 10,
+    color: '#00000099',
+    opacity: 1,
+    fontFamily: 'Roboto-Regular',
+  },
+  inputContainer: {
+    borderWidth: 1,
+    borderColor: '#0000001F',
+    borderRadius: 4,
+    opacity: 1,
+  },
+  inputError: {
+    paddingTop: 0,
+    marginTop: 0,
+  },
+  inputStyle: {
+    paddingLeft: 15,
+    fontSize: 15,
+    fontFamily: 'Roboto-Medium',
   },
 });
