@@ -10,7 +10,7 @@ import {connect} from 'react-redux';
 import {RootState} from 'state/store/store';
 import {forgiveUser, saveUser} from 'state/user/actions';
 import {ForgiveUser, IUser, SaveUser} from 'state/user/types';
-import Lottie from 'components/Lottie/Lottie';
+import Lottie from 'components/Lottie';
 
 import Auth from 'views/Auth';
 import MainFrame from 'views/MainFrame';

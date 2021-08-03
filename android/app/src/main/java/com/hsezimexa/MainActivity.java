@@ -1,4 +1,4 @@
-package cl.innoapsion.hsezimexa;
+package cl.innoapsion.zimexa.hse;
 
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;
@@ -24,6 +24,6 @@ public class MainActivity extends ReactActivity {
 
   @Override
   protected String getMainComponentName() {
-    return "Hse Zimexa";
+    return "Zimexa HSE";
   }
 }
