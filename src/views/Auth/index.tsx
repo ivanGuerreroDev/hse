@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import SignIn from './components/signIn';
-import forgotPassword from './components/forgotPassword';
-import confirmPassRecovery from './components/confirmPassRecovery';
-import endPassRecovery from './components/endPassRecovery';
-import forceChangePass from './components/forceChangePass';
+import SignIn from './signIn';
+import forgotPassword from './forgotPassword';
+import confirmPassRecovery from './confirmPassRecovery';
+import endPassRecovery from './endPassRecovery';
+import forceChangePass from './forceChangePass';
 
 const Stack = createStackNavigator();
 

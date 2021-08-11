@@ -4,9 +4,9 @@ import {Divider, Input, Text} from 'react-native-elements';
 import {validate, format, clean} from 'rut.js';
 import {StackNavigationProp} from '@react-navigation/stack';
 
-import {AuthStackParamList} from 'utils/navigations';
-import {resetPassword} from '../cognito/cognito-wrapper';
-import Layout from 'views/Auth/components/layauts';
+import {AuthStackParamList} from 'utils/types/navigations';
+import {resetPassword} from '../../utils/cognito/cognito-wrapper';
+import Layout from 'views/Auth/layaut';
 
 type Props = {
   navigation: StackNavigationProp<AuthStackParamList, 'forgotPassword'>;

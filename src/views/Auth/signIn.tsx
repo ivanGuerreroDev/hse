@@ -17,9 +17,9 @@ import {SaveUser, IUser} from 'state/user/types';
 import {saveUser} from 'state/user/actions';
 import {validate, format, clean} from 'rut.js';
 
-import {getUser, signIn} from '../cognito/cognito-wrapper';
-import Layaut from 'views/Auth/components/layauts';
-import {AuthStackParamList} from 'utils/navigations';
+import {getUser, signIn} from '../../utils/cognito/cognito-wrapper';
+import Layaut from 'views/Auth/layaut';
+import {AuthStackParamList} from 'utils/types/navigations';
 
 type Props = {
   navigation: StackNavigationProp<AuthStackParamList>;
@@ -247,7 +247,6 @@ const styles = StyleSheet.create({
   container: {
     marginLeft: 35,
     marginRight: 35,
-    /*     paddingTop: 0, */
   },
   messageHidden: {
     textAlign: 'center',

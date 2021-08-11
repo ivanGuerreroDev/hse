@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import profile from './components/profile';
-import changePass from './components/changePass';
+import profile from './profile';
+import changePass from './changePass';
 
 const Stack = createStackNavigator();
 
