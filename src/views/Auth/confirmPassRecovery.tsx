@@ -1,23 +1,21 @@
 import React, {Component} from 'react';
 import {TextInput, TouchableOpacity, View, StyleSheet} from 'react-native';
-import {Divider, Input, Text} from 'react-native-elements';
-//Cognito
-import {respondNewPassword} from 'views/Auth/cognito/cognito-wrapper';
-//Navigation
+import {Divider, Icon, Input, Text} from 'react-native-elements';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {AuthStackParamList} from 'utils/navigations';
+import {AuthStackParamList} from 'utils/types/navigations';
+import {confirmResetPassword} from 'utils/cognito/cognito-wrapper';
 
-import Layout from 'views/Auth/components/layauts';
+import Layout from 'views/Auth/layaut';
 
 type Props = {
-  navigation: StackNavigationProp<AuthStackParamList, 'SignIn'>;
-  route: RouteProp<AuthStackParamList, 'ForceChangePass'>;
+  navigation: StackNavigationProp<AuthStackParamList, 'ConfirmPassRecovery'>;
+  route: RouteProp<AuthStackParamList, 'ConfirmPassRecovery'>;
 };
 
-class forceChangePass extends Component<Props> {
+class ConfirmPassRecovery extends Component<Props> {
   state = {
-    message1: '',
+    message1: 'El código fue enviado a:',
     message2: '',
     messageStyle: styles.messageNormal,
 
@@ -27,43 +25,47 @@ class forceChangePass extends Component<Props> {
     showpassword: true,
     securePass: true,
 
-    Errornewpassword: '',
+    ErrverifyCode: '',
+    ErrnewPass: '',
+    Errpassword: '',
     ErrconfirmNewPass: '',
   };
 
   validationData() {
     this.setState({
-      Errornewpassword: '',
+      ErrverifyCode: '',
+      ErrnewPass: '',
+      Errpassword: '',
       ErrconfirmNewPass: '',
     });
     let isvalid = true;
 
-    if (!this.state.newPass) {
-      this.setState({Errornewpassword: 'La nueva contraseña es requrida'});
+    if (!this.state.verifyCode) {
+      this.setState({ErrverifyCode: 'El código es requerido'});
       isvalid = false;
     }
-    if (this.state.newPass) {
-      if (this.state.newPass.length < 6) {
-        this.setState({
-          Errornewpassword: 'La contraseña debe tener al menos 6 caracteres',
-        });
-        isvalid = false;
-      }
+    if (!this.state.newPass) {
+      this.setState({Errpassword: 'La nueva contreaseña es requrida'});
+      isvalid = false;
+    }
+    if (this.state.newPass.length < 6) {
+      this.setState({
+        Errpassword: 'La contreaseña debe tener al menos 6 caracteres',
+      });
+      isvalid = false;
     }
     if (!this.state.confirmNewPass) {
       this.setState({
-        Errorpassword: 'La confirmación de contraseña es requerida',
+        ErrconfirmNewPass: 'La confirmación de contraseña es requerida',
       });
 
       isvalid = false;
     }
-    if (this.state.confirmNewPass) {
-      if (this.state.newPass !== this.state.confirmNewPass) {
-        this.setState({
-          ErrconfirmNewPass: 'Las contraseñas deben ser iguales',
-        });
-        isvalid = false;
-      }
+    if (this.state.newPass !== this.state.confirmNewPass) {
+      this.setState({
+        ErrconfirmNewPass: 'Las contraseñas deben ser iguales',
+      });
+      isvalid = false;
     }
     return isvalid;
   }
@@ -72,17 +74,19 @@ class forceChangePass extends Component<Props> {
     if (!this.validationData()) {
       return;
     }
-    respondNewPassword(
-      this.props.route.params.session,
+    confirmResetPassword(
+      this.state.verifyCode,
       this.props.route.params.rutempresa,
       this.props.route.params.username,
       this.state.newPass,
     )
-      .then(() => {
-        this.props.navigation.navigate('SignIn');
+      .then(result => {
+        console.log(result);
+
+        this.props.navigation.navigate('EndPassRecovery');
       })
       .catch(err => {
-        // console.warn(err);
+        console.warn(err);
         switch (err.name) {
           case 'InvalidParameterException':
             this.setState({
@@ -111,6 +115,13 @@ class forceChangePass extends Component<Props> {
       });
   }
 
+  componentDidMount() {
+    let {destination} = this.props.route.params;
+    this.setState({
+      message2: destination,
+    });
+  }
+
   render() {
     let inputPasswordRef: TextInput | null;
 
@@ -132,25 +143,37 @@ class forceChangePass extends Component<Props> {
       <Layout>
         <View style={styles.container}>
           <Divider color="transparent" width={20} />
-          <Text style={styles.title}>{'Cambia tu contraseña'}</Text>
+          <Text style={styles.title}>{'Restablece tu contraseña'}</Text>
           <Text style={styles.text}>
-            {
-              'Como es la primera vez que estás ingresando a Zimexa, es necesario que cambies tu contraseña. '
-            }
+            {'El código fue enviado al correo electrónico '}
           </Text>
 
           <Divider color="transparent" width={30} />
 
           <Input
+            autoCapitalize="none"
+            keyboardType="numeric"
+            label={this.state.verifyCode ? 'Código de Verificación' : ''}
+            placeholder={'Código de Verificación'}
+            errorMessage={this.state.ErrverifyCode}
+            onSubmitEditing={() => inputPasswordRef?.focus()}
+            onChangeText={verifyCode => this.setState({verifyCode})}
+            value={this.state.verifyCode}
+            labelStyle={styles.inputLabel}
+            inputContainerStyle={styles.inputContainer}
+            errorStyle={styles.inputError}
+            inputStyle={styles.inputStyle}
+          />
+          <Input
             ref={ref => (inputPasswordRef = ref)}
             autoCapitalize="none"
             secureTextEntry={this.state.showpassword}
-            placeholder={'Contraseña'}
-            errorMessage={this.state.Errornewpassword}
+            placeholder="Nueva Contraseña"
+            errorMessage={this.state.Errpassword}
             onChangeText={newPass => this.setState({newPass})}
             value={this.state.newPass}
             rightIcon={securePassIcon}
-            label={this.state.newPass ? 'Contraseña' : ''}
+            label={this.state.newPass ? 'Nueva Contraseña' : ''}
             rightIconContainerStyle={{width: 60}}
             labelStyle={styles.inputLabel}
             inputContainerStyle={styles.inputContainer}
@@ -166,14 +189,13 @@ class forceChangePass extends Component<Props> {
             onChangeText={confirmNewPass => this.setState({confirmNewPass})}
             value={this.state.confirmNewPass}
             rightIcon={securePassIcon}
-            label={this.state.confirmNewPass ? 'Comfirmar Contraseña' : ''}
+            label={this.state.confirmNewPass ? 'Confirmar Contraseña' : ''}
             rightIconContainerStyle={{width: 60}}
             labelStyle={styles.inputLabel}
             inputContainerStyle={styles.inputContainer}
             errorStyle={styles.inputError}
             inputStyle={styles.inputStyle}
           />
-          <Divider color="transparent" width={30} />
           <View style={styles.goContainer}>
             <TouchableOpacity
               style={styles.goButton}
@@ -181,14 +203,13 @@ class forceChangePass extends Component<Props> {
               <Text style={styles.goText}>Cambiar contraseña</Text>
             </TouchableOpacity>
           </View>
-          <Divider color="transparent" width={20} />
         </View>
       </Layout>
     );
   }
 }
 
-export default forceChangePass;
+export default ConfirmPassRecovery;
 
 export const styles = StyleSheet.create({
   container: {

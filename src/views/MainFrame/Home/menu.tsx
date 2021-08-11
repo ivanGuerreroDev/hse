@@ -8,8 +8,8 @@ import {
   Image,
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {MainFrameStackParamList} from 'utils/navigations';
-import Layout from 'views/MainFrame/components/layauts';
+import {MainFrameStackParamList} from 'utils/types/navigations';
+import Layout from 'views/MainFrame/layaut';
 import Menus from 'components/Assets/Menu/MenuBd';
 
 type Props = {
@@ -33,17 +33,20 @@ class Menu extends Component<Props> {
                 tintColor = '#808080';
                 opacity = 0.7;
               } else {
-                navigate = item.nombre;
+                navigate = item.navigate;
               }
               return (
                 <TouchableOpacity
                   style={{...styles.card, opacity}}
-                  /* onPress={() => {
+                  onPress={() => {
                     item.estado &&
-                      item.navigate === 'Menu' &&
-                      this.props.navigation.navigate(item.nombre);
-                  }} */
-                >
+                      this.props.navigation.navigate('SubMenu', {
+                        titulo: item.nombre,
+                        submenulist: item.menuLista,
+                        submenuaccordion: item.menuAcordeon,
+                        submenuCard: item.menuCard,
+                      });
+                  }}>
                   <View style={styles.cardHeader}></View>
 
                   <Image
@@ -73,7 +76,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 10,
     marginHorizontal: 1,
-    marginBottom: 96,
+    /*     marginBottom: 96, */
   },
   list: {
     alignSelf: 'center',

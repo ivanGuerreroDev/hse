@@ -4,8 +4,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {
   RootAuthStackParamList,
   RootMainStackParamList,
-} from 'utils/navigations';
-import {refreshToken} from 'views/Auth/cognito/cognito-wrapper';
+} from 'utils/types/navigations';
+import {refreshToken} from 'utils/cognito/cognito-wrapper';
 import {connect} from 'react-redux';
 import {RootState} from 'state/store/store';
 import {forgiveUser, saveUser} from 'state/user/actions';

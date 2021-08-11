@@ -15,9 +15,9 @@ import {forgiveUser} from 'state/user/actions';
 import {IUser, ForgiveUser} from 'state/user/types';
 //Navigation
 import {StackNavigationProp} from '@react-navigation/stack';
-import {MainFrameStackParamList} from 'utils/navigations';
+import {MainFrameStackParamList} from 'utils/types/navigations';
 
-import Layout from 'views/MainFrame/components/layauts';
+import Layout from 'views/MainFrame/layaut';
 
 type Props = {
   currentUser: IUser | undefined;

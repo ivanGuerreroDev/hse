@@ -4,7 +4,7 @@ import {
   BottomTabBarOptions,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
-import {MainFrameStackParamList} from 'utils/navigations';
+import {MainFrameStackParamList} from 'utils/types/navigations';
 
 import Home from './Home';
 import Documents from './Documents';

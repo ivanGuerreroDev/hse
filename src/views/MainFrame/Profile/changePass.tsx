@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {Divider, Header, Image, Input, Text, Icon} from 'react-native-elements';
 //Cognito
-import {changePassword, refreshToken} from 'views/Auth/cognito/cognito-wrapper';
+import {changePassword, refreshToken} from 'utils/cognito/cognito-wrapper';
 //Redux
 import {connect} from 'react-redux';
 import {RootState} from 'state/store/store';
@@ -17,7 +17,7 @@ import {forgiveUser, saveUser} from 'state/user/actions';
 import {ForgiveUser, IUser, SaveUser} from 'state/user/types';
 //Navigate
 import {StackNavigationProp} from '@react-navigation/stack';
-import {MainFrameStackParamList} from 'utils/navigations';
+import {MainFrameStackParamList} from 'utils/types/navigations';
 
 type Props = {
   currentUser: IUser | undefined;
