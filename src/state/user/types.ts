@@ -50,8 +50,8 @@ export type SaveUser = (user: IUser, remember: boolean) => SaveUserAction;
 //#region Action type enum
 
 export enum USER_ACTIONS {
-  FORGIVE_USER,
-  SAVE_USER,
+  FORGIVE_USER='FORGIVE_USER',
+  SAVE_USER='SAVE_USER',
 }
 
 //#endregion
