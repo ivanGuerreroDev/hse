@@ -1,5 +1,5 @@
 import { AnyAction } from 'redux';
-import { IDocumento, IFormulario, IResource} from '@Types/formulariodinamico';
+import { IDocumento, IFormulario, IResource} from 'types/formulariodinamico';
 
 //#region State Interface
 

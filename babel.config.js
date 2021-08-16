@@ -7,7 +7,7 @@ module.exports = {
         root: ['./src'],
         extensions: ['.js', '.ts', '.tsx'],
         alias: {
-          '@Types': './src/components/Types'
+          'types': './src/utils/types'
         }
       }
     ]

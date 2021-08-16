@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { ControlBridge } from 'utils/ControlBridge';
-import { ControlBridgeTreeItem } from 'utils/DocumentoFactory';
+import { ControlBridge } from 'utils/formulariodinamico/ControlBridge';
+import { ControlBridgeTreeItem } from 'utils/formulariodinamico/DocumentoFactory';
 
 type ContainerProps = {
   treeItems: ControlBridgeTreeItem[]

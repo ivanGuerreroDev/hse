@@ -1,4 +1,4 @@
-import { IControl, IDocumento, IFormulario } from '@Types/formulariodinamico';
+import { IControl, IDocumento, IFormulario } from 'types/formulariodinamico';
 import { ControlBridge } from './ControlBridge';
 
 export interface ControlBridgeTreeItem {

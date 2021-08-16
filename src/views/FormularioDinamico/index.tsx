@@ -3,10 +3,10 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { Header, Tab, Text } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp } from '@react-navigation/native';
-import { RootMainStackParamList } from '@Types/navigations';
+import { RootMainStackParamList } from 'types/navigations';
 import { connect } from 'react-redux';
 import { RootState } from 'state/store/store';
-import { ControlBridgeTreeItem, DocumentoFactory } from 'utils/DocumentoFactory';
+import { ControlBridgeTreeItem, DocumentoFactory } from 'utils/formulariodinamico/DocumentoFactory';
 import { ControlContainer } from './ControlRenderer';
 
 type Props = {

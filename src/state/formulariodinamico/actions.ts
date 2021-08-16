@@ -13,7 +13,7 @@ import {
   SaveResource,
   SaveResourceAction
 } from './types';
-import { IDocumento, IFormulario, IResource } from '@Types/formulariodinamico';
+import { IDocumento, IFormulario, IResource } from 'types/formulariodinamico';
 
 export const changeStatusDocumento: ChangeStatusDocumento = (
   id: number,

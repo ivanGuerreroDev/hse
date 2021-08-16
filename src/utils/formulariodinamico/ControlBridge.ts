@@ -1,4 +1,4 @@
-import { IControl } from '@Types/formulariodinamico';
+import { IControl } from 'types/formulariodinamico';
 import jmespath from 'jmespath';
 import { ReactElement } from 'react';
 import { Text } from 'react-native-elements';

@@ -1,3 +1,5 @@
+import { IDocumento } from 'types/formulariodinamico';
+
 export type AuthStackParamList = {
   SignIn: undefined;
   ForceChangePass: {
@@ -58,4 +60,7 @@ export type RootAuthStackParamList = {
 
 export type RootMainStackParamList = {
   MainFrame: undefined;
+  FormularioDinamico: {
+    documento: IDocumento
+  }
 };
