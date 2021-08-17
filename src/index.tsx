@@ -7,9 +7,12 @@ import {
 } from 'utils/types/navigations';
 import {refreshToken} from 'utils/cognito/cognito-wrapper';
 import {connect} from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
 import {RootState} from 'state/store/store';
 import {forgiveUser, saveUser} from 'state/user/actions';
+import { saveFormulariosAsync } from 'state/formulariodinamico/thunk';
 import {ForgiveUser, IUser, SaveUser} from 'state/user/types';
+import { SaveFormularioAsync } from 'state/formulariodinamico/types';
 import Lottie from 'components/Lottie';
 
 import Auth from 'views/Auth';
@@ -18,12 +21,18 @@ import MainFrame from 'views/MainFrame';
 const AuthStack = createStackNavigator<RootAuthStackParamList>();
 const MainStack = createStackNavigator<RootMainStackParamList>();
 
-type Props = {
+type StateProps = {
   currentUser: IUser | undefined;
   rememberUser: IUser | undefined;
+}
+
+type DispatchProps = {
   forgiveUser: ForgiveUser;
   saveUser: SaveUser;
+  saveFormulariosAsync: SaveFormularioAsync;
 };
+
+type Props = StateProps & DispatchProps;
 
 class Index extends Component<Props> {
   state = {
@@ -50,6 +59,8 @@ class Index extends Component<Props> {
               },
             };
             props.saveUser(user, true);
+
+            props.saveFormulariosAsync();
           } else {
             props.forgiveUser();
           }
@@ -88,16 +99,19 @@ class Index extends Component<Props> {
   }
 }
 
-const mapStateToProps = (state: RootState) => {
+const mapStateToProps = (state: RootState): StateProps => {
   return {
     currentUser: state.currentUser.user,
-    rememberUser: state.user.rememberUser,
+    rememberUser: state.user.rememberUser
   };
 };
 
-const mapDispatchToProps = {
-  forgiveUser,
-  saveUser,
+const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): DispatchProps => {
+  return {
+    forgiveUser: () => dispatch(forgiveUser()),
+    saveUser: (user: IUser, remember: boolean) => dispatch(saveUser(user, remember)),
+    saveFormulariosAsync: () => dispatch(saveFormulariosAsync())
+  };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Index);
+export default connect<StateProps, DispatchProps, {}, RootState>(mapStateToProps, mapDispatchToProps)(Index);

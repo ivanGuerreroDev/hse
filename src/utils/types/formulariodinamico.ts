@@ -7,8 +7,8 @@ export interface IControl extends ITaggeable {
   type: string;
   order: number;
   properties?: INameValue[];
-  outputValue: any;
-  outputMetadata: any;
+  outputValue?: any;
+  outputMetadata?: any;
   controls?: IControl[];
 }
 
