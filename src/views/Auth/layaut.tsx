@@ -1,15 +1,29 @@
 import React, {Component} from 'react';
-import {Image, View, StyleSheet, Text, ScrollView} from 'react-native';
+import {
+  Image,
+  View,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Dimensions,
+} from 'react-native';
+import {Grid, Row} from 'react-native-easy-grid';
 import {Header} from 'react-native-elements';
 import {SafeAreaView} from 'react-native-safe-area-context';
+
+const {height} = Dimensions.get('window');
+const box_count = 4;
+const box_height = height / box_count;
 
 class Layaut extends Component {
   render() {
     return (
-      <ScrollView>
+      <ScrollView style={styles.container}>
         <SafeAreaView
-          style={styles.container}
+          /* style={styles.container} */
           edges={['bottom', 'right', 'left']}>
+          {/*    <Grid>
+            <Row style={styles.container}> */}
           <Header
             containerStyle={styles.headerContainer}
             centerComponent={
@@ -20,17 +34,25 @@ class Layaut extends Component {
               />
             }
           />
-
+          {/*             </Row>
+          </Grid>
+          <Grid>
+            <Row size={50}> */}
           <View style={styles.content}>{this.props.children}</View>
-
-          <View style={styles.footer}>
-            <Text>Por</Text>
+          {/*             </Row>
+          </Grid>
+          <Grid>
+            <Row style={styles.footer}> */}
+          <View>
+            <Text style={styles.footer}>Por</Text>
             <Image
               source={require('components/Assets/Zimexa.png')}
               style={styles.footerLogo}
               resizeMode="stretch"
             />
           </View>
+          {/*     </Row>
+          </Grid> */}
         </SafeAreaView>
       </ScrollView>
     );
@@ -42,34 +64,31 @@ export default Layaut;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    /*     height: box_height, */
+    flexDirection: 'column',
+    backgroundColor: '#ffffff',
   },
   headerContainer: {
     backgroundColor: 'transparent',
-    borderBottomWidth: 0,
-    flex: 0,
     opacity: 1,
   },
   headerLogo: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 25,
     width: 220,
     height: 100,
   },
+
   content: {
-    flex: 1,
-    backgroundColor: '#fff',
+    flexDirection: 'column',
+    /*    backgroundColor: 'orange', */
   },
   footer: {
-    paddingTop: 10,
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'flex-end',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'pink',
   },
   footerLogo: {
-    /*     flexDirection: 'row', */
-    /*     justifyContent: 'flex-end', */
     width: 200,
     height: 60,
   },

@@ -10,30 +10,32 @@ type Props = {
   List: any;
 };
 
-class MenuList extends Component<Props> {
-  render() {
-    console.log(this.props.List);
-    return (
-      <View style={styles.container}>
-        {this.props.List.map((item: any, i: any) => (
-          <ListItem
-            key={i}
-            Component={TouchableScale}
-            style={styles.contentMenu}
-            onPress={() => console.log(item.navigate)}>
-            <ListItem.Content>
-              <ListItem.Title style={styles.menuTitle}>
-                {item.titulo}
-              </ListItem.Title>
-            </ListItem.Content>
-          </ListItem>
-        ))}
-      </View>
-    );
-  }
-}
+/* class MenuList extends Component<Props> { */
+const MenuList = ({List}: Props) => {
+  return (
+    <View style={styles.container}>
+      {List.map((item: any, i: any) => (
+        <ListItem
+          key={i}
+          Component={TouchableScale}
+          friction={90}
+          tension={100}
+          activeScale={0.95}
+          style={styles.contentMenu}
+          onPress={() => console.log(item.navigate)}>
+          <ListItem.Content>
+            <ListItem.Title style={styles.menuTitle}>
+              {item.titulo}
+            </ListItem.Title>
+          </ListItem.Content>
+        </ListItem>
+      ))}
+    </View>
+  );
+};
 
 export default MenuList;
+
 const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
@@ -42,9 +44,7 @@ const styles = StyleSheet.create({
   contentMenu: {
     paddingTop: 15,
     borderRadius: 5,
-    borderLeftWidth: 0.5,
-    borderRightWidth: 0.5,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.7,
     borderColor: '#0000003D',
     alignItems: 'center',
   },

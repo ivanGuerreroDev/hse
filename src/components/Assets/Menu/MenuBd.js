@@ -105,7 +105,7 @@ const Menus = [
     menuAcordeon: [
       {
         id: '1',
-        menuPadre: 'EQUIPOS O MAQUINARIAS',
+        menuPadre: 'EQUIPOS Y Herramientas',
         expand: false,
         menuhijo: [
           {
@@ -133,6 +133,40 @@ const Menus = [
       {
         id: '2',
         menuPadre: 'INSTALACIONES',
+        expand: false,
+        menuLista: [],
+        menuAcordeon: [],
+        menuhijo: [
+          {
+            id: '5',
+            subtitulo: 'TALLER DE MANTENCIÓN',
+            navigate: ''
+          },
+          {
+            id: '6',
+            subtitulo: 'OFICINAS',
+            navigate: ''
+          },
+          {
+            id: '7',
+            subtitulo: 'FAENAS DE MOTOSIERRISTAS',
+            navigate: ''
+          },
+          {
+            id: '8',
+            subtitulo: 'BODEGAS',
+            navigate: ''
+          },
+          {
+            id: '9',
+            subtitulo: 'Grua',
+            navigate: ''
+          },
+        ],
+      },
+      {
+        id: '3',
+        menuPadre: 'MAQUINARIAS Y VEHICULOS',
         expand: false,
         menuLista: [],
         menuAcordeon: [],

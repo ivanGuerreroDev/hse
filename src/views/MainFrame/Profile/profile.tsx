@@ -33,9 +33,13 @@ class Profile extends Component<Props> {
     CentroTrabajo: 'Gerencia de operaciones',
     Cargo: 'Diseñador',
   };
+  // list
   render() {
     return (
       <Layout>
+        <View style={{alignItems: 'flex-end', paddingEnd: 5}}>
+          <Text style={styles.vtext}>V. 1.3.0</Text>
+        </View>
         <View style={styles.avatar}>
           <Avatar
             size="large"
@@ -148,8 +152,14 @@ const styles = StyleSheet.create({
     marginBottom: 250,
   },
   containerInput: {},
+  vtext: {
+    fontSize: 10,
+    alignContent: 'flex-end',
+    fontWeight: 'bold',
+    fontFamily: 'Roboto',
+    color: '#00000099',
+  },
   avatar: {
-    paddingTop: 15,
     paddingBottom: 10,
     alignItems: 'center',
     backgroundColor: '#F2F2F266',

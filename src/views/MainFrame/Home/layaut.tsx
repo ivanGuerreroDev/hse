@@ -1,31 +1,10 @@
 import React, {Component} from 'react';
-import {
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  View,
-  ScrollView,
-  Keyboard,
-} from 'react-native';
-import {Divider, Header, Image, Input, Text, Icon} from 'react-native-elements';
-//Cognito
-import {changePassword, refreshToken} from 'utils/cognito/cognito-wrapper';
-//Redux
-import {connect} from 'react-redux';
-import {RootState} from 'state/store/store';
-import {forgiveUser, saveUser} from 'state/user/actions';
-import {ForgiveUser, IUser, SaveUser} from 'state/user/types';
-//Navigate
-import {RouteProp} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {MainFrameStackParamList} from 'utils/types/navigations';
-//Data
-import Menu from 'components/Assets/Menu/MenuBd';
+import {TouchableOpacity, StyleSheet, View} from 'react-native';
+import {Header, Text, Icon} from 'react-native-elements';
+
 type Props = {
   Titulo: String;
   navigation: () => void;
-  /*   route: RouteProp<MainFrameStackParamList, 'SubMenu'>;
-  navigation: StackNavigationProp<MainFrameStackParamList>; */
 };
 
 class Layaut extends Component<Props> {
@@ -69,6 +48,7 @@ const styles = StyleSheet.create({
   },
   containerHeader: {
     flexDirection: 'row',
+    alignItems: 'center',
     width: '400%',
   },
   headergoBack: {
@@ -82,7 +62,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 0.5,
   },
-
   content: {
     flex: 1,
     backgroundColor: '#F2F2F266',

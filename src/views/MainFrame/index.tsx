@@ -144,8 +144,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   icon: {
-    height: 41,
-    width: 40,
+    height: 31,
+    width: 30,
     alignItems: 'center',
   },
   viewDocs: {
@@ -155,8 +155,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   iconDocs: {
-    height: 35,
-    width: 35,
+    height: 25,
+    width: 25,
     alignItems: 'center',
   },
   viewNot: {
@@ -166,8 +166,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   iconNot: {
-    height: 35,
-    width: 35,
+    height: 25,
+    width: 25,
     alignItems: 'center',
   },
 });

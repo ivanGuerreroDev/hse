@@ -12,7 +12,11 @@ class MenuCard extends Component<Props> {
     return (
       <View style={styles.container}>
         {this.props.Card.map((item: any, i: any) => (
-          <TouchableScale key={i}>
+          <TouchableScale
+            key={i}
+            friction={90}
+            tension={100}
+            activeScale={0.95}>
             <Card>
               <View style={styles.cardcontainer}>
                 <Text style={styles.Title}>{item.tipo}</Text>

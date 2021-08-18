@@ -8,7 +8,6 @@ import {
   InitiateAuthCommandInput,
   RespondToAuthChallengeCommandInput,
   ChangePasswordCommandInput,
-  AdminUserGlobalSignOutCommandInput,
 } from '@aws-sdk/client-cognito-identity-provider';
 import Config from 'react-native-config';
 import 'react-native-get-random-values';
@@ -124,21 +123,4 @@ export const signIn = async (
   };
 
   return await provider.initiateAuth(command);
-};
-export const signOut = async (
-  empresa: string | undefined,
-  username: string | undefined,
-) => {
-  if (empresa && username) {
-    let pool = await getUserPool(empresa);
-    const command: AdminUserGlobalSignOutCommandInput = {
-      Username: username,
-      UserPoolId: pool.UserPoolId,
-    };
-    let result = await provider.adminUserGlobalSignOut(command);
-    console.log(command);
-
-    return result;
-  }
-  return;
 };

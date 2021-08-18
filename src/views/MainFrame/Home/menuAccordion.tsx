@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {ListItem} from 'react-native-elements';
 import TouchableScale from 'react-native-touchable-scale';
@@ -33,6 +33,9 @@ class MenuAccordion extends Component<Props> {
             style={styles.subcontainer}
             containerStyle={{backgroundColor: '#808080'}}
             Component={TouchableScale}
+            friction={90}
+            tension={100}
+            activeScale={0.95}
             content={
               <>
                 <ListItem.Content>
@@ -50,6 +53,9 @@ class MenuAccordion extends Component<Props> {
               <ListItem
                 key={i}
                 Component={TouchableScale}
+                friction={90}
+                tension={100}
+                activeScale={0.95}
                 style={styles.menusubcontainer}
                 onPress={() => console.log('holi')}>
                 <ListItem.Content>
