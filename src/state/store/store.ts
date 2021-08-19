@@ -1,5 +1,5 @@
-import { applyMiddleware, createStore } from 'redux';
-import { persistReducer, persistStore } from 'redux-persist';
+import {applyMiddleware, createStore} from 'redux';
+import {persistReducer, persistStore} from 'redux-persist';
 // @ts-ignore
 import createSensitiveStorage from 'redux-persist-sensitive-storage';
 import thunk from 'redux-thunk';
@@ -16,12 +16,7 @@ const storage = createSensitiveStorage({
 const config = {
   key: 'root',
   storage,
-  whitelist: [
-    'documentos',
-    'formularios',
-    'resources',
-    'user'
-  ],
+  whitelist: ['perfiles', 'documentos', 'formularios', 'resources', 'user'],
 };
 
 const persisted = persistReducer(config, reducers);

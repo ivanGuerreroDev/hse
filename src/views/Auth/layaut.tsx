@@ -43,7 +43,7 @@ class Layaut extends Component {
           </Grid>
           <Grid>
             <Row style={styles.footer}> */}
-          <View>
+          <View style={styles.footer}>
             <Text style={styles.footer}>Por</Text>
             <Image
               source={require('components/Assets/Zimexa.png')}
@@ -85,8 +85,8 @@ const styles = StyleSheet.create({
   },
   footer: {
     alignSelf: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'pink',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
   footerLogo: {
     width: 200,

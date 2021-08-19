@@ -13,28 +13,28 @@ import {connect} from 'react-redux';
 import {RootState} from 'state/store/store';
 import {forgiveUser} from 'state/user/actions';
 import {IUser, ForgiveUser} from 'state/user/types';
+import {IPerfil} from 'utils/types/perfil';
 //Navigation
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainFrameStackParamList} from 'utils/types/navigations';
 
 import Layout from 'views/MainFrame/layaut';
 
-type Props = {
+type StateProps = {
   currentUser: IUser | undefined;
-  forgiveUser: ForgiveUser;
+  perfil: IPerfil[];
   navigation: StackNavigationProp<MainFrameStackParamList>;
 };
+
+type DispatchProps = {
+  forgiveUser: ForgiveUser;
+};
+
+type Props = StateProps & DispatchProps;
 class Profile extends Component<Props> {
-  state = {
-    Rut: '18.799.725-9',
-    Nombre: 'Williams Mesina Oyarce',
-    Correo: 'wmesinaoyarce@gmail.com',
-    Empresa: 'Innoapsion Ltda',
-    CentroTrabajo: 'Gerencia de operaciones',
-    Cargo: 'Diseñador',
-  };
-  // list
   render() {
+    console.log(this.props.perfil);
+
     return (
       <Layout>
         <View style={{alignItems: 'flex-end', paddingEnd: 5}}>
@@ -45,8 +45,10 @@ class Profile extends Component<Props> {
             size="large"
             source={require('components/Assets/Profile/icono_foto.png')}
           />
-          <Text style={styles.userText}>{this.state.Nombre}</Text>
-          <Text>{this.state.Correo}</Text>
+          <Text style={styles.userText}>
+            {`${this.props.perfil[0]?.NombrePersona} ${this.props.perfil[0]?.ApellidoPaterno} ${this.props.perfil[0].ApellidoMaterno}`}
+          </Text>
+          <Text>{this.props.perfil[0]?.CorreoElectronicoPersona}</Text>
         </View>
 
         <ScrollView>
@@ -59,7 +61,7 @@ class Profile extends Component<Props> {
                 disabled
                 autoCapitalize="none"
                 label={'Nombre'}
-                value={this.state.Nombre}
+                value={`${this.props.perfil[0]?.NombrePersona} ${this.props.perfil[0]?.ApellidoPaterno} ${this.props.perfil[0].ApellidoMaterno}`}
                 labelStyle={styles.inputLabel}
                 inputStyle={styles.inputStyle}
                 errorStyle={styles.inputError}
@@ -68,7 +70,7 @@ class Profile extends Component<Props> {
                 disabled
                 autoCapitalize="none"
                 label={'RUT'}
-                value={this.state.Rut}
+                value={`${this.props.perfil[0]?.RunPersona}-${this.props.perfil[0]?.DvPersona}`}
                 labelStyle={styles.inputLabel}
                 inputStyle={styles.inputStyle}
                 errorStyle={styles.inputError}
@@ -80,7 +82,7 @@ class Profile extends Component<Props> {
                 disabled
                 autoCapitalize="none"
                 label={'EESS'}
-                value={this.state.Empresa}
+                value={this.props.perfil[0]?.NombreEmpresa}
                 labelStyle={styles.inputLabel}
                 inputStyle={styles.inputStyle}
                 errorStyle={styles.inputError}
@@ -88,8 +90,8 @@ class Profile extends Component<Props> {
               <Input
                 disabled
                 autoCapitalize="none"
-                label={'Centro de trabajo'}
-                value={this.state.CentroTrabajo}
+                label={this.props.perfil[0]?.Mascara}
+                value={this.props.perfil[0]?.NombreNV3}
                 labelStyle={styles.inputLabel}
                 inputStyle={styles.inputStyle}
                 errorStyle={styles.inputError}
@@ -98,7 +100,7 @@ class Profile extends Component<Props> {
                 disabled
                 autoCapitalize="none"
                 label={'Cargo'}
-                value={this.state.Cargo}
+                value={this.props.perfil[0]?.NombreCargo}
                 labelStyle={styles.inputLabel}
                 inputStyle={styles.inputStyle}
                 errorStyle={styles.inputError}
@@ -110,7 +112,7 @@ class Profile extends Component<Props> {
                 disabled
                 autoCapitalize="none"
                 label={'Correo Electronico'}
-                value={this.state.Correo}
+                value={this.props.perfil[0]?.CorreoElectronicoPersona}
                 labelStyle={styles.inputLabel}
                 inputStyle={styles.inputStyle}
                 errorStyle={styles.inputError}
@@ -137,6 +139,7 @@ class Profile extends Component<Props> {
 const mapStateToProps = (state: RootState) => {
   return {
     currentUser: state.currentUser.user,
+    perfil: state.perfiles.perfiles,
   };
 };
 
