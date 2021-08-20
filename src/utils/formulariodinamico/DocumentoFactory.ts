@@ -1,71 +1,48 @@
-import { IControl, IDocumento, IFormulario } from 'types/formulariodinamico';
-import { ControlBridge } from './ControlBridge';
+import _ from 'lodash'
+import { generateUUID4 } from 'utils/rng';
 
-export interface ControlBridgeTreeItem {
-  controlBridge: ControlBridge,
-  childrens: ControlBridgeTreeItem[]
-}
+import { ControlBridge } from './ControlBridge';
+import { IControl, IDocumento, IFormulario } from 'types/formulariodinamico';
+import { OutputValueChangeCallBack } from 'types/documentofactory';
 
 export class DocumentoFactory {
   static createFromFormulario(formulario: IFormulario): IDocumento {
-    return {
+    return _.cloneDeep({
       ...formulario,
-      _formId: '',
+      _id: generateUUID4(),
+      _formId: formulario._id,
       sentDate: { $date: '' },
       geolocation: undefined,
       profile: undefined,
       user: {},
       device: {}
-    }
+    });
   }
 
-  private controlRegistry: {order: number, parentPath: string, path: string, bridge: ControlBridge}[] = [];
+  private bridgeList: ControlBridge[] = [];
+
+  onOutputValueChange?: OutputValueChangeCallBack;
 
   constructor(private documento: IDocumento) {
     const redundantRegister = (parentPath: string, controls: IControl[]) => {
       controls.sort((a, b) => a.order - b.order).forEach(control => {
         const path: string = parentPath + control.order;
-        const bridge: ControlBridge = this.createTypeBridge(control, path, value => console.log('hola'));
+        let bridge: ControlBridge = new ControlBridge(this, control, path);
+        bridge.onOutputValueChange = this.onOutputValueChange;
 
-        this.controlRegistry.push({order: control.order, parentPath, path, bridge});
+        this.bridgeList.push(bridge);
 
-        if (control.controls)
-          redundantRegister(path + '.', control.controls);
+        control.controls && redundantRegister(`${path}.`, control.controls);
       });
     }
     redundantRegister('', documento.pages);
   }
 
   get ControlBridgeList(): ControlBridge[] {
-    return this.controlRegistry.map(item => item.bridge);
-  }
-
-  get ControlBridgeTree(): ControlBridgeTreeItem[] {
-    type FControlBridgeTree = (parentPath: string) => ControlBridgeTreeItem[]
-    const redudantTreeBuilder: FControlBridgeTree = (parentPath: string) => {
-      return this.controlRegistry
-        .filter(item => item.parentPath === parentPath)
-        .sort((a, b) => a.order - b.order)
-        .map(item => {
-          return {
-            controlBridge: item.bridge,
-            childrens: redudantTreeBuilder(item.path + '.')
-          };
-        });
-    };
-
-    return redudantTreeBuilder('');
+    return this.bridgeList;
   }
 
   get Documento(): IDocumento {
     return this.documento;
-  }
-
-  private createTypeBridge(control: IControl, path: string, onOutputValueChange?: (outputValue: any) => void): ControlBridge {
-    let TypeBridge = ControlBridge;
-    switch (control.type) {
-      default: break;
-    }
-    return new TypeBridge(control, path, onOutputValueChange);
   }
 }

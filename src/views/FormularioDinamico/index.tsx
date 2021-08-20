@@ -2,57 +2,101 @@ import React, { Component } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Header, Tab, Text } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { TabItem } from './TabItemComponent';
+import ControlContainer from './ControlContainer';
+
 import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { RootMainStackParamList } from 'types/navigations';
+
 import { connect } from 'react-redux';
 import { RootState } from 'state/store/store';
-import { ControlBridgeTreeItem, DocumentoFactory } from 'utils/formulariodinamico/DocumentoFactory';
-import { ControlContainer } from './ControlRenderer';
+import { saveDocumento } from 'state/formulariodinamico/actions';
+import { SaveDocumento } from 'state/formulariodinamico/types';
 
-type Props = {
-  route: RouteProp<RootMainStackParamList, 'FormularioDinamico'>;
+import { ControlBridge } from 'utils/formulariodinamico/ControlBridge';
+import { DocumentoFactory } from 'utils/formulariodinamico/DocumentoFactory';
+import { OutputValueChangeCallBack, OutputValueChangedEvent } from 'types/documentofactory';
+
+type State = {
+  tabIndex: number,
+  updated: boolean
+};
+
+type DispatchProps = {
+  saveDocumento: SaveDocumento;
 }
 
-class FormularioDinamico extends Component<Props> {
+type NavigationProps = {
+  navigation: StackNavigationProp<RootMainStackParamList, 'FormularioDinamico'>;
+  route: RouteProp<RootMainStackParamList, 'FormularioDinamico'>;
+};
+
+type Props = DispatchProps & NavigationProps;
+
+class FormularioDinamico extends Component<Props, State> {
   private documentoFactory: DocumentoFactory;
+  private handleOutputValueChange: OutputValueChangeCallBack = (event: OutputValueChangedEvent) => {
+    this.props.saveDocumento(this.documentoFactory.Documento);
+    this.setState({updated: true});
+  };
 
   state = {
-    tabIndex: 0
+    tabIndex: 0,
+    updated: false
   };
 
   constructor(props: Props) {
     super(props);
 
-    this.documentoFactory = new DocumentoFactory(props.route.params.documento);
+    const { documento } = props.route.params;
+
+    this.documentoFactory = new DocumentoFactory(documento);
+    this.documentoFactory.onOutputValueChange = this.handleOutputValueChange;
   }
 
   render() {
-    const tabItems = this.documentoFactory.ControlBridgeTree.map((bridge: ControlBridgeTreeItem) =>
-      <Tab.Item key={`control:${bridge.controlBridge.Path}`} title={bridge.controlBridge.property('title')}/>
+    const { ControlBridgeList, Documento } = this.documentoFactory;
+
+    const getPagesBridge = (): ControlBridge[] => {
+      return ControlBridgeList
+        .filter(controlBridge => controlBridge.Control.type === 'Page')
+        .sort((a, b) => a.Control.order - b.Control.order)
+    };
+
+    const TabItems = getPagesBridge().map((pageBridge, index) =>
+      <TabItem key={index} title={pageBridge.property('title')}/>
     );
 
     return (
       <SafeAreaView style={styles.safeContainer}>
         <Header backgroundColor='#FDAE01' statusBarProps={{backgroundColor: '#FDAE01'}}
-          centerComponent={<Text>{this.documentoFactory.Documento.title}</Text>}
-        />
+        centerContainerStyle={{flex: 10}} containerStyle={{borderBottomWidth: 0}}
+        centerComponent={<Text style={styles.centerTitle}>{Documento.title}</Text>}/>
+
         <View style={styles.tabsBar}>
           <Tab value={this.state.tabIndex} onChange={tabIndex => this.setState({tabIndex})}>
-            {tabItems}
+            {TabItems}
           </Tab>
         </View>
+
         <ScrollView style={styles.controlsContent}>
-          <ControlContainer treeItems={this.documentoFactory.ControlBridgeTree[this.state.tabIndex].childrens}/>
+          <ControlContainer
+            controlBridges={ControlBridgeList}
+            path={getPagesBridge()[this.state.tabIndex].Path}
+            navigation={this.props.navigation}/>
         </ScrollView>
-        <View style={styles.footerBar}>
-          <Text>hola</Text>
-        </View>
       </SafeAreaView>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  centerTitle: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
   safeContainer: {
     flex: 1
   },
@@ -60,16 +104,13 @@ const styles = StyleSheet.create({
     flex: 0,
   },
   controlsContent: {
-    flex: 1
-  },
-  footerBar: {
-    backgroundColor: 'green',
-    flex: 0
+    flex: 1,
+    paddingHorizontal: 10
   }
 });
 
-const mapStateToProps = (state: RootState) => {
-  return {};
+const mapDispatchToProps: DispatchProps = {
+  saveDocumento
 };
 
-export default connect(mapStateToProps, null)(FormularioDinamico);
+export default connect<{}, DispatchProps, {}, RootState>(null, mapDispatchToProps)(FormularioDinamico);

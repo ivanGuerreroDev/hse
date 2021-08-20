@@ -1,10 +1,11 @@
+import { ControlType } from './controltypes';
 export interface ITaggeable {
   keywords?: INameValue[];
   tags?: string[];
 }
 
 export interface IControl extends ITaggeable {
-  type: string;
+  type: ControlType;
   order: number;
   properties?: INameValue[];
   outputValue?: any;
