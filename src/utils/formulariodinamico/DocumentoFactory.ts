@@ -3,7 +3,7 @@ import { generateUUID4 } from 'utils/rng';
 
 import { ControlBridge } from './ControlBridge';
 import { IControl, IDocumento, IFormulario } from 'types/formulariodinamico';
-import { OutputValueChangeCallBack } from 'types/documentofactory';
+import { OutputValueChangeCallBack, OutputValueChangedEvent } from 'types/documentofactory';
 
 export class DocumentoFactory {
   static createFromFormulario(formulario: IFormulario): IDocumento {
@@ -20,6 +20,9 @@ export class DocumentoFactory {
   }
 
   private bridgeList: ControlBridge[] = [];
+  private outputValueChangeCallBack: OutputValueChangeCallBack = (event: OutputValueChangedEvent) => {
+    this.onOutputValueChange?.(event);
+  };
 
   onOutputValueChange?: OutputValueChangeCallBack;
 
@@ -28,7 +31,7 @@ export class DocumentoFactory {
       controls.sort((a, b) => a.order - b.order).forEach(control => {
         const path: string = parentPath + control.order;
         let bridge: ControlBridge = new ControlBridge(this, control, path);
-        bridge.onOutputValueChange = this.onOutputValueChange;
+        bridge.onOutputValueChange = this.outputValueChangeCallBack;
 
         this.bridgeList.push(bridge);
 

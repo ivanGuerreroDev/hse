@@ -6,7 +6,7 @@ import { RootMainStackParamList } from 'types/navigations';
 
 import { ControlBridge } from 'utils/formulariodinamico/ControlBridge';
 
-type Props = {
+export type Props = {
   controlBridge: ControlBridge;
   navigation: StackNavigationProp<RootMainStackParamList, 'FormularioDinamico'>;
 };

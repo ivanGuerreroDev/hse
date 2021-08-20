@@ -20,7 +20,7 @@ import { OutputValueChangeCallBack, OutputValueChangedEvent } from 'types/docume
 
 type State = {
   tabIndex: number,
-  updated: boolean
+  thisisonlyforforcerender: any
 };
 
 type DispatchProps = {
@@ -38,12 +38,12 @@ class FormularioDinamico extends Component<Props, State> {
   private documentoFactory: DocumentoFactory;
   private handleOutputValueChange: OutputValueChangeCallBack = (event: OutputValueChangedEvent) => {
     this.props.saveDocumento(this.documentoFactory.Documento);
-    this.setState({updated: true});
+    this.setState({thisisonlyforforcerender: undefined});
   };
 
   state = {
     tabIndex: 0,
-    updated: false
+    thisisonlyforforcerender: undefined
   };
 
   constructor(props: Props) {
