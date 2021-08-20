@@ -7,6 +7,7 @@ import { RootMainStackParamList } from 'types/navigations';
 
 import { ControlBridge } from 'utils/formulariodinamico/ControlBridge';
 
+import CheckControl from './Controls/CheckControl';
 import TextControl from './Controls/TextControl';
 
 type MapControlBridgesProps = {
@@ -52,6 +53,7 @@ type ControlComponentSelectType = (controlBridge: ControlBridge) => typeof Contr
 const controlComponent: ControlComponentSelectType = (controlBridge: ControlBridge) => {
   let controlType = ControlComponent;
   switch (controlBridge.Control.type) {
+    case 'Check': controlType = CheckControl; break;
     case 'Text': controlType = TextControl; break;
     default: break;
   }
