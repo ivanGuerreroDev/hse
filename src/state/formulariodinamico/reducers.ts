@@ -48,7 +48,7 @@ export const documentosReducer = (
 
       return {
         documentos: [
-          ...state.documentos,
+          ...state.documentos.filter(item => item._id !== documento._id),
           documento
         ]
       };
@@ -73,7 +73,7 @@ export const formulariosReducer = (
 
       return {
         formularios: [
-          ...state.formularios,
+          ...state.formularios.filter(item => item._id !== formulario._id),
           formulario
         ]
       }
