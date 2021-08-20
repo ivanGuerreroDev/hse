@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { Text } from 'react-native-elements';
 import ControlComponent from './ControlComponent';
 
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootMainStackParamList } from 'types/navigations';
 
 import { ControlBridge } from 'utils/formulariodinamico/ControlBridge';
+
+import TextControl from './Controls/TextControl';
 
 type MapControlBridgesProps = {
   controlBridges: ControlBridge[];
@@ -51,6 +52,7 @@ type ControlComponentSelectType = (controlBridge: ControlBridge) => typeof Contr
 const controlComponent: ControlComponentSelectType = (controlBridge: ControlBridge) => {
   let controlType = ControlComponent;
   switch (controlBridge.Control.type) {
+    case 'Text': controlType = TextControl; break;
     default: break;
   }
 
