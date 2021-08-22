@@ -16,7 +16,7 @@ const storage = createSensitiveStorage({
 const config = {
   key: 'root',
   storage,
-  whitelist: ['perfiles', 'documentos', 'formularios', 'resources', 'user'],
+  whitelist: ['perfiles', 'documentos', 'formularios', 'resources', 'settings', 'user'],
 };
 
 const persisted = persistReducer(config, reducers);
