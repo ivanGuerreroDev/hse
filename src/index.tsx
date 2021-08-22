@@ -6,6 +6,8 @@ import {
   RootMainStackParamList,
 } from 'utils/types/navigations';
 import {refreshToken} from 'utils/cognito/cognito-wrapper';
+import { isNetworkAllowed } from 'utils/network';
+
 // Redux
 import {connect} from 'react-redux';
 import {ThunkDispatch} from 'redux-thunk';
@@ -49,36 +51,46 @@ class Index extends Component<Props> {
   constructor(props: Props) {
     super(props);
 
-    if (props.rememberUser && props.rememberUser.UserTokens.RefreshToken) {
-      refreshToken(
-        props.rememberUser.UserTokens.RefreshToken,
-        props.rememberUser.Empresa,
-      )
-        .then(result => {
-          if (props.rememberUser) {
-            let user: IUser = {
-              ...props.rememberUser,
-              UserTokens: {
-                ...props.rememberUser.UserTokens,
-                AccessToken: result.AuthenticationResult?.AccessToken,
-                IdToken: result.AuthenticationResult?.IdToken,
-              },
-            };
-            props.saveUser(user, true);
+    if (isNetworkAllowed()) {
+      if (props.rememberUser && props.rememberUser.UserTokens.RefreshToken) {
+        refreshToken(
+          props.rememberUser.UserTokens.RefreshToken,
+          props.rememberUser.Empresa,
+        )
+          .then(result => {
+            if (props.rememberUser) {
+              console.log('remember');
+              let user: IUser = {
+                ...props.rememberUser,
+                UserTokens: {
+                  ...props.rememberUser.UserTokens,
+                  AccessToken: result.AuthenticationResult?.AccessToken,
+                  IdToken: result.AuthenticationResult?.IdToken,
+                },
+              };
+              props.saveUser(user, true);
 
-            props.saveFormulariosAsync();
-            props.savePerfilesAsync(props.rememberUser);
-          } else {
+              props.saveFormulariosAsync();
+              props.savePerfilesAsync(props.rememberUser);
+            } else {
+              props.forgiveUser();
+            }
+          })
+          .catch(err => {
             props.forgiveUser();
-          }
-        })
-        .catch(err => {
-          props.forgiveUser();
-        })
-        .finally(() => {
-          this.setState({isValidate: false});
-        });
+          })
+          .finally(() => {
+            this.setState({isValidate: false});
+          });
+      } else {
+        this.state.isValidate = false;
+      }
     } else {
+      if (props.rememberUser) {
+        props.saveUser(props.rememberUser, true);
+      } else {
+        props.forgiveUser();
+      }
       this.state.isValidate = false;
     }
   }
