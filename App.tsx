@@ -6,6 +6,7 @@ import {persistor, store} from 'state/store/store';
 import RNBootSplash from 'react-native-bootsplash';
 import Index from 'index';
 import {lightTheme} from 'components/Theme/theme';
+import 'utils/network';
 
 class App extends Component {
   componentDidMount() {
