@@ -7,11 +7,13 @@ import {
   resourcesReducer,
 } from '../formulariodinamico/reducers';
 import {currentUserReducer, userReducer} from '../user/reducers';
+import { netInfoStateReducer } from 'state/settings/reducers';
 
 export default combineReducers({
   currentUser: currentUserReducer,
   documentos: documentosReducer,
   formularios: formulariosReducer,
+  netInfoState: netInfoStateReducer,
   resources: resourcesReducer,
   perfiles: perfilReducer,
   user: userReducer,
