@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import { formatRFC3339 } from 'date-fns';
 import { generateUUID4 } from 'utils/rng';
 
 import { ControlBridge } from './ControlBridge';
@@ -11,6 +12,12 @@ export class DocumentoFactory {
       ...formulario,
       _id: generateUUID4(),
       _formId: formulario._id,
+      creationDate: {
+        $date: formatRFC3339(new Date(), {fractionDigits: 3})
+      },
+      modifiedDate: {
+        $date: formatRFC3339(new Date(), {fractionDigits: 3})
+      },
       sentDate: { $date: '' },
       status: DocumentoStatus.draft,
       geolocation: undefined,
