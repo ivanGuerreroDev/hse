@@ -35,7 +35,7 @@ export default Layout;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   containerHeader: {
     flexDirection: 'row',
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FDAE01',
     height: 80,
     opacity: 1,
+    borderBottomWidth: 0
   },
   headergoBack: {
     marginRight: '50%',
