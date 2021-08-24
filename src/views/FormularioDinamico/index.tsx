@@ -74,10 +74,13 @@ class FormularioDinamico extends Component<Props, State> {
         centerContainerStyle={{flex: 10}} containerStyle={{borderBottomWidth: 0}}
         centerComponent={<Text style={styles.centerTitle}>{Documento.title}</Text>}/>
 
-        <View style={styles.tabsBar}>
-          <Tab value={this.state.tabIndex} onChange={tabIndex => this.setState({tabIndex})}>
-            {TabItems}
-          </Tab>
+        <View style={{ overflow: 'hidden', paddingBottom: 3 }}>
+          <View style={styles.tabsBar}>
+            <Tab value={this.state.tabIndex} onChange={(tabIndex => this.setState({tabIndex}))}
+              indicatorStyle={{borderBottomColor: 'white', borderBottomWidth: 2}}>
+              {TabItems}
+            </Tab>
+          </View>
         </View>
 
         <ScrollView style={styles.controlsContent}>
@@ -102,6 +105,10 @@ const styles = StyleSheet.create({
   },
   tabsBar: {
     flex: 0,
+    backgroundColor: 'black',
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity:  0.4,
+    elevation: 6
   },
   controlsContent: {
     flex: 1,
