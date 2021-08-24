@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   children: {
+    flex: 1,
     flexDirection: 'column',
     backgroundColor: '#F2F2F266',
   },
