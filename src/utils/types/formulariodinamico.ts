@@ -17,9 +17,16 @@ export interface IDate {
   $date: string;
 }
 
+export enum DocumentoStatus {
+  draft,
+  sending,
+  sent
+}
+
 export interface IDocumento extends IFormulario {
   _formId: string;
   sentDate: IDate | undefined;
+  status: DocumentoStatus,
   geolocation: {
     type: string;
     precision: number;

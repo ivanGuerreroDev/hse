@@ -59,7 +59,6 @@ class Index extends Component<Props> {
         )
           .then(result => {
             if (props.rememberUser) {
-              console.log('remember');
               let user: IUser = {
                 ...props.rememberUser,
                 UserTokens: {

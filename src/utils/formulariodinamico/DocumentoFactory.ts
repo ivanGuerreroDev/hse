@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { generateUUID4 } from 'utils/rng';
 
 import { ControlBridge } from './ControlBridge';
-import { IControl, IDocumento, IFormulario } from 'types/formulariodinamico';
+import { DocumentoStatus, IControl, IDocumento, IFormulario } from 'types/formulariodinamico';
 import { OutputValueChangeCallBack, OutputValueChangedEvent } from 'types/documentofactory';
 
 export class DocumentoFactory {
@@ -12,6 +12,7 @@ export class DocumentoFactory {
       _id: generateUUID4(),
       _formId: formulario._id,
       sentDate: { $date: '' },
+      status: DocumentoStatus.draft,
       geolocation: undefined,
       profile: undefined,
       user: {},
