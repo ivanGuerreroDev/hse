@@ -24,6 +24,7 @@ import Lottie from 'components/Lottie';
 import Auth from 'views/Auth';
 import MainFrame from 'views/MainFrame';
 import FormularioDinamico from 'views/FormularioDinamico';
+import Modal from 'components/Modal';
 
 const AuthStack = createStackNavigator<RootAuthStackParamList>();
 const MainStack = createStackNavigator<RootMainStackParamList>();
@@ -104,7 +105,10 @@ class Index extends Component<Props> {
     const AppNavigator = (
       <MainStack.Navigator headerMode="none">
         <MainStack.Screen name="MainFrame" component={MainFrame} />
-        <MainStack.Screen name="FormularioDinamico" component={FormularioDinamico}/>
+        <MainStack.Screen name="FormularioDinamico" component={FormularioDinamico} />
+        <MainStack.Screen name="Modal">
+          {props => <Modal {...props}/>}
+        </MainStack.Screen>
       </MainStack.Navigator>
     );
 
