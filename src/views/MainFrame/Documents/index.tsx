@@ -11,8 +11,8 @@ import { MainFrameStackParamList, RootMainStackParamList } from 'types/navigatio
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { RootState } from 'state/store/store';
-import { saveDocumento } from 'state/formulariodinamico/actions';
-import { SaveDocumento } from 'state/formulariodinamico/types';
+import { changeStatusDocumento, deleteDocumento } from 'state/formulariodinamico/actions';
+import { ChangeStatusDocumento, DeleteDocumento } from 'state/formulariodinamico/types';
 import { DocumentoStatus, IDocumento } from 'types/formulariodinamico';
 
 type StateProps = {
@@ -20,7 +20,8 @@ type StateProps = {
 };
 
 type DispatchProps = {
-
+  changeStatusDocumento: ChangeStatusDocumento,
+  deleteDocumento: DeleteDocumento
 };
 
 type Props = StateProps & DispatchProps & {
@@ -36,63 +37,64 @@ class Documents extends Component<Props> {
   };
 
   renderList() {
-    const documentos = (filter: DocumentoStatus) => this.props.documentos
+    const { documentos, navigation, changeStatusDocumento, deleteDocumento } = this.props;
+    const filteredDocumentos = (filter: DocumentoStatus) => documentos
       .filter(documento => documento.status === filter)
       .sort((a, b) => new Date(b.modifiedDate.$date).valueOf() - new Date(a.modifiedDate.$date).valueOf())
 
     switch (this.state.tabIndex) {
       case 0: return (
         <FlatList
-          data={documentos(DocumentoStatus.draft)}
+          data={filteredDocumentos(DocumentoStatus.draft)}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item}) =>
             <CardDocumento documento={item}
-              onCardPress={() => this.props.navigation.navigate(
+              onCardPress={() => navigation.navigate(
                 'FormularioDinamico', {documento: item}
               )}
               leftOption={
                 <Button buttonStyle={{backgroundColor: 'green', height: '100%'}}
                   icon={<Icon type='material' name='send' color='white'/>}
-                  onPress={() => {}}/>
+                  onPress={() => changeStatusDocumento(item._id, DocumentoStatus.sending)}/>
               }
               rightOption={
                 <Button buttonStyle={{backgroundColor: 'red', height: '100%'}}
                   icon={<Icon type='material' name='delete' color='white'/>}
-                  onPress={() => {}}/>
+                  onPress={() => deleteDocumento(item._id)}/>
               }/>
           }/>
       );
 
       case 1: return (
         <FlatList
-          data={documentos(DocumentoStatus.sending)}
+          data={filteredDocumentos(DocumentoStatus.sending)}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item}) =>
             <CardDocumento documento={item}
-              onCardPress={() => this.props.navigation.navigate(
+              onCardPress={() => navigation.navigate(
                 'FormularioDinamico', {documento: item}
               )}
               rightOption={
                 <Button buttonStyle={{backgroundColor: 'red', height: '100%'}}
                   icon={<Icon type='material' name='cancel' color='white'/>}
-                  onPress={() => {}}/>
+                  onPress={() => changeStatusDocumento(item._id, DocumentoStatus.draft)}/>
               }/>
           }/>
       );
 
       case 2: return (
         <FlatList
-          data={documentos(DocumentoStatus.sent)}
+          data={filteredDocumentos(DocumentoStatus.sent)}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item}) =>
             <CardDocumento documento={item}
-              onCardPress={() => this.props.navigation.navigate(
+              onCardPress={() => navigation.navigate(
                 'FormularioDinamico', {documento: item}
               )}
               rightOption={
                 <Button buttonStyle={{backgroundColor: 'red', height: '100%'}}
                   icon={<Icon type='material' name='delete' color='white'/>}
-                  onPress={() => {}}/>
+                  onPress={() => deleteDocumento(item._id)}/>
               }/>
           }/>
       );
@@ -136,7 +138,8 @@ const mapStateToProps = (state: RootState): StateProps => {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): DispatchProps => {
   return {
-
+    changeStatusDocumento: (id: string, status: DocumentoStatus) => dispatch(changeStatusDocumento(id, status)),
+    deleteDocumento: (id: string) => dispatch(deleteDocumento(id))
   };
 };
 
