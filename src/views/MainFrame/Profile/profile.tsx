@@ -33,8 +33,6 @@ type DispatchProps = {
 type Props = StateProps & DispatchProps;
 class Profile extends Component<Props> {
   render() {
-    console.log(this.props.perfil);
-
     return (
       <Layout>
         <View style={{alignItems: 'flex-end', paddingEnd: 5}}>

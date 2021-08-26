@@ -1,26 +1,21 @@
 import {AnyAction} from 'redux';
+import {ThunkAction} from 'redux-thunk';
+import {IUser} from 'state/user/types';
+import {MenuData} from 'utils/types/menu';
 
-export interface CurrentUser {
-  Rut: number;
-  Dv: string;
-  Nombre: string;
-  Correo: string;
-  Empresa: string;
-  CentroTrabajo: string;
-  Cargo: string;
+//#region State Interface
+
+export interface MenuState {
+  menus: MenuData[];
 }
 
-export interface UserState {
-  currentUserList: CurrentUser[];
-}
+//#endregion
 
-export interface CurrentUserState {
-  currentUser: CurrentUser | undefined;
-}
+//#region Actions interfaces
 
-export interface SaveCurrentUserAction extends AnyAction {
+export interface SaveMenuAction extends AnyAction {
   payload: {
-    currentUser: CurrentUser;
+    menu: MenuData;
   };
 }
 
@@ -28,23 +23,37 @@ export interface SaveCurrentUserAction extends AnyAction {
 
 //#region Combined actions interfaces type
 
-export type UserAction = ForgiveUserAction | SaveUserAction;
+export type MenuAction = SaveMenuAction;
 
 //#endregion
 
 //#region Actions func types
 
-export type ForgiveUser = () => ForgiveUserAction;
+export type SaveMenu = (menu: MenuData) => SaveMenuAction;
 
-export type SaveUser = (user: User) => SaveUserAction;
+//#endregion
+
+//#region Thunk interfaces
+
+export type SaveMenuAsyncThunk = ThunkAction<
+  Promise<void>,
+  {},
+  {},
+  SaveMenuAction
+>;
+
+//#endregion
+
+//#region Thunk func types
+
+export type SaveMenuAsync = (data: IUser) => SaveMenuAsyncThunk;
 
 //#endregion
 
 //#region Action type enum
 
-export enum USER_ACTIONS {
-  FORGIVE_USER,
-  SAVE_USER,
+export enum MENU_ACTIONS {
+  SAVE_MENU = 'SAVE_MENU',
 }
 
 //#endregion

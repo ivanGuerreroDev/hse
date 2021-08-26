@@ -1,63 +1,25 @@
-/* import {CurrentUserState, USER_ACTIONS, UserAction, UserState} from './types';
+import {MenuState, MenuAction, MENU_ACTIONS} from './types';
 
-const initialState: UserState = {
-  userList: [],
+const initialMenusState: MenuState = {
+  menus: [],
 };
 
-export const userReducer = (
-  state: UserState = initialState,
-  action: UserAction,
-): UserState => {
+export const menuReducer = (
+  state: MenuState = initialMenusState,
+  action: MenuAction,
+): MenuState => {
   switch (action.type) {
-    case USER_ACTIONS.FORGIVE_USER: {
-      return {
-        ...state,
-      };
-    }
-
-    case USER_ACTIONS.SAVE_USER: {
-      const {user, remember} = action.payload;
+    case MENU_ACTIONS.SAVE_MENU:
+      const {menu} = action.payload;
 
       return {
-        ...state,
-        userList: [
-          ...state.userList.filter(suser => suser.Username !== user.Username),
-          user,
+        menus: [
+          ...state.menus.filter(item => item.IdModulo !== menu.IdModulo),
+          menu,
         ],
-        rememberUser: remember ? user : undefined,
       };
-    }
 
     default:
       return state;
   }
 };
-
-const initialCurrentUserState: CurrentUserState = {
-  user: undefined,
-};
-
-export const currentUserReducer = (
-  state: CurrentUserState = initialCurrentUserState,
-  action: UserAction,
-): CurrentUserState => {
-  switch (action.type) {
-    case USER_ACTIONS.FORGIVE_USER: {
-      return {
-        user: undefined,
-      };
-    }
-
-    case USER_ACTIONS.SAVE_USER: {
-      const {user} = action.payload;
-
-      return {
-        user: user,
-      };
-    }
-
-    default:
-      return state;
-  }
-};
- */

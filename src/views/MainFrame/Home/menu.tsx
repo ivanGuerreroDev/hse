@@ -9,36 +9,51 @@ import {
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainFrameStackParamList} from 'utils/types/navigations';
+
+import {connect} from 'react-redux';
+import {RootState} from 'state/store/store';
+import {MenuData} from 'utils/types/menu';
+
 import Layout from 'views/MainFrame/layaut';
 import Menus from 'components/Assets/Menu/MenuBd';
+import Config from 'react-native-config';
 
 type Props = {
   navigation: StackNavigationProp<MainFrameStackParamList>;
+  menu: MenuData[] | any[];
 };
 class Menu extends Component<Props> {
+  state = {
+    menu: this.props.menu[0],
+  };
+
   render() {
+    console.log(this.props.menu[0]);
+
     return (
       <Layout>
         <View style={styles.container}>
           <FlatList
             style={styles.list}
             numColumns={2}
-            keyExtractor={item => item.id}
-            data={Menus}
+            keyExtractor={item => item.IdModulo}
+            data={this.state.menu}
             renderItem={({item}) => {
+              console.log(`${Config.s3}${item.NombreMenu}`);
+
               let tintColor;
               let opacity = 1;
               let navigate = '';
-              if (!item.estado) {
+              if (!item.Estado) {
                 tintColor = '#808080';
                 opacity = 0.7;
               } else {
-                navigate = item.navigate;
+                /* navigate = item.navigate; */
               }
               return (
                 <TouchableOpacity
                   style={{...styles.card, opacity}}
-                  onPress={() => {
+                  /*  onPress={() => {
                     item.estado &&
                       this.props.navigation.navigate('SubMenu', {
                         titulo: item.nombre,
@@ -46,18 +61,18 @@ class Menu extends Component<Props> {
                         submenuaccordion: item.menuAcordeon,
                         submenuCard: item.menuCard,
                       });
-                  }}>
+                  }} */
+                >
                   <View style={styles.cardHeader}></View>
-
                   <Image
                     style={{...styles.cardImage, tintColor}}
-                    source={item.image}
+                    source={{uri: `${Config.s3}${item.NombreMenu}.png`}}
                     resizeMode={'contain'}
                   />
 
                   <View style={styles.cardFooter}>
                     <View style={styles.aling}>
-                      <Text style={{...styles.text}}>{item.nombre}</Text>
+                      <Text style={{...styles.text}}>{item.NombreMenu}</Text>
                     </View>
                   </View>
                 </TouchableOpacity>
@@ -70,7 +85,15 @@ class Menu extends Component<Props> {
   }
 }
 
-export default Menu;
+const mapStateToProps = (state: RootState) => {
+  return {
+    menu: state.menus.menus,
+  };
+};
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Menu);
 
 const styles = StyleSheet.create({
   container: {

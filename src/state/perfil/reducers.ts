@@ -13,7 +13,10 @@ export const perfilReducer = (
       const {perfil} = action.payload;
 
       return {
-        perfiles: [...state.perfiles, perfil],
+        perfiles: [
+          ...state.perfiles.filter(item => item.IdUsuario !== perfil.IdUsuario),
+          perfil,
+        ],
       };
 
     default:

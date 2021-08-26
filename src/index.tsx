@@ -10,12 +10,18 @@ import {refreshToken} from 'utils/cognito/cognito-wrapper';
 import {connect} from 'react-redux';
 import {ThunkDispatch} from 'redux-thunk';
 import {RootState} from 'state/store/store';
+// User
 import {forgiveUser, saveUser} from 'state/user/actions';
 import {ForgiveUser, IUser, SaveUser} from 'state/user/types';
+// Formulario
 import {saveFormulariosAsync} from 'state/formulariodinamico/thunk';
 import {SaveFormularioAsync} from 'state/formulariodinamico/types';
+// Perfill
 import {savePerfilesAsync} from 'state/perfil/thunk';
 import {SavePerfilAsync} from 'state/perfil/types';
+// Menu
+import {saveMenusAsyncThunk} from 'state/menu/thunk';
+import {SaveMenuAsync} from 'state/menu/types';
 
 import Lottie from 'components/Lottie';
 
@@ -35,6 +41,7 @@ type DispatchProps = {
   saveUser: SaveUser;
   saveFormulariosAsync: SaveFormularioAsync;
   savePerfilesAsync: SavePerfilAsync;
+  saveMenusAsyncThunk: SaveMenuAsync;
 };
 
 type Props = StateProps & DispatchProps;
@@ -67,6 +74,7 @@ class Index extends Component<Props> {
 
             props.saveFormulariosAsync();
             props.savePerfilesAsync(props.rememberUser);
+            props.saveMenusAsyncThunk(props.rememberUser);
           } else {
             props.forgiveUser();
           }
@@ -121,6 +129,7 @@ const mapDispatchToProps = (
       dispatch(saveUser(user, remember)),
     saveFormulariosAsync: () => dispatch(saveFormulariosAsync()),
     savePerfilesAsync: (user: IUser) => dispatch(savePerfilesAsync(user)),
+    saveMenusAsyncThunk: (user: IUser) => dispatch(saveMenusAsyncThunk(user)),
   };
 };
 

@@ -1,29 +1,28 @@
 import axios, {AxiosResponse} from 'axios';
 import {ThunkDispatch} from 'redux-thunk';
 import Config from 'react-native-config';
-import {savePerfil} from './actions';
-import {SavePerfilAsync, SavePerfilAsyncThunk, SavePerfilAction} from './types';
-import {IPerfil} from 'utils/types/perfil';
+import {saveMenu} from './actions';
+import {SaveMenuAsync, SaveMenuAsyncThunk, SaveMenuAction} from './types';
+import {MenuData} from 'utils/types/menu';
 import {IUser} from 'state/user/types';
 
-export const savePerfilesAsync: SavePerfilAsync = (
+export const saveMenusAsyncThunk: SaveMenuAsync = (
   userData: IUser,
-): SavePerfilAsyncThunk => {
+): SaveMenuAsyncThunk => {
   return async (
-    dispatch: ThunkDispatch<{}, {}, SavePerfilAction>,
+    dispatch: ThunkDispatch<{}, {}, SaveMenuAction>,
   ): Promise<void> => {
     return new Promise<void>(async (resolve, reject) => {
       try {
-        const response: AxiosResponse<IPerfil> = await axios({
+        const response: AxiosResponse<MenuData> = await axios({
           method: 'post',
-          url: `${Config.UrlApi}/perfil`,
+          url: `${Config.UrlApi}/menu`,
           data: {
-            Username: userData.Username,
             Empresa: userData.Empresa,
           },
         });
-
-        dispatch(savePerfil(response.data));
+        console.log(response.data);
+        dispatch(saveMenu(response.data));
       } catch (error) {
         reject(error);
       } finally {

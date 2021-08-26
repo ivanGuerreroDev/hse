@@ -1,25 +1,11 @@
-import {
-  USER_ACTIONS,
-  ForgiveUser,
-  ForgiveUserAction,
-  User,
-  SaveUser,
-  SaveUserAction,
-} from './types';
+import {SaveMenu, SaveMenuAction, MENU_ACTIONS} from './types';
+import {MenuData} from 'utils/types/menu';
 
-export const forgiveUser: ForgiveUser = (): ForgiveUserAction => {
-  let action: ForgiveUserAction = {
-    type: USER_ACTIONS.FORGIVE_USER,
-  };
-
-  return action;
-};
-
-export const saveUser: SaveUser = (user: User): SaveUserAction => {
-  let action: SaveUserAction = {
-    type: USER_ACTIONS.SAVE_USER,
+export const saveMenu: SaveMenu = (menu: MenuData): SaveMenuAction => {
+  let action: SaveMenuAction = {
+    type: MENU_ACTIONS.SAVE_MENU,
     payload: {
-      user: user,
+      menu,
     },
   };
 

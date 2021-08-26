@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux';
 
 import {perfilReducer} from 'state/perfil/reducers';
+import {menuReducer} from 'state/menu/reducers';
 import {
   documentosReducer,
   formulariosReducer,
@@ -14,5 +15,6 @@ export default combineReducers({
   formularios: formulariosReducer,
   resources: resourcesReducer,
   perfiles: perfilReducer,
+  menus: menuReducer,
   user: userReducer,
 });
