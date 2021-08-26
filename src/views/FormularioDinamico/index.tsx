@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Header, Tab, Text } from 'react-native-elements';
+import { Button, Header, Icon, Tab, Text } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TabItem } from './TabItemComponent';
 import ControlContainer from './ControlContainer';
@@ -14,9 +14,11 @@ import { RootState } from 'state/store/store';
 import { saveDocumento } from 'state/formulariodinamico/actions';
 import { SaveDocumento } from 'state/formulariodinamico/types';
 
+import { formatRFC3339 } from 'date-fns';
 import { ControlBridge } from 'utils/formulariodinamico/ControlBridge';
 import { DocumentoFactory } from 'utils/formulariodinamico/DocumentoFactory';
 import { OutputValueChangeCallBack, OutputValueChangedEvent } from 'types/documentofactory';
+import { DocumentoStatus } from 'utils/types/formulariodinamico';
 
 type State = {
   tabIndex: number,
@@ -37,6 +39,9 @@ type Props = DispatchProps & NavigationProps;
 class FormularioDinamico extends Component<Props, State> {
   private documentoFactory: DocumentoFactory;
   private handleOutputValueChange: OutputValueChangeCallBack = (event: OutputValueChangedEvent) => {
+    this.documentoFactory.Documento.modifiedDate = {
+      $date: formatRFC3339(new Date(), {fractionDigits: 3})
+    };
     this.props.saveDocumento(this.documentoFactory.Documento);
     this.setState({thisisonlyforforcerender: undefined});
   };
@@ -68,6 +73,26 @@ class FormularioDinamico extends Component<Props, State> {
       <TabItem key={index} title={pageBridge.property('title')}/>
     );
 
+    let FooterButtons: JSX.Element[] = [];
+    if (Documento.modifiedDate !== Documento.creationDate && Documento.status !== DocumentoStatus.sending)
+      FooterButtons.push(
+        <Button title='Eliminar' iconPosition='top'
+          titleStyle={{fontSize: 12}} buttonStyle={{backgroundColor: '#FDAE01'}}
+          icon={<Icon type='material' name='delete' color='white'/>}/>
+      );
+    if (Documento.status === DocumentoStatus.sending)
+      FooterButtons.push(
+        <Button title='Cancelar Envío' iconPosition='top'
+          titleStyle={{fontSize: 12}} buttonStyle={{backgroundColor: '#FDAE01'}}
+          icon={<Icon type='material' name='cancel' color='white'/>}/>
+      );
+    if (Documento.status === DocumentoStatus.draft)
+      FooterButtons.push(
+        <Button title='Enviar' iconPosition='top'
+          titleStyle={{fontSize: 12}} buttonStyle={{backgroundColor: '#FDAE01'}}
+          icon={<Icon type='material' name='send' color='white'/>}/>
+      );
+
     return (
       <SafeAreaView style={styles.safeContainer}>
         <Header backgroundColor='#FDAE01' statusBarProps={{backgroundColor: '#FDAE01'}}
@@ -89,6 +114,14 @@ class FormularioDinamico extends Component<Props, State> {
             path={getPagesBridge()[this.state.tabIndex].Path}
             navigation={this.props.navigation}/>
         </ScrollView>
+
+        <View style={styles.footerBar}>
+          {FooterButtons.map((button, index) =>
+            <View key={index} style={styles.footerButtonContainer}>
+              {button}
+            </View>
+          )}
+        </View>
       </SafeAreaView>
     );
   }
@@ -113,6 +146,17 @@ const styles = StyleSheet.create({
   controlsContent: {
     flex: 1,
     paddingHorizontal: 10
+  },
+  footerBar: {
+    flex: 0,
+    flexDirection: 'row',
+    marginTop: 2,
+    backgroundColor: '#FDAE01',
+
+  },
+  footerButtonContainer: {
+    flex: 1,
+    alignItems: 'center'
   }
 });
 

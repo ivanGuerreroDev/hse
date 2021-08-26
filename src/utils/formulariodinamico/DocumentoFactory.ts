@@ -8,16 +8,16 @@ import { OutputValueChangeCallBack, OutputValueChangedEvent } from 'types/docume
 
 export class DocumentoFactory {
   static createFromFormulario(formulario: IFormulario): IDocumento {
+    const creationDate = {
+      $date: formatRFC3339(new Date(), {fractionDigits: 3})
+    };
+
     return _.cloneDeep({
       ...formulario,
       _id: generateUUID4(),
       _formId: formulario._id,
-      creationDate: {
-        $date: formatRFC3339(new Date(), {fractionDigits: 3})
-      },
-      modifiedDate: {
-        $date: formatRFC3339(new Date(), {fractionDigits: 3})
-      },
+      creationDate: creationDate,
+      modifiedDate: creationDate,
       sentDate: { $date: '' },
       status: DocumentoStatus.draft,
       geolocation: undefined,
