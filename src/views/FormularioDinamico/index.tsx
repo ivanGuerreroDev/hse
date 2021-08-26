@@ -10,15 +10,16 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootMainStackParamList } from 'types/navigations';
 
 import { connect } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
 import { RootState } from 'state/store/store';
-import { saveDocumento } from 'state/formulariodinamico/actions';
-import { SaveDocumento } from 'state/formulariodinamico/types';
+import { changeStatusDocumento, deleteDocumento, saveDocumento } from 'state/formulariodinamico/actions';
+import { ChangeStatusDocumento, DeleteDocumento, SaveDocumento } from 'state/formulariodinamico/types';
 
 import { formatRFC3339 } from 'date-fns';
 import { ControlBridge } from 'utils/formulariodinamico/ControlBridge';
 import { DocumentoFactory } from 'utils/formulariodinamico/DocumentoFactory';
 import { OutputValueChangeCallBack, OutputValueChangedEvent } from 'types/documentofactory';
-import { DocumentoStatus } from 'utils/types/formulariodinamico';
+import { DocumentoStatus, IDocumento } from 'utils/types/formulariodinamico';
 
 type State = {
   tabIndex: number,
@@ -26,6 +27,8 @@ type State = {
 };
 
 type DispatchProps = {
+  changeStatusDocumento: ChangeStatusDocumento;
+  deleteDocumento: DeleteDocumento;
   saveDocumento: SaveDocumento;
 }
 
@@ -62,6 +65,7 @@ class FormularioDinamico extends Component<Props, State> {
 
   render() {
     const { ControlBridgeList, Documento } = this.documentoFactory;
+    const { changeStatusDocumento, deleteDocumento, navigation } = this.props;
 
     const getPagesBridge = (): ControlBridge[] => {
       return ControlBridgeList
@@ -78,19 +82,31 @@ class FormularioDinamico extends Component<Props, State> {
       FooterButtons.push(
         <Button title='Eliminar' iconPosition='top'
           titleStyle={{fontSize: 12}} buttonStyle={{backgroundColor: '#FDAE01'}}
-          icon={<Icon type='material' name='delete' color='white'/>}/>
+          icon={<Icon type='material' name='delete' color='white'/>}
+          onPress={() => {
+            deleteDocumento(Documento._id);
+            navigation.goBack();
+          }}/>
       );
     if (Documento.status === DocumentoStatus.sending)
       FooterButtons.push(
         <Button title='Cancelar Envío' iconPosition='top'
           titleStyle={{fontSize: 12}} buttonStyle={{backgroundColor: '#FDAE01'}}
-          icon={<Icon type='material' name='cancel' color='white'/>}/>
+          icon={<Icon type='material' name='cancel' color='white'/>}
+          onPress={() => {
+            changeStatusDocumento(Documento._id, DocumentoStatus.draft);
+            navigation.goBack();
+          }}/>
       );
     if (Documento.status === DocumentoStatus.draft)
       FooterButtons.push(
         <Button title='Enviar' iconPosition='top'
           titleStyle={{fontSize: 12}} buttonStyle={{backgroundColor: '#FDAE01'}}
-          icon={<Icon type='material' name='send' color='white'/>}/>
+          icon={<Icon type='material' name='send' color='white'/>}
+          onPress={() => {
+            changeStatusDocumento(Documento._id, DocumentoStatus.sending);
+            navigation.goBack();
+          }}/>
       );
 
     return (
@@ -160,8 +176,12 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapDispatchToProps: DispatchProps = {
-  saveDocumento
+const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): DispatchProps => {
+  return {
+    changeStatusDocumento: (id: string, status: DocumentoStatus) => dispatch(changeStatusDocumento(id, status)),
+    deleteDocumento: (id: string) => dispatch(deleteDocumento(id)),
+    saveDocumento: (documento: IDocumento) => dispatch(saveDocumento(documento))
+  };
 };
 
 export default connect<{}, DispatchProps, {}, RootState>(null, mapDispatchToProps)(FormularioDinamico);
