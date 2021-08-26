@@ -22,6 +22,8 @@ export const saveFormulariosAsync: SaveFormularioAsync = (): SaveFormularioAsync
 
         response.data.forEach((formulario: IFormulario) => {
           dispatch(saveFormulario(formulario));
+
+          formulario.resources?.forEach((resource: IResource) => dispatch(saveLocalResourceAsync(resource)));
         });
       } catch (error) {
         reject(error);
@@ -43,13 +45,16 @@ export const saveLocalResourceAsync: SaveLocalResourceAsync = (resource: IResour
             data: resource.body
           });
 
-          dispatch(saveResource({
+          const localResource: ILocalResource = {
             url: resource.url,
             type: resource.type,
             method: resource.method,
             body: resource.body,
             localData: response.data
-          }));
+          };
+
+          dispatch(saveResource(localResource));
+          resolve(localResource);
         }
       } catch (error) {
         reject(error);
