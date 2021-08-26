@@ -106,9 +106,7 @@ class Index extends Component<Props> {
       <MainStack.Navigator headerMode="none">
         <MainStack.Screen name="MainFrame" component={MainFrame} />
         <MainStack.Screen name="FormularioDinamico" component={FormularioDinamico} />
-        <MainStack.Screen name="Modal">
-          {props => <Modal {...props}/>}
-        </MainStack.Screen>
+        <MainStack.Screen name="Modal" component={Modal} />
       </MainStack.Navigator>
     );
 
