@@ -1,4 +1,5 @@
-import { IDocumento } from 'types/formulariodinamico';
+import {NavigatorScreenParams} from '@react-navigation/native';
+import {IDocumento} from 'types/formulariodinamico';
 
 export type AuthStackParamList = {
   SignIn: undefined;
@@ -21,7 +22,7 @@ export type MainFrameStackParamList = {
   Menu: undefined;
   SubMenu: {
     titulo: string;
-    submenulist:
+    /* submenulist:
       | {
           titulo: string;
           navigate: string;
@@ -44,7 +45,7 @@ export type MainFrameStackParamList = {
           cargo: string;
           navigate: string;
         }[]
-      | undefined;
+      | undefined; */
   };
 
   Documents: undefined;
@@ -55,12 +56,13 @@ export type MainFrameStackParamList = {
 };
 
 export type RootAuthStackParamList = {
-  Auth: undefined;
+  Auth: NavigatorScreenParams<AuthStackParamList>;
 };
 
 export type RootMainStackParamList = {
-  MainFrame: undefined;
+  MainFrame: NavigatorScreenParams<MainFrameStackParamList>;
   FormularioDinamico: {
-    documento: IDocumento
-  }
+    documento: IDocumento;
+  };
+  Modal: JSX.Element;
 };

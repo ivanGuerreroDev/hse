@@ -12,15 +12,14 @@ import {MainFrameStackParamList} from 'utils/types/navigations';
 
 import {connect} from 'react-redux';
 import {RootState} from 'state/store/store';
-import {MenuData} from 'utils/types/menu';
+import {IMenu} from 'utils/types/menu';
 
 import Layout from 'views/MainFrame/layaut';
-import Menus from 'components/Assets/Menu/MenuBd';
 import Config from 'react-native-config';
 
 type Props = {
   navigation: StackNavigationProp<MainFrameStackParamList>;
-  menu: MenuData[] | any[];
+  menu: IMenu[] | any[];
 };
 class Menu extends Component<Props> {
   state = {
@@ -28,19 +27,16 @@ class Menu extends Component<Props> {
   };
 
   render() {
-    console.log(this.props.menu[0]);
-
+    console.log('menu', this.state.menu);
     return (
       <Layout>
         <View style={styles.container}>
           <FlatList
             style={styles.list}
             numColumns={2}
-            keyExtractor={item => item.IdModulo}
+            keyExtractor={item => item.Id}
             data={this.state.menu}
             renderItem={({item}) => {
-              console.log(`${Config.s3}${item.NombreMenu}`);
-
               let tintColor;
               let opacity = 1;
               let navigate = '';
@@ -53,16 +49,12 @@ class Menu extends Component<Props> {
               return (
                 <TouchableOpacity
                   style={{...styles.card, opacity}}
-                  /*  onPress={() => {
-                    item.estado &&
+                  onPress={() => {
+                    item.Estado &&
                       this.props.navigation.navigate('SubMenu', {
-                        titulo: item.nombre,
-                        submenulist: item.menuLista,
-                        submenuaccordion: item.menuAcordeon,
-                        submenuCard: item.menuCard,
+                        titulo: item.NombreMenu,
                       });
-                  }} */
-                >
+                  }}>
                   <View style={styles.cardHeader}></View>
                   <Image
                     style={{...styles.cardImage, tintColor}}

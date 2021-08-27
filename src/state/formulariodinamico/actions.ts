@@ -13,11 +13,11 @@ import {
   SaveResource,
   SaveResourceAction
 } from './types';
-import { IDocumento, IFormulario, IResource } from 'types/formulariodinamico';
+import { DocumentoStatus, IDocumento, IFormulario, IResource } from 'types/formulariodinamico';
 
 export const changeStatusDocumento: ChangeStatusDocumento = (
-  id: number,
-  status: number
+  id: string,
+  status: DocumentoStatus
 ): ChangeStatusDocumentoAction => {
   let action: ChangeStatusDocumentoAction = {
     type: DOCUMENTOS_ACTIONS.CHANGESTATUS_DOCUMENTO,
@@ -31,7 +31,7 @@ export const changeStatusDocumento: ChangeStatusDocumento = (
 };
 
 export const deleteDocumento: DeleteDocumento = (
-  id: number
+  id: string
 ): DeleteDocumentoAction => {
   let action: DeleteDocumentoAction = {
     type: DOCUMENTOS_ACTIONS.DELETE_DOCUMENTO,

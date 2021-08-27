@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { IDocumento, IFormulario, IResource} from 'types/formulariodinamico';
+import { DocumentoStatus, IDocumento, IFormulario, IResource} from 'types/formulariodinamico';
 
 //#region State Interface
 
@@ -22,14 +22,14 @@ export interface ResourcesState {
 
 export interface ChangeStatusDocumentoAction extends AnyAction {
   payload: {
-    id: number,
-    status: number
+    id: string,
+    status: DocumentoStatus
   }
 }
 
 export interface DeleteDocumentoAction extends AnyAction {
   payload: {
-    id: number
+    id: string
   }
 }
 
@@ -68,9 +68,9 @@ export type ResourcesAction = SaveResourceAction;
 
 //#region Actions func types
 
-export type ChangeStatusDocumento = (id: number, status: number) => ChangeStatusDocumentoAction;
+export type ChangeStatusDocumento = (id: string, status: DocumentoStatus) => ChangeStatusDocumentoAction;
 
-export type DeleteDocumento = (id: number) => DeleteDocumentoAction;
+export type DeleteDocumento = (id: string) => DeleteDocumentoAction;
 
 export type SaveDocumento = (documento: IDocumento) => SaveDocumentoAction;
 

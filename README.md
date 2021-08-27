@@ -48,6 +48,7 @@ En esta sección se detalla la estructura en árbol de los archivos y carpetas (
 │   ├─ components
 │   │   ├─ Assets
 │   │   ├─ Lottie
+│   │   ├─ Modal
 │   │   └─ Theme
 │   ├─ state
 │   │   ├─ store
@@ -81,6 +82,10 @@ Carpeta contenedora de todos los archivos estáticos (audios, iconos, imágenes,
 ### Lottie `(./src/components/Lottie)`:
 
 Carpeta contenedora del componente `Lottie` (pantalla de carga animada)
+
+### Lottie `(./src/components/Modal)`:
+
+Carpeta contenedora del componente `Modal` (pantalla para cargar modal al navigator)
 
 ### Theme `(./src/components/Theme)`:
 

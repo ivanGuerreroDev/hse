@@ -1,28 +1,31 @@
 import axios, {AxiosResponse} from 'axios';
 import {ThunkDispatch} from 'redux-thunk';
 import Config from 'react-native-config';
-import {saveMenu} from './actions';
-import {SaveMenuAsync, SaveMenuAsyncThunk, SaveMenuAction} from './types';
-import {IMenu} from 'utils/types/menu';
+import {saveInspeccion} from './actions';
+import {
+  SaveInspeccionAsync,
+  SaveInspeccionAsyncThunk,
+  SaveInspeccionAction,
+} from './types';
+import {IInspecciones} from 'utils/types/menu';
 import {IUser} from 'state/user/types';
 
-export const saveMenusAsyncThunk: SaveMenuAsync = (
+export const saveInspeccionAsyncThunk: SaveInspeccionAsync = (
   userData: IUser,
-): SaveMenuAsyncThunk => {
+): SaveInspeccionAsyncThunk => {
   return async (
-    dispatch: ThunkDispatch<{}, {}, SaveMenuAction>,
+    dispatch: ThunkDispatch<{}, {}, SaveInspeccionAction>,
   ): Promise<void> => {
     return new Promise<void>(async (resolve, reject) => {
       try {
-        const response: AxiosResponse<IMenu> = await axios({
+        const response: AxiosResponse<IInspecciones> = await axios({
           method: 'post',
-          url: `${Config.UrlApi}/menu`,
+          url: `${Config.UrlApi}/inspecciones`,
           data: {
             Empresa: userData.Empresa,
           },
         });
-
-        dispatch(saveMenu(response.data));
+        dispatch(saveInspeccion(response.data));
       } catch (error) {
         reject(error);
       } finally {

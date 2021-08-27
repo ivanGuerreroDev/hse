@@ -19,9 +19,9 @@ class MenuCard extends Component<Props> {
             activeScale={0.95}>
             <Card>
               <View style={styles.cardcontainer}>
-                <Text style={styles.Title}>{item.tipo}</Text>
-                <Text style={styles.subTitle}>{item.titulo}</Text>
-                <Text style={styles.cargo}>Cargo: {item.cargo}</Text>
+                <Text style={styles.Title}>{item.Tipo}</Text>
+                <Text style={styles.subTitle}>{item.Titulo}</Text>
+                <Text style={styles.cargo}>Cargo: {item.Cargo}</Text>
                 <View>
                   <Text style={styles.buttonText}>COMENZAR</Text>
                 </View>

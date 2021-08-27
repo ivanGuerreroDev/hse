@@ -17,11 +17,15 @@ const config = {
   key: 'root',
   storage,
   whitelist: [
+    'inspeccion',
+    'observacion',
+    'capacitacion',
     'menus',
     'perfiles',
     'documentos',
     'formularios',
     'resources',
+    'settings',
     'user',
   ],
 };

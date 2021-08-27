@@ -26,9 +26,12 @@ export const documentosReducer = (
       let { id, status } = (action as ChangeStatusDocumentoAction).payload;
 
       return {
-        ...state,
         documentos: [
-          ...state.documentos
+          ...state.documentos.filter(item => item._id !== id),
+          {
+            ...state.documentos.filter(item => item._id === id)[0],
+            status
+          }
         ]
       };
     }
@@ -38,7 +41,7 @@ export const documentosReducer = (
 
       return {
         documentos: [
-          ...state.documentos
+          ...state.documentos.filter(item => item._id !== id)
         ]
       };
     }
@@ -48,7 +51,7 @@ export const documentosReducer = (
 
       return {
         documentos: [
-          ...state.documentos,
+          ...state.documentos.filter(item => item._id !== documento._id),
           documento
         ]
       };
@@ -73,7 +76,7 @@ export const formulariosReducer = (
 
       return {
         formularios: [
-          ...state.formularios,
+          ...state.formularios.filter(item => item._id !== formulario._id),
           formulario
         ]
       }

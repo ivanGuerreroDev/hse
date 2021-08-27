@@ -1,12 +1,12 @@
 import {AnyAction} from 'redux';
 import {ThunkAction} from 'redux-thunk';
 import {IUser} from 'state/user/types';
-import {MenuData} from 'utils/types/menu';
+import {IMenu} from 'utils/types/menu';
 
 //#region State Interface
 
 export interface MenuState {
-  menus: MenuData[];
+  menus: IMenu[];
 }
 
 //#endregion
@@ -15,7 +15,7 @@ export interface MenuState {
 
 export interface SaveMenuAction extends AnyAction {
   payload: {
-    menu: MenuData;
+    menu: IMenu;
   };
 }
 
@@ -29,7 +29,7 @@ export type MenuAction = SaveMenuAction;
 
 //#region Actions func types
 
-export type SaveMenu = (menu: MenuData) => SaveMenuAction;
+export type SaveMenu = (menu: IMenu) => SaveMenuAction;
 
 //#endregion
 

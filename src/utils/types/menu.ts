@@ -1,29 +1,26 @@
-export interface MenuCard {
-  IdModulo: number;
-  NombreMenu: string;
-  Plataforma: number;
-}
-
-export interface MenuList {
-  IdModulo: number;
-  NombreMenu: string;
-  Plataforma: number;
-}
-
-export interface MenuAccordion {
-  IdModulo: number;
-  NombreMenu: string;
-  Plataforma: number;
-}
-
-export interface MenuData {
+export interface IMenu {
   Estado: string;
   IdModulo: string;
   NombreMenu: string;
   Plataforma: number;
 }
 
-/* export interface IMenu extends MenuData {
-  Menu: MenuData[];
+export interface IInspecciones {
+  Id: string;
+  expand: string;
+  Tipos: string;
+  Inspecciones: string;
 }
- */
+export interface IObservaciones {
+  Id: string;
+  titulo: string;
+  Formulario: string;
+}
+export interface ICapacitacion {
+  IdCapacitacion: string;
+  IdTipoCapacitacion: string;
+  Tipo: string;
+  Titulo: string;
+  Categoria: string;
+  Cargo: string | undefined;
+}

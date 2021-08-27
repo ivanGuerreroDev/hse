@@ -12,9 +12,11 @@ type Props = {
 
 /* class MenuList extends Component<Props> { */
 const MenuList = ({List}: Props) => {
+  console.log(List);
+
   return (
     <View style={styles.container}>
-      {List.map((item: any, i: any) => (
+      {List[0].map((item: any, i: any) => (
         <ListItem
           key={i}
           Component={TouchableScale}

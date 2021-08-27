@@ -12,7 +12,7 @@ class MenuAccordion extends Component<Props> {
     MenuAccordion: this.props.Accordion,
   };
 
-  handleChange(id: string, expand: boolean) {
+  /*  handleChange(id: string, expand: boolean) {
     let newArr = this.state.MenuAccordion.map((item: any, i: number) => {
       if (id === item.id) {
         return {...item, expand: !expand};
@@ -22,10 +22,10 @@ class MenuAccordion extends Component<Props> {
     });
     this.setState({MenuAccordion: newArr});
   }
-
+ */
   render() {
-    return (
-      <View style={styles.container}>
+    return {
+      /* <View style={styles.container}>
         {this.state.MenuAccordion.map((item: any, i: any) => (
           <ListItem.Accordion
             noIcon
@@ -67,8 +67,8 @@ class MenuAccordion extends Component<Props> {
             ))}
           </ListItem.Accordion>
         ))}
-      </View>
-    );
+      </View> */
+    };
   }
 }
 
