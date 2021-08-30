@@ -9,12 +9,31 @@ type Props = {
 
 class MenuAccordion extends Component<Props> {
   state = {
-    MenuAccordion: this.props.Accordion,
+    MenuAccordion: Object.keys(
+      this.props.Accordion.reduce((a: any, e: any) => {
+        let groupByKeyName = e['Tipos'];
+        (a[groupByKeyName]
+          ? a[groupByKeyName]
+          : (a[groupByKeyName] = null || [])
+        ).push(e);
+        return a;
+      }, {}),
+    ).map(
+      (abuelo, i) =>
+        abuelo && {
+          Tipo: abuelo,
+          Id: this.props.Accordion.find((x: any) => x.Tipos === abuelo).Id,
+          expand: false,
+          menuhijo: this.props.Accordion.filter(
+            (x: any) => x.Tipos === abuelo,
+          ).map((x: any) => x.Inspecciones),
+        },
+    ),
   };
 
-  /*  handleChange(id: string, expand: boolean) {
-    let newArr = this.state.MenuAccordion.map((item: any, i: number) => {
-      if (id === item.id) {
+  handleChange(id: string, expand: boolean) {
+    let newArr = this.state.MenuAccordion.map((item: any) => {
+      if (id === item.Id) {
         return {...item, expand: !expand};
       } else {
         return item;
@@ -22,10 +41,11 @@ class MenuAccordion extends Component<Props> {
     });
     this.setState({MenuAccordion: newArr});
   }
- */
+
   render() {
-    return {
-      /* <View style={styles.container}>
+    console.log('component', this.state.MenuAccordion);
+    return (
+      <View style={styles.container}>
         {this.state.MenuAccordion.map((item: any, i: any) => (
           <ListItem.Accordion
             noIcon
@@ -40,14 +60,14 @@ class MenuAccordion extends Component<Props> {
               <>
                 <ListItem.Content>
                   <ListItem.Title style={styles.menuTitle}>
-                    {item.menuPadre}
+                    {item.Tipo}
                   </ListItem.Title>
                 </ListItem.Content>
               </>
             }
             isExpanded={item.expand}
             onPress={() => {
-              this.handleChange(item.id, item.expand);
+              this.handleChange(item.Id, item.expand);
             }}>
             {item.menuhijo.map((subitem: any, i: any) => (
               <ListItem
@@ -60,15 +80,15 @@ class MenuAccordion extends Component<Props> {
                 onPress={() => console.log('holi')}>
                 <ListItem.Content>
                   <ListItem.Title style={styles.submenuTitle}>
-                    {subitem.subtitulo}
+                    {subitem}
                   </ListItem.Title>
                 </ListItem.Content>
               </ListItem>
             ))}
           </ListItem.Accordion>
         ))}
-      </View> */
-    };
+      </View>
+    );
   }
 }
 

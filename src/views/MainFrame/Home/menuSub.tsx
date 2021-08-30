@@ -20,12 +20,12 @@ type Props = {
 
   submenuList: IObservaciones[] | any[];
   submenuCard: ICapacitacion[] | any[];
-  submenuAccordion: IInspecciones | any[];
+  submenuAccordion: IInspecciones[] | any[];
 };
 class SubMenu extends Component<Props> {
   state = {
     list: this.props.submenuList,
-    accordion: this.props.submenuAccordion,
+    accordion: this.props.submenuAccordion[0],
     card: this.props.submenuCard[0],
   };
   render() {
@@ -44,11 +44,11 @@ class SubMenu extends Component<Props> {
                 <MenuList List={this.state.list} />
               </View>
             )}
-            {/* {this.props.route.params.titulo === 'Inspecciones' && (
+            {this.props.route.params.titulo === 'Inspecciones' && (
               <View>
                 <MenuAccordion Accordion={this.state.accordion} />
               </View>
-            )} */}
+            )}
             {this.props.route.params.titulo === 'Capacitaciones' && (
               <View>
                 <MenuCard Card={this.state.card} />

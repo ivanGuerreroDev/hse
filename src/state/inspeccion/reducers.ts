@@ -1,11 +1,11 @@
 import {InspeccionState, InspeccionAction, INSPECCION_ACTIONS} from './types';
 
-const initialObservacionState: InspeccionState = {
+const initialInspeccionState: InspeccionState = {
   inspecciones: [],
 };
 
 export const inspeccionReducer = (
-  state: InspeccionState = initialObservacionState,
+  state: InspeccionState = initialInspeccionState,
   action: InspeccionAction,
 ): InspeccionState => {
   switch (action.type) {
