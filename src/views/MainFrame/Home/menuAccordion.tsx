@@ -43,19 +43,18 @@ class MenuAccordion extends Component<Props> {
   }
 
   render() {
-    console.log('component', this.state.MenuAccordion);
     return (
       <View style={styles.container}>
         {this.state.MenuAccordion.map((item: any, i: any) => (
           <ListItem.Accordion
             noIcon
             key={i}
+            Component={TouchableScale}
+            /*   friction={90}
+            tension={100}
+            activeScale={0.95} */
             style={styles.subcontainer}
             containerStyle={{backgroundColor: '#808080'}}
-            Component={TouchableScale}
-            friction={90}
-            tension={100}
-            activeScale={0.95}
             content={
               <>
                 <ListItem.Content>

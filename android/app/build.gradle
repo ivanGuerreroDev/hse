@@ -135,8 +135,8 @@ android {
         applicationId "cl.innoapsion.zimexa.hse"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3
-        versionName "1.3.0"
+        versionCode 4
+        versionName "1.4.0"
     }
     splits {
         abi {
@@ -173,7 +173,7 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
-        
+
     }
 
     // applicationVariants are e.g. debug, release

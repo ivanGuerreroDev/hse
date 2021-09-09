@@ -81,8 +81,6 @@ class ConfirmPassRecovery extends Component<Props> {
       this.state.newPass,
     )
       .then(result => {
-        console.log(result);
-
         this.props.navigation.navigate('EndPassRecovery');
       })
       .catch(err => {

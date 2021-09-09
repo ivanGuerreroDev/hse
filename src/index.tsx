@@ -21,6 +21,7 @@ import {SaveFormularioAsync} from 'state/formulariodinamico/types';
 // Perfill
 import {savePerfilesAsync} from 'state/perfil/thunk';
 import {SavePerfilAsync} from 'state/perfil/types';
+import {IPerfil} from 'utils/types/perfil';
 // Menu
 import {saveMenusAsyncThunk} from 'state/menu/thunk';
 import {SaveMenuAsync} from 'state/menu/types';

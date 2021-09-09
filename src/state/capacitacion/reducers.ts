@@ -15,7 +15,6 @@ export const capacitacionReducer = (
   switch (action.type) {
     case CAPACITACION_ACTIONS.SAVE_CAPACITACION:
       const {capacitacion} = action.payload;
-      console.log('reducers', capacitacion);
       return {
         capacitaciones: [
           ...state.capacitaciones.filter(

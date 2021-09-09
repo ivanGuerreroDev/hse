@@ -4,7 +4,6 @@ export interface IMenu {
   NombreMenu: string;
   Plataforma: number;
 }
-
 export interface IInspecciones {
   Id: string;
   expand: string;

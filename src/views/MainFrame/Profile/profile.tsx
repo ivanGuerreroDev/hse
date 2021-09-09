@@ -33,10 +33,12 @@ type DispatchProps = {
 type Props = StateProps & DispatchProps;
 class Profile extends Component<Props> {
   render() {
+    console.log('Profile', this.props.perfil);
+
     return (
       <Layout>
         <View style={{alignItems: 'flex-end', paddingEnd: 5}}>
-          <Text style={styles.vtext}>V. 1.3.0</Text>
+          <Text style={styles.vtext}>V. 1.4.0</Text>
         </View>
         <View style={styles.avatar}>
           <Avatar
@@ -44,9 +46,20 @@ class Profile extends Component<Props> {
             source={require('components/Assets/Profile/icono_foto.png')}
           />
           <Text style={styles.userText}>
-            {`${this.props.perfil[0]?.NombrePersona} ${this.props.perfil[0]?.ApellidoPaterno} ${this.props.perfil[0].ApellidoMaterno}`}
+            {`${
+              this.props.perfil[this.props.perfil.length - 1]?.NombrePersona
+            } ${
+              this.props.perfil[this.props.perfil.length - 1]?.ApellidoPaterno
+            } ${
+              this.props.perfil[this.props.perfil.length - 1].ApellidoMaterno
+            }`}
           </Text>
-          <Text>{this.props.perfil[0]?.CorreoElectronicoPersona}</Text>
+          <Text>
+            {
+              this.props.perfil[this.props.perfil.length - 1]
+                ?.CorreoElectronicoPersona
+            }
+          </Text>
         </View>
 
         <ScrollView>
@@ -59,7 +72,15 @@ class Profile extends Component<Props> {
                 disabled
                 autoCapitalize="none"
                 label={'Nombre'}
-                value={`${this.props.perfil[0]?.NombrePersona} ${this.props.perfil[0]?.ApellidoPaterno} ${this.props.perfil[0].ApellidoMaterno}`}
+                value={`${
+                  this.props.perfil[this.props.perfil.length - 1]?.NombrePersona
+                } ${
+                  this.props.perfil[this.props.perfil.length - 1]
+                    ?.ApellidoPaterno
+                } ${
+                  this.props.perfil[this.props.perfil.length - 1]
+                    .ApellidoMaterno
+                }`}
                 labelStyle={styles.inputLabel}
                 inputStyle={styles.inputStyle}
                 errorStyle={styles.inputError}
@@ -68,7 +89,11 @@ class Profile extends Component<Props> {
                 disabled
                 autoCapitalize="none"
                 label={'RUT'}
-                value={`${this.props.perfil[0]?.RunPersona}-${this.props.perfil[0]?.DvPersona}`}
+                value={`${
+                  this.props.perfil[this.props.perfil.length - 1]?.RunPersona
+                }-${
+                  this.props.perfil[this.props.perfil.length - 1]?.DvPersona
+                }`}
                 labelStyle={styles.inputLabel}
                 inputStyle={styles.inputStyle}
                 errorStyle={styles.inputError}
@@ -80,7 +105,9 @@ class Profile extends Component<Props> {
                 disabled
                 autoCapitalize="none"
                 label={'EESS'}
-                value={this.props.perfil[0]?.NombreEmpresa}
+                value={
+                  this.props.perfil[this.props.perfil.length - 1]?.NombreEmpresa
+                }
                 labelStyle={styles.inputLabel}
                 inputStyle={styles.inputStyle}
                 errorStyle={styles.inputError}
@@ -88,8 +115,10 @@ class Profile extends Component<Props> {
               <Input
                 disabled
                 autoCapitalize="none"
-                label={this.props.perfil[0]?.Mascara}
-                value={this.props.perfil[0]?.NombreNV3}
+                label={this.props.perfil[this.props.perfil.length - 1]?.Mascara}
+                value={
+                  this.props.perfil[this.props.perfil.length - 1]?.NombreNV3
+                }
                 labelStyle={styles.inputLabel}
                 inputStyle={styles.inputStyle}
                 errorStyle={styles.inputError}
@@ -98,7 +127,9 @@ class Profile extends Component<Props> {
                 disabled
                 autoCapitalize="none"
                 label={'Cargo'}
-                value={this.props.perfil[0]?.NombreCargo}
+                value={
+                  this.props.perfil[this.props.perfil.length - 1]?.NombreCargo
+                }
                 labelStyle={styles.inputLabel}
                 inputStyle={styles.inputStyle}
                 errorStyle={styles.inputError}
@@ -110,7 +141,10 @@ class Profile extends Component<Props> {
                 disabled
                 autoCapitalize="none"
                 label={'Correo Electronico'}
-                value={this.props.perfil[0]?.CorreoElectronicoPersona}
+                value={
+                  this.props.perfil[this.props.perfil.length - 1]
+                    ?.CorreoElectronicoPersona
+                }
                 labelStyle={styles.inputLabel}
                 inputStyle={styles.inputStyle}
                 errorStyle={styles.inputError}

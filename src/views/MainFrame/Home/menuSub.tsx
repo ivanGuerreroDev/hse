@@ -1,9 +1,16 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, ScrollView} from 'react-native';
 //Navigate
-import {RouteProp} from '@react-navigation/native';
+import {
+  CompositeNavigationProp,
+  NavigationProp,
+  RouteProp,
+} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {MainFrameStackParamList} from 'utils/types/navigations';
+import {
+  MainFrameStackParamList,
+  RootMainStackParamList,
+} from 'utils/types/navigations';
 
 import Layaut from './layaut';
 import MenuList from './menuList';
@@ -13,14 +20,20 @@ import MenuCard from './menuCard';
 import {connect} from 'react-redux';
 import {RootState} from 'state/store/store';
 import {ICapacitacion, IObservaciones, IInspecciones} from 'utils/types/menu';
+import {IFormulario} from 'utils/types/formulariodinamico';
 
 type Props = {
   route: RouteProp<MainFrameStackParamList, 'SubMenu'>;
-  navigation: StackNavigationProp<MainFrameStackParamList>;
+  navigation: CompositeNavigationProp<
+    NavigationProp<MainFrameStackParamList, 'SubMenu'>,
+    NavigationProp<RootMainStackParamList>
+  >;
 
   submenuList: IObservaciones[] | any[];
+
   submenuCard: ICapacitacion[] | any[];
   submenuAccordion: IInspecciones[] | any[];
+  formularios: IFormulario[];
 };
 class SubMenu extends Component<Props> {
   state = {
@@ -29,10 +42,6 @@ class SubMenu extends Component<Props> {
     card: this.props.submenuCard[0],
   };
   render() {
-    console.log('Card', this.state.card);
-    console.log('List', this.state.list);
-    console.log('Accordion', this.state.accordion);
-
     return (
       <Layaut
         Titulo={this.props.route.params.titulo}
@@ -41,7 +50,11 @@ class SubMenu extends Component<Props> {
           <View style={styles.container}>
             {this.props.route.params.titulo === 'Observaciones' && (
               <View>
-                <MenuList List={this.state.list} />
+                <MenuList
+                  List={this.state.list}
+                  formularios={this.props.formularios}
+                  navigation={this.props.navigation}
+                />
               </View>
             )}
             {this.props.route.params.titulo === 'Inspecciones' && (
@@ -66,6 +79,7 @@ const mapStateToProps = (state: RootState) => {
     submenuList: state.observacion.observaciones,
     submenuCard: state.capacitacion.capacitaciones,
     submenuAccordion: state.inspeccion.inspecciones,
+    formularios: state.formularios.formularios,
   };
 };
 

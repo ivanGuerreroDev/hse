@@ -27,7 +27,6 @@ class Menu extends Component<Props> {
   };
 
   render() {
-    console.log('menu', this.state.menu);
     return (
       <Layout>
         <View style={styles.container}>
@@ -91,7 +90,6 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 10,
     marginHorizontal: 1,
-    /*     marginBottom: 96, */
   },
   list: {
     alignSelf: 'center',

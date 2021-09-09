@@ -5,6 +5,7 @@ import {
   View,
   StyleSheet,
   Keyboard,
+  ScrollView,
 } from 'react-native';
 import {Divider, Input, CheckBox, Text} from 'react-native-elements';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -49,8 +50,13 @@ class SignIn extends Component<Props> {
       Errorpassword: '',
     });
     let isvalid = true;
+    let regex = /^\d{7,8}-[\dk]{1}$/;
+    if (!this.state.rutempresa.match(regex)) {
+      this.setState({Errorutempresa: 'El formato es incorrecto'});
+      isvalid = false;
+    }
 
-    if (!validate(clean(this.state.rutempresa))) {
+    if (!validate(this.state.rutempresa)) {
       this.setState({Errorutempresa: 'El rut ingresado no es valido'});
       isvalid = false;
     }
@@ -70,14 +76,14 @@ class SignIn extends Component<Props> {
   }
 
   onSubmit() {
+    Keyboard.dismiss();
     if (!this.validationData()) {
       return;
     }
-    Keyboard.dismiss();
     new Promise(async (resolve: (value: IUser) => void, reject) => {
       try {
         let signin: InitiateAuthCommandOutput = await signIn(
-          clean(this.state.rutempresa.slice(0, -1)),
+          this.state.rutempresa.slice(0, -2),
           this.state.username,
           this.state.password,
         );
@@ -97,7 +103,7 @@ class SignIn extends Component<Props> {
           let userData: GetUserCommandOutput = await getUser(accessToken);
           if (userData.Username) {
             let user: IUser = {
-              Empresa: clean(this.state.rutempresa.slice(0, -1)),
+              Empresa: this.state.rutempresa.slice(0, -2),
               Username: userData.Username,
               UserTokens: signin.AuthenticationResult,
             };
@@ -112,6 +118,8 @@ class SignIn extends Component<Props> {
         this.props.saveUser(result, this.state.remember);
       })
       .catch(err => {
+        // console.log(err);
+
         switch (err.name) {
           case 'NotAuthorizedException':
             this.setState({
@@ -156,75 +164,79 @@ class SignIn extends Component<Props> {
 
     return (
       <Layaut>
-        <View style={styles.container}>
-          <Divider color="transparent" width={40} />
-
-          <Input
-            autoCapitalize="none"
-            placeholder="RUT Empresa (12345678-9)"
-            errorMessage={this.state.Errorutempresa}
-            onSubmitEditing={() => inputPasswordRef?.focus()}
-            onChangeText={rutempresa =>
-              this.setState({rutempresa, Errorutempresa: ''})
-            }
-            label={this.state.rutempresa ? 'RUT Empresa (12345678-9)' : ''}
-            value={this.state.rutempresa ? format(this.state.rutempresa) : ''}
-            labelStyle={styles.inputLabel}
-            inputContainerStyle={styles.inputContainer}
-            errorStyle={styles.inputError}
-            inputStyle={styles.inputStyle}
-          />
-          <Input
-            autoCapitalize="none"
-            keyboardType="email-address"
-            placeholder="Usuario"
-            errorMessage={this.state.Errorusername}
-            onSubmitEditing={() => inputPasswordRef?.focus()}
-            onChangeText={username => this.setState({username})}
-            label={this.state.username ? 'Usuario' : ''}
-            value={this.state.username}
-            labelStyle={styles.inputLabel}
-            inputContainerStyle={styles.inputContainer}
-            errorStyle={styles.inputError}
-            inputStyle={styles.inputStyle}
-          />
-          <Input
-            ref={ref => (inputPasswordRef = ref)}
-            autoCapitalize="none"
-            secureTextEntry={this.state.showpassword}
-            placeholder="Contraseña"
-            errorMessage={this.state.Errorpassword}
-            onChangeText={password => this.setState({password})}
-            value={this.state.password}
-            rightIcon={securePassIcon}
-            label={this.state.password ? 'Contraseña' : ''}
-            rightIconContainerStyle={{width: 60}}
-            labelStyle={styles.inputLabel}
-            inputContainerStyle={styles.inputContainer}
-            errorStyle={styles.inputError}
-            inputStyle={styles.inputStyle}
-          />
-        </View>
-        <View style={styles.rememberContainer}>
-          <CheckBox
-            checked={this.state.remember}
-            onPress={() => this.setState({remember: !this.state.remember})}
-            title="Recuérdame"
-            containerStyle={styles.checkbox}
-            checkedColor="#FDAE01"
-            textStyle={{fontWeight: 'normal', fontSize: 12}}
-            size={20}
-          />
-          <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate('forgotPassword');
-            }}>
-            <Text style={styles.buttonText}>¿Olvidaste tu contraseña?</Text>
-          </TouchableOpacity>
-        </View>
-
+        <Divider color="transparent" width={30} />
+        <ScrollView>
+          <View style={styles.containerInput}>
+            <Input
+              autoCapitalize="none"
+              placeholder="RUT Empresa (12345678-9)"
+              errorMessage={this.state.Errorutempresa}
+              onSubmitEditing={() => inputPasswordRef?.focus()}
+              onChangeText={rutempresa =>
+                this.setState({rutempresa, Errorutempresa: ''})
+              }
+              label={this.state.rutempresa ? 'RUT Empresa (12345678-9)' : ''}
+              value={this.state.rutempresa}
+              labelStyle={styles.inputLabel}
+              inputContainerStyle={styles.inputContainer}
+              errorStyle={styles.inputError}
+              inputStyle={styles.inputStyle}
+            />
+            <Input
+              autoCapitalize="none"
+              keyboardType="email-address"
+              placeholder="Usuario"
+              errorMessage={this.state.Errorusername}
+              onSubmitEditing={() => inputPasswordRef?.focus()}
+              onChangeText={username =>
+                this.setState({username, Errorusername: ''})
+              }
+              label={this.state.username ? 'Usuario' : ''}
+              value={this.state.username}
+              labelStyle={styles.inputLabel}
+              inputContainerStyle={styles.inputContainer}
+              errorStyle={styles.inputError}
+              inputStyle={styles.inputStyle}
+            />
+            <Input
+              ref={ref => (inputPasswordRef = ref)}
+              autoCapitalize="none"
+              secureTextEntry={this.state.showpassword}
+              placeholder="Contraseña"
+              errorMessage={this.state.Errorpassword}
+              onChangeText={password =>
+                this.setState({password, Errorpassword: ''})
+              }
+              value={this.state.password}
+              rightIcon={securePassIcon}
+              label={this.state.password ? 'Contraseña' : ''}
+              rightIconContainerStyle={{width: 60}}
+              labelStyle={styles.inputLabel}
+              inputContainerStyle={styles.inputContainer}
+              errorStyle={styles.inputError}
+              inputStyle={styles.inputStyle}
+            />
+            <View style={styles.rememberContainer}>
+              <CheckBox
+                checked={this.state.remember}
+                onPress={() => this.setState({remember: !this.state.remember})}
+                title="Recuérdame"
+                containerStyle={styles.checkbox}
+                checkedColor="#FDAE01"
+                textStyle={{fontWeight: 'normal', fontSize: 12}}
+                size={20}
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate('forgotPassword');
+                }}>
+                <Text style={styles.buttonText}>¿Olvidaste tu contraseña?</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
         <Text style={this.state.messageStyle}>Credenciales Incorrectas.</Text>
-
+        <Divider color="transparent" width={20} />
         <View style={styles.goContainer}>
           <TouchableOpacity
             style={styles.goButton}
@@ -232,6 +244,7 @@ class SignIn extends Component<Props> {
             <Text style={styles.goText}>INGRESAR</Text>
           </TouchableOpacity>
         </View>
+        <Divider color="transparent" width={40} />
       </Layaut>
     );
   }
@@ -244,9 +257,11 @@ const mapDispatchToProps = {
 export default connect(null, mapDispatchToProps)(SignIn);
 
 const styles = StyleSheet.create({
-  container: {
-    marginLeft: 35,
-    marginRight: 35,
+  containerInput: {
+    flex: 4,
+    marginLeft: 20,
+    marginRight: 20,
+    justifyContent: 'center',
   },
   messageHidden: {
     textAlign: 'center',
@@ -258,14 +273,13 @@ const styles = StyleSheet.create({
     color: 'red',
   },
   rememberContainer: {
-    marginLeft: 20,
-    marginRight: 30,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
   },
   checkbox: {
     paddingLeft: 0,
+    paddingRight: 0,
     width: '40%',
     backgroundColor: 'transparent',
     borderColor: 'transparent',
@@ -277,10 +291,11 @@ const styles = StyleSheet.create({
     marginRight: 1,
   },
   goContainer: {
+    flex: 1,
     marginLeft: 35,
     marginRight: 35,
     padding: 6,
-    /*  paddingBottom: 50, */
+    justifyContent: 'center',
   },
   buttonText: {
     justifyContent: 'center',

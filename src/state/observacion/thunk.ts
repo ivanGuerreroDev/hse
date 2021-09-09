@@ -22,6 +22,7 @@ export const saveObservacionAsyncThunk: SaveObservacionAsync = (
           method: 'post',
           url: `${Config.UrlApi}/observaciones`,
           data: {
+            Usuario: userData.Username,
             Empresa: userData.Empresa,
           },
         });
