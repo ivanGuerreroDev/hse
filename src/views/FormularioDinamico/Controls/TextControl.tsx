@@ -17,7 +17,8 @@ export default class TextControl extends ControlComponent {
         placeholder={controlBridge.property('title')}
         onChangeText={(value) => controlBridge.OutputValue = value}
         value={controlBridge.OutputValue}
-        inputContainerStyle={{borderColor: '#0000001F', borderBottomWidth: 1}} placeholderTextColor='#00000061'/>
+        inputContainerStyle={{borderColor: '#0000001F', borderBottomWidth: 1}} placeholderTextColor='#00000061'
+        editable={!controlBridge.ReadOnly}/>
     );
   }
 }
