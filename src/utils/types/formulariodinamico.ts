@@ -10,7 +10,14 @@ export interface IControl extends ITaggeable {
   order: number;
   properties?: INameValue[];
   outputValue?: any;
-  outputMetadata?: any;
+  outputMetadata?: {
+    schema: object;
+    validateSchema?: boolean;
+    outputValidationErrorMessage?: string;
+    customValidation?: string;
+    defaultValue?: any;
+    updateOnChanges?: boolean | string;
+  };
   controls?: IControl[];
 }
 

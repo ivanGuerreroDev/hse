@@ -56,4 +56,15 @@ export class DocumentoFactory {
   get Documento(): IDocumento {
     return this.documento;
   }
+
+  validateOutputValues(): Array<string> {
+    let errorStack: Array<string> = [];
+    this.bridgeList.forEach(controlBridge => {
+      const validate = controlBridge.validateOutputValue();
+
+      if (validate) errorStack.push(validate);
+    });
+
+    return errorStack;
+  }
 }

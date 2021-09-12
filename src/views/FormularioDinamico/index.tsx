@@ -104,8 +104,13 @@ class FormularioDinamico extends Component<Props, State> {
           titleStyle={{fontSize: 12}} buttonStyle={{backgroundColor: '#FDAE01'}}
           icon={<Icon type='material' name='send' color='white'/>}
           onPress={() => {
-            changeStatusDocumento(Documento._id, DocumentoStatus.sending);
-            navigation.goBack();
+            let messages = this.documentoFactory.validateOutputValues();
+            if (messages.length > 0) {
+              console.log(JSON.stringify(messages));
+            } else {
+              changeStatusDocumento(Documento._id, DocumentoStatus.sending);
+              navigation.goBack();
+            }
           }}/>
       );
 
