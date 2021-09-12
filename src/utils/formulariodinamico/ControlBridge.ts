@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import ajv from 'ajv';
 import jmespath from 'jmespath';
 import { DocumentoFactory } from './DocumentoFactory';
 import { OutputValueChangeCallBack } from 'types/documentofactory';
@@ -43,6 +44,21 @@ export class ControlBridge {
     );
 
     return this.catchValue(propertyValue);
+  }
+
+  validateOutputValue(): string | undefined {
+    if (this.control.outputMetadata?.validateSchema) {
+      const schemaValidator = new ajv();
+      const validate = schemaValidator.compile(this.control.outputMetadata.schema);
+      if (!validate(this.control.outputValue)) {
+        return this.control.outputMetadata.outputValidationErrorMessage || 'unknown';
+      }
+    }
+    if (this.control.outputMetadata?.customValidation) {
+      return this.excecuteValueCode(
+        `const value = ${JSON.stringify(this.control.outputValue)};\n${this.control.outputMetadata.customValidation}`
+      );
+    }
   }
 
   private catchValue(param: any): any {
