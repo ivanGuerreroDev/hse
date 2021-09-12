@@ -37,6 +37,10 @@ export class ControlBridge {
     });
   }
 
+  get ReadOnly(): boolean {
+    return this.factory.isReadOnly;
+  }
+
   property(propertyName: string): any {
     const propertyValue: any = jmespath.search(
       this.control.properties || [],

@@ -106,7 +106,7 @@ class Documents extends Component<Props> {
               <CardDocumento
                 documento={item}
                 onCardPress={() =>
-                  navigation.navigate('FormularioDinamico', {documento: item})
+                  navigation.navigate('FormularioDinamico', {documento: item, readOnly: true})
                 }
                 rightOption={
                   <Button
@@ -131,7 +131,7 @@ class Documents extends Component<Props> {
               <CardDocumento
                 documento={item}
                 onCardPress={() =>
-                  navigation.navigate('FormularioDinamico', {documento: item})
+                  navigation.navigate('FormularioDinamico', {documento: item, readOnly: true})
                 }
                 rightOption={
                   <Button

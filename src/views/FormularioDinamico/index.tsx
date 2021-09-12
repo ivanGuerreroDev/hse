@@ -57,9 +57,10 @@ class FormularioDinamico extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    const { documento } = props.route.params;
+    const { documento, readOnly } = props.route.params;
 
     this.documentoFactory = new DocumentoFactory(documento);
+    this.documentoFactory.isReadOnly = readOnly || false;
     this.documentoFactory.onOutputValueChange = this.handleOutputValueChange;
   }
 

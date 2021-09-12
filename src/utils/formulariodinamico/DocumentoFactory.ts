@@ -32,6 +32,7 @@ export class DocumentoFactory {
     this.onOutputValueChange?.(event);
   };
 
+  isReadOnly: boolean = false;
   onOutputValueChange?: OutputValueChangeCallBack;
 
   constructor(private documento: IDocumento) {
