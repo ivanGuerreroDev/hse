@@ -13,7 +13,7 @@ import {
   SaveResource,
   SaveResourceAction
 } from './types';
-import { DocumentoStatus, IDocumento, IFormulario, IResource } from 'types/formulariodinamico';
+import { DocumentoStatus, IDocumento, IFormulario, ILocalResource, IResource } from 'types/formulariodinamico';
 
 export const changeStatusDocumento: ChangeStatusDocumento = (
   id: string,
@@ -70,7 +70,7 @@ export const saveFormulario: SaveFormulario = (
 };
 
 export const saveResource: SaveResource = (
-  resource: IResource
+  resource: ILocalResource
 ): SaveResourceAction => {
   let action: SaveResourceAction = {
     type: RESOURCES_ACTIONS.SAVE_RESOURCE,

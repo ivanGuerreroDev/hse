@@ -1,3 +1,4 @@
+import { Method } from 'axios';
 import { ControlType } from './controltypes';
 export interface ITaggeable {
   keywords?: INameValue[];
@@ -63,6 +64,15 @@ export interface IPage extends IControl{
 export interface IResource {
   name: string;
   url: string;
-  method: string;
-  body: string;
+  type: 'object' | 'api';
+  method?: Method;
+  body?: string;
+}
+
+export interface ILocalResource {
+  url: string;
+  type: 'object' | 'api';
+  method?: Method;
+  body?: string;
+  localData: any;
 }

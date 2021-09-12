@@ -2,7 +2,8 @@ import _ from 'lodash';
 import jmespath from 'jmespath';
 import { DocumentoFactory } from './DocumentoFactory';
 import { OutputValueChangeCallBack } from 'types/documentofactory';
-import { IControl } from 'types/formulariodinamico';
+import { IControl, ILocalResource, IResource } from 'types/formulariodinamico';
+import { RootState, store } from 'state/store/store';
 
 export class ControlBridge {
   requiredProperties: Array<string> = [
@@ -68,7 +69,27 @@ export class ControlBridge {
       })?.[0];
 
       return controlBridge?.OutputValue;
-    }
+    };
+
+    const resource = (resourceName: string): any => {
+      if (!this.factory.Documento.resources) throw `Este documento no tiene configurado los recursos`;
+
+      const documentoResources: IResource[] = this.factory.Documento.resources
+        ?.filter(resource => resource.name === resourceName);
+      if (documentoResources.length === 0) throw `El recurso ${resourceName} no existe en este documento`;
+      const documentoResource: IResource = documentoResources[0];
+
+      const state: RootState = store.getState();
+      const localResource: ILocalResource = state.resources.resources
+        .filter(item =>
+          item.url === documentoResource.url &&
+          item.type === documentoResource.type &&
+          item.method === documentoResource.method &&
+          item.body === documentoResource.body)
+        [0];
+
+      return localResource.localData;
+    };
 
     return eval(valueCode);
   }
