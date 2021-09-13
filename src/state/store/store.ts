@@ -25,6 +25,7 @@ const config = {
     'documentos',
     'formularios',
     'resources',
+    'pendingManager',
     'settings',
     'user',
   ],
