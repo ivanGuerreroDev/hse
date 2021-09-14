@@ -1,6 +1,7 @@
 import React from 'react';
-import ControlComponent, { Props } from '../ControlComponent';
-import { Input } from 'react-native-elements';
+import ControlComponent, {Props} from '../ControlComponent';
+import {Input} from 'react-native-elements';
+import {Text, View} from 'react-native';
 
 export default class TextControl extends ControlComponent {
   constructor(props: Props) {
@@ -10,14 +11,16 @@ export default class TextControl extends ControlComponent {
   }
 
   render() {
-    const { controlBridge } = this.props;
+    const {children, controlBridge} = this.props;
 
     return (
-      <Input
-        placeholder={controlBridge.property('title')}
-        onChangeText={(value) => controlBridge.OutputValue = value}
-        value={controlBridge.OutputValue}
-        inputContainerStyle={{borderColor: '#0000001F', borderBottomWidth: 1}} placeholderTextColor='#00000061'/>
+      <View style={{flex: 1, paddingTop: 2, paddingBottom: 10}}>
+        <Text
+          style={{flex: 1, fontSize: 18, color: '#FDAE01', fontWeight: 'bold'}}>
+          {controlBridge.property('title')}
+        </Text>
+        {children}
+      </View>
     );
   }
 }
