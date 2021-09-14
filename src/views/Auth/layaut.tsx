@@ -19,7 +19,7 @@ class Layaut extends Component {
         {height < 684 ? (
           <ScrollView>
             <Header
-              containerStyle={styles.headerContainer}
+              containerStyle={{...styles.headerContainer, paddingTop: '5%'}}
               centerComponent={
                 <Image
                   source={require('components/Assets/logo_hse.png')}

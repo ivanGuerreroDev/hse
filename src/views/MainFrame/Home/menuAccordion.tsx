@@ -1,10 +1,25 @@
+import {
+  CompositeNavigationProp,
+  NavigationProp,
+} from '@react-navigation/native';
 import React, {Component} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {ListItem} from 'react-native-elements';
 import TouchableScale from 'react-native-touchable-scale';
+import {DocumentoFactory} from 'utils/formulariodinamico/DocumentoFactory';
+import {IFormulario} from 'utils/types/formulariodinamico';
+import {
+  MainFrameStackParamList,
+  RootMainStackParamList,
+} from 'utils/types/navigations';
 
 type Props = {
   Accordion: any;
+  formularios: IFormulario[];
+  navigation: CompositeNavigationProp<
+    NavigationProp<MainFrameStackParamList, 'SubMenu'>,
+    NavigationProp<RootMainStackParamList>
+  >;
 };
 
 class MenuAccordion extends Component<Props> {
@@ -26,7 +41,15 @@ class MenuAccordion extends Component<Props> {
           expand: false,
           menuhijo: this.props.Accordion.filter(
             (x: any) => x.Tipos === abuelo,
-          ).map((x: any) => x.Inspecciones),
+          ).map(
+            (x: any) =>
+              x && {
+                SubMenu: x.Inspecciones,
+                Formulario: this.props.formularios.filter(
+                  item => item._id === x.IdFormulario,
+                ),
+              },
+          ),
         },
     ),
   };
@@ -43,6 +66,8 @@ class MenuAccordion extends Component<Props> {
   }
 
   render() {
+    console.log('Acordion', this.state.MenuAccordion);
+
     return (
       <View style={styles.container}>
         {this.state.MenuAccordion.map((item: any, i: any) => (
@@ -72,14 +97,23 @@ class MenuAccordion extends Component<Props> {
               <ListItem
                 key={i}
                 Component={TouchableScale}
-                friction={90}
+                /* friction={90}
                 tension={100}
-                activeScale={0.95}
+                activeScale={0.95} */
                 style={styles.menusubcontainer}
-                onPress={() => console.log('holi')}>
+                onPress={() => {
+                  if (subitem.Formulario[0]) {
+                    console.log('formuilario', subitem.Formulario[0]);
+                    this.props.navigation.navigate('FormularioDinamico', {
+                      documento: DocumentoFactory.createFromFormulario(
+                        subitem.Formulario[0],
+                      ),
+                    });
+                  }
+                }}>
                 <ListItem.Content>
                   <ListItem.Title style={styles.submenuTitle}>
-                    {subitem}
+                    {subitem.SubMenu}
                   </ListItem.Title>
                 </ListItem.Content>
               </ListItem>

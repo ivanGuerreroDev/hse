@@ -22,6 +22,7 @@ export const saveInspeccionAsyncThunk: SaveInspeccionAsync = (
           method: 'post',
           url: `${Config.UrlApi}/inspecciones`,
           data: {
+            Usuario: userData.Username,
             Empresa: userData.Empresa,
           },
         });

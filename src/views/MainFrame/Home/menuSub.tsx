@@ -59,7 +59,11 @@ class SubMenu extends Component<Props> {
             )}
             {this.props.route.params.titulo === 'Inspecciones' && (
               <View>
-                <MenuAccordion Accordion={this.state.accordion} />
+                <MenuAccordion
+                  Accordion={this.state.accordion}
+                  formularios={this.props.formularios}
+                  navigation={this.props.navigation}
+                />
               </View>
             )}
             {this.props.route.params.titulo === 'Capacitaciones' && (

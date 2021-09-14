@@ -16,7 +16,7 @@ import {
 import {connect} from 'react-redux';
 import {SaveUser, IUser} from 'state/user/types';
 import {saveUser} from 'state/user/actions';
-import {validate, format, clean} from 'rut.js';
+import {validate, clean} from 'rut.js';
 
 import {getUser, signIn} from '../../utils/cognito/cognito-wrapper';
 import Layaut from 'views/Auth/layaut';
@@ -116,6 +116,7 @@ class SignIn extends Component<Props> {
     })
       .then(result => {
         this.props.saveUser(result, this.state.remember);
+        /*         */
       })
       .catch(err => {
         // console.log(err);

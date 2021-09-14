@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {ListItem} from 'react-native-elements';
 import TouchableScale from 'react-native-touchable-scale';
-import {connect} from 'react-redux';
-import {RootState} from 'state/store/store';
 import {DocumentoFactory} from 'utils/formulariodinamico/DocumentoFactory';
 import {IFormulario} from 'utils/types/formulariodinamico';
 import {

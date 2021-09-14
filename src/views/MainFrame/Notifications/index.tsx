@@ -32,7 +32,7 @@ class Notifications extends Component<Props> {
           {this.props.formularios.map((formulario, index) => (
             <Button
               key={index * 2}
-              title={'a' + formulario.title}
+              title={formulario.title}
               onPress={() => {
                 this.props.navigation.navigate('FormularioDinamico', {
                   documento: DocumentoFactory.createFromFormulario(formulario),
