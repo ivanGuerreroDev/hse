@@ -39,6 +39,7 @@ export type RootMainStackParamList = {
   MainFrame: NavigatorScreenParams<MainFrameStackParamList>;
   FormularioDinamico: {
     documento: IDocumento;
+    readOnly?: boolean;
   };
   Modal: JSX.Element;
 };

@@ -27,7 +27,17 @@ export default class CheckControl extends ControlComponent {
             buttonStyle={{
               backgroundColor: option.color ?? '#FDAE01'
             }}
-            containerStyle={selectionStyle}/>
+            disabledStyle={{
+              backgroundColor: option.color ?? '#FDAE01'
+            }}
+            titleStyle={{
+              color: 'white'
+            }}
+            disabledTitleStyle={{
+              color: 'white'
+            }}
+            containerStyle={selectionStyle}
+            disabled={controlBridge.ReadOnly}/>
         </View>
       );
     });

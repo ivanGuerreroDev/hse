@@ -1,3 +1,4 @@
+import { Method } from 'axios';
 import { ControlType } from './controltypes';
 export interface ITaggeable {
   keywords?: INameValue[];
@@ -9,7 +10,14 @@ export interface IControl extends ITaggeable {
   order: number;
   properties?: INameValue[];
   outputValue?: any;
-  outputMetadata?: any;
+  outputMetadata?: {
+    schema: object;
+    validateSchema?: boolean;
+    outputValidationErrorMessage?: string;
+    customValidation?: string;
+    defaultValue?: any;
+    updateOnChanges?: boolean | string;
+  };
   controls?: IControl[];
 }
 
@@ -63,6 +71,15 @@ export interface IPage extends IControl{
 export interface IResource {
   name: string;
   url: string;
-  method: string;
-  body: string;
+  type: 'object' | 'api';
+  method?: Method;
+  body?: string;
+}
+
+export interface ILocalResource {
+  url: string;
+  type: 'object' | 'api';
+  method?: Method;
+  body?: string;
+  localData: any;
 }

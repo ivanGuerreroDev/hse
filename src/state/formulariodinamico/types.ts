@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { DocumentoStatus, IDocumento, IFormulario, IResource} from 'types/formulariodinamico';
+import { DocumentoStatus, IDocumento, IFormulario, ILocalResource, IResource } from 'types/formulariodinamico';
 
 //#region State Interface
 
@@ -13,7 +13,7 @@ export interface FormulariosState {
 }
 
 export interface ResourcesState {
-  resources: IResource[]
+  resources: ILocalResource[]
 }
 
 //#endregion
@@ -47,7 +47,7 @@ export interface SaveFormularioAction extends AnyAction {
 
 export interface SaveResourceAction extends AnyAction {
   payload: {
-    resource: IResource
+    resource: ILocalResource
   }
 }
 
@@ -76,7 +76,7 @@ export type SaveDocumento = (documento: IDocumento) => SaveDocumentoAction;
 
 export type SaveFormulario = (formulario: IFormulario) => SaveFormularioAction;
 
-export type SaveResource = (resource: IResource) => SaveResourceAction;
+export type SaveResource = (resource: ILocalResource) => SaveResourceAction;
 
 //#endregion
 
@@ -84,11 +84,15 @@ export type SaveResource = (resource: IResource) => SaveResourceAction;
 
 export type SaveFormularioAsyncThunk = ThunkAction<Promise<void>, {}, {}, SaveFormularioAction>;
 
+export type SaveLocalResourceAsyncThunk = ThunkAction<Promise<ILocalResource>, {}, {}, SaveResourceAction>;
+
 //#endregion
 
 //#region Thunk func types
 
 export type SaveFormularioAsync = () => SaveFormularioAsyncThunk;
+
+export type SaveLocalResourceAsync = (resource: IResource) => SaveLocalResourceAsyncThunk;
 
 //#endregion
 
