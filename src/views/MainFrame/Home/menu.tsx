@@ -27,6 +27,8 @@ class Menu extends Component<Props> {
   };
 
   render() {
+    console.log(this.props.menu);
+
     return (
       <Layout>
         <View style={styles.container}>

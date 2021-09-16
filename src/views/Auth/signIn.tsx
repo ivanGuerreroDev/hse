@@ -16,17 +16,48 @@ import {
 import {connect} from 'react-redux';
 import {SaveUser, IUser} from 'state/user/types';
 import {saveUser} from 'state/user/actions';
+// Formulario
+import {saveFormulariosAsync} from 'state/formulariodinamico/thunk';
+import {SaveFormularioAsync} from 'state/formulariodinamico/types';
+// Perfill
+import {savePerfilesAsync} from 'state/perfil/thunk';
+import {SavePerfilAsync} from 'state/perfil/types';
+import {IPerfil} from 'utils/types/perfil';
+// Menu
+import {saveMenusAsyncThunk} from 'state/menu/thunk';
+import {SaveMenuAsync} from 'state/menu/types';
+// Capacitacion
+import {saveCapacitacionAsyncThunk} from 'state/capacitacion/thunk';
+import {SaveCapacitacionAsync} from 'state/capacitacion/types';
+// Observaciones
+import {saveObservacionAsyncThunk} from 'state/observacion/thunk';
+import {SaveObservacionAsync} from 'state/observacion/types';
+// Inspecciones
+import {saveInspeccionAsyncThunk} from 'state/inspeccion/thunk';
+import {SaveInspeccionAsync} from 'state/inspeccion/types';
 import {validate, clean} from 'rut.js';
 
 import {getUser, signIn} from '../../utils/cognito/cognito-wrapper';
 import Layaut from 'views/Auth/layaut';
 import {AuthStackParamList} from 'utils/types/navigations';
+import {ThunkDispatch} from 'redux-thunk';
+import {RootState} from 'state/store/store';
 
-type Props = {
+type StateProps = {
   navigation: StackNavigationProp<AuthStackParamList>;
-  saveUser: SaveUser;
 };
 
+type DispatchProps = {
+  saveUser: SaveUser;
+  saveFormulariosAsync: SaveFormularioAsync;
+  savePerfilesAsync: SavePerfilAsync;
+  saveMenusAsyncThunk: SaveMenuAsync;
+  saveCapacitacionAsyncThunk: SaveCapacitacionAsync;
+  saveObservacionAsyncThunk: SaveObservacionAsync;
+  saveInspeccionAsyncThunk: SaveInspeccionAsync;
+};
+
+type Props = StateProps & DispatchProps;
 class SignIn extends Component<Props> {
   state = {
     messageStyle: styles.messageHidden,
@@ -95,7 +126,7 @@ class SignIn extends Component<Props> {
           });
           this.setState({password: ''});
         }
-        /*   if (signin.ChallengeName) {
+        /*  if (signin.ChallengeName) {
           resolve();
         } */
         if (signin.AuthenticationResult?.AccessToken) {
@@ -107,6 +138,14 @@ class SignIn extends Component<Props> {
               Username: userData.Username,
               UserTokens: signin.AuthenticationResult,
             };
+
+            this.props.saveFormulariosAsync();
+            this.props.savePerfilesAsync(user);
+            this.props.saveMenusAsyncThunk(user);
+            this.props.saveCapacitacionAsyncThunk(user);
+            this.props.saveObservacionAsyncThunk(user);
+            this.props.saveInspeccionAsyncThunk(user);
+
             resolve(user);
           }
         }
@@ -116,7 +155,6 @@ class SignIn extends Component<Props> {
     })
       .then(result => {
         this.props.saveUser(result, this.state.remember);
-        /*         */
       })
       .catch(err => {
         // console.log(err);
@@ -251,11 +289,34 @@ class SignIn extends Component<Props> {
   }
 }
 
-const mapDispatchToProps = {
+/* const mapDispatchToProps = {
   saveUser,
 };
 
-export default connect(null, mapDispatchToProps)(SignIn);
+export default connect(null, mapDispatchToProps)(SignIn); */
+
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<{}, {}, any>,
+): DispatchProps => {
+  return {
+    saveUser: (user: IUser, remember: boolean) =>
+      dispatch(saveUser(user, remember)),
+    saveFormulariosAsync: () => dispatch(saveFormulariosAsync()),
+    savePerfilesAsync: (user: IUser) => dispatch(savePerfilesAsync(user)),
+    saveMenusAsyncThunk: (user: IUser) => dispatch(saveMenusAsyncThunk(user)),
+    saveCapacitacionAsyncThunk: (user: IUser) =>
+      dispatch(saveCapacitacionAsyncThunk(user)),
+    saveObservacionAsyncThunk: (user: IUser) =>
+      dispatch(saveObservacionAsyncThunk(user)),
+    saveInspeccionAsyncThunk: (user: IUser) =>
+      dispatch(saveInspeccionAsyncThunk(user)),
+  };
+};
+
+export default connect<StateProps, DispatchProps, {}, RootState>(
+  null,
+  mapDispatchToProps,
+)(SignIn);
 
 const styles = StyleSheet.create({
   containerInput: {

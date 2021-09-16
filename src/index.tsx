@@ -120,8 +120,6 @@ class Index extends Component<Props> {
   }
 
   render() {
-    console.log('index general');
-
     const AuthNavigator = (
       <AuthStack.Navigator headerMode="none">
         <AuthStack.Screen name="Auth" component={Auth} />

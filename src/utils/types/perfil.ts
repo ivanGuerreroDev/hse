@@ -9,7 +9,7 @@ export interface IPerfil {
   ApellidoMaterno: string;
   TelefonoPersona: string;
   NombreEmpresa: string;
-  NombreNV3: string;
+  NombreNV2: string;
   Mascara: string;
   NombreCargo: string;
 }

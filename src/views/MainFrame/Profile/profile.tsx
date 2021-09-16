@@ -33,46 +33,20 @@ type DispatchProps = {
 type Props = StateProps & DispatchProps;
 class Profile extends Component<Props> {
   render() {
-    console.log('Profile', this.props.perfil);
-
     return (
       <Layout>
-        <View style={{alignItems: 'flex-end', paddingEnd: 5}}>
-          <Text style={styles.vtext}>V. 1.4.0</Text>
-        </View>
-        <View style={styles.avatar}>
-          <Avatar
-            size="large"
-            source={require('components/Assets/Profile/icono_foto.png')}
-          />
-          <Text style={styles.userText}>
-            {`${
-              this.props.perfil[this.props.perfil.length - 1]?.NombrePersona
-            } ${
-              this.props.perfil[this.props.perfil.length - 1]?.ApellidoPaterno
-            } ${
-              this.props.perfil[this.props.perfil.length - 1].ApellidoMaterno
-            }`}
-          </Text>
-          <Text>
-            {
-              this.props.perfil[this.props.perfil.length - 1]
-                ?.CorreoElectronicoPersona
-            }
-          </Text>
-        </View>
-
-        <ScrollView>
-          <View style={styles.container}>
-            <View>
-              <Text style={styles.title}>Información Personal</Text>
+        {this.props.perfil[this.props.perfil.length - 1] && (
+          <>
+            <View style={{alignItems: 'flex-end', paddingEnd: 5}}>
+              <Text style={styles.vtext}>V. 1.4.0</Text>
             </View>
-            <View style={styles.containerInput}>
-              <Input
-                disabled
-                autoCapitalize="none"
-                label={'Nombre'}
-                value={`${
+            <View style={styles.avatar}>
+              <Avatar
+                size="large"
+                source={require('components/Assets/Profile/icono_foto.png')}
+              />
+              <Text style={styles.userText}>
+                {`${
                   this.props.perfil[this.props.perfil.length - 1]?.NombrePersona
                 } ${
                   this.props.perfil[this.props.perfil.length - 1]
@@ -81,88 +55,126 @@ class Profile extends Component<Props> {
                   this.props.perfil[this.props.perfil.length - 1]
                     .ApellidoMaterno
                 }`}
-                labelStyle={styles.inputLabel}
-                inputStyle={styles.inputStyle}
-                errorStyle={styles.inputError}
-              />
-              <Input
-                disabled
-                autoCapitalize="none"
-                label={'RUT'}
-                value={`${
-                  this.props.perfil[this.props.perfil.length - 1]?.RunPersona
-                }-${
-                  this.props.perfil[this.props.perfil.length - 1]?.DvPersona
-                }`}
-                labelStyle={styles.inputLabel}
-                inputStyle={styles.inputStyle}
-                errorStyle={styles.inputError}
-              />
-              <View>
-                <Text style={styles.title}>Información Laboral</Text>
-              </View>
-              <Input
-                disabled
-                autoCapitalize="none"
-                label={'EESS'}
-                value={
-                  this.props.perfil[this.props.perfil.length - 1]?.NombreEmpresa
-                }
-                labelStyle={styles.inputLabel}
-                inputStyle={styles.inputStyle}
-                errorStyle={styles.inputError}
-              />
-              <Input
-                disabled
-                autoCapitalize="none"
-                label={this.props.perfil[this.props.perfil.length - 1]?.Mascara}
-                value={
-                  this.props.perfil[this.props.perfil.length - 1]?.NombreNV3
-                }
-                labelStyle={styles.inputLabel}
-                inputStyle={styles.inputStyle}
-                errorStyle={styles.inputError}
-              />
-              <Input
-                disabled
-                autoCapitalize="none"
-                label={'Cargo'}
-                value={
-                  this.props.perfil[this.props.perfil.length - 1]?.NombreCargo
-                }
-                labelStyle={styles.inputLabel}
-                inputStyle={styles.inputStyle}
-                errorStyle={styles.inputError}
-              />
-              <View>
-                <Text style={styles.title}>Inicio de sesión</Text>
-              </View>
-              <Input
-                disabled
-                autoCapitalize="none"
-                label={'Correo Electronico'}
-                value={
+              </Text>
+              <Text>
+                {
                   this.props.perfil[this.props.perfil.length - 1]
                     ?.CorreoElectronicoPersona
                 }
-                labelStyle={styles.inputLabel}
-                inputStyle={styles.inputStyle}
-                errorStyle={styles.inputError}
-              />
+              </Text>
             </View>
-            <View style={styles.buttons}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('changePass')}>
-                <Text style={styles.buttonText}>Cambiar Contraseña</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={{...styles.buttons, marginTop: 10}}>
-              <TouchableOpacity onPress={() => this.props.forgiveUser()}>
-                <Text style={styles.buttonText}>Cerrar Sesión</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </ScrollView>
+
+            <ScrollView>
+              <View style={styles.container}>
+                <View>
+                  <Text style={styles.title}>Información Personal</Text>
+                </View>
+                <View style={styles.containerInput}>
+                  <Input
+                    disabled
+                    autoCapitalize="none"
+                    label={'Nombre'}
+                    value={`${
+                      this.props.perfil[this.props.perfil.length - 1]
+                        ?.NombrePersona
+                    } ${
+                      this.props.perfil[this.props.perfil.length - 1]
+                        ?.ApellidoPaterno
+                    } ${
+                      this.props.perfil[this.props.perfil.length - 1]
+                        .ApellidoMaterno
+                    }`}
+                    labelStyle={styles.inputLabel}
+                    inputStyle={styles.inputStyle}
+                    errorStyle={styles.inputError}
+                  />
+                  <Input
+                    disabled
+                    autoCapitalize="none"
+                    label={'RUT'}
+                    value={`${
+                      this.props.perfil[this.props.perfil.length - 1]
+                        ?.RunPersona
+                    }-${
+                      this.props.perfil[this.props.perfil.length - 1]?.DvPersona
+                    }`}
+                    labelStyle={styles.inputLabel}
+                    inputStyle={styles.inputStyle}
+                    errorStyle={styles.inputError}
+                  />
+                  <View>
+                    <Text style={styles.title}>Información Laboral</Text>
+                  </View>
+                  <Input
+                    disabled
+                    autoCapitalize="none"
+                    label={'EESS'}
+                    value={
+                      this.props.perfil[this.props.perfil.length - 1]
+                        ?.NombreEmpresa
+                    }
+                    labelStyle={styles.inputLabel}
+                    inputStyle={styles.inputStyle}
+                    errorStyle={styles.inputError}
+                  />
+                  <Input
+                    disabled
+                    autoCapitalize="none"
+                    label={
+                      this.props.perfil[this.props.perfil.length - 1]?.Mascara
+                    }
+                    value={
+                      this.props.perfil[this.props.perfil.length - 1]?.NombreNV2
+                    }
+                    labelStyle={styles.inputLabel}
+                    inputStyle={styles.inputStyle}
+                    errorStyle={styles.inputError}
+                  />
+                  <Input
+                    disabled
+                    autoCapitalize="none"
+                    label={'Cargo'}
+                    value={
+                      this.props.perfil[this.props.perfil.length - 1]
+                        ?.NombreCargo
+                    }
+                    labelStyle={styles.inputLabel}
+                    inputStyle={styles.inputStyle}
+                    errorStyle={styles.inputError}
+                  />
+                  <View>
+                    <Text style={styles.title}>Inicio de sesión</Text>
+                  </View>
+                  <Input
+                    disabled
+                    autoCapitalize="none"
+                    label={'Correo Electronico'}
+                    value={
+                      this.props.perfil[this.props.perfil.length - 1]
+                        ?.CorreoElectronicoPersona
+                    }
+                    labelStyle={styles.inputLabel}
+                    inputStyle={styles.inputStyle}
+                    errorStyle={styles.inputError}
+                  />
+                </View>
+                <View style={styles.buttons}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.navigate('changePass')
+                    }>
+                    <Text style={styles.buttonText}>Cambiar Contraseña</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={{...styles.buttons, marginTop: 10}}>
+                  <TouchableOpacity onPress={() => this.props.forgiveUser()}>
+                    <Text style={styles.buttonText}>Cerrar Sesión</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </ScrollView>
+          </>
+        )}
       </Layout>
     );
   }
@@ -184,7 +196,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Profile);
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
-    marginBottom: 250,
+    marginBottom: 50,
   },
   containerInput: {},
   vtext: {
