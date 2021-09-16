@@ -3,6 +3,7 @@ import {
   addPendingTask,
   addSendingResource,
   addSendingTask,
+  deletePendingResource,
   deletePendingTask,
   deleteSendingResource,
   deleteSendingTask,
@@ -14,6 +15,11 @@ import { RootState, store } from 'state/store/store';
 import { IDocumento, IResource } from 'types/formulariodinamico';
 import { isNetworkAllowed } from './network';
 import { stateMonitor } from './stateMonitor';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import Upload, { UploadOptions } from 'react-native-background-upload';
+import Config from 'react-native-config';
+import { saveDocumento, saveResource } from 'state/formulariodinamico/actions';
 
 export const createPendingTask = (documento: IDocumento): void => {
   const state: RootState = store.getState();
@@ -49,7 +55,6 @@ stateMonitor(store, 'sendingManager.sendingTasks', (newValue: ISendingTask[], ol
   });
 
   if (newValue.length === 0) {
-    console.log(`Deteniendo motor de envío (stopSending)`);
     store.dispatch(stopSending());
   }
 });
@@ -57,31 +62,95 @@ stateMonitor(store, 'sendingManager.sendingTasks', (newValue: ISendingTask[], ol
 const startSendingManager = (): void => {
   const state: RootState = store.getState();
   if (isNetworkAllowed() && !state.sendingManager.isSending && state.pendingManager.pendingTasks.length > 0) {
-    console.log('Iniciando motor de envío (startSending)');
     store.dispatch(startSending());
 
     state.pendingManager.pendingTasks.forEach(pendingTask => {
-      console.log(`${pendingTask.documentoId}: Iniciando envío de recursos. (addSendingTask)`);
       store.dispatch(addSendingTask({ documentoId: pendingTask.documentoId, totalResources: 1}));
 
       pendingTask.pendingResourcesUri.forEach(pendingResource => {
-        console.log(`${pendingTask.documentoId}: enviando recurso "${pendingResource}" (addSendingResource)`);
         store.dispatch(addSendingResource(pendingTask.documentoId));
 
         uploadResource(pendingTask.documentoId, pendingResource);
       });
 
-      console.log(`${pendingTask.documentoId}: recursos procesados (deleteSendingResource)`);
       store.dispatch(deleteSendingResource(pendingTask.documentoId));
     });
   }
 };
 
-const uploadResource = (documentoId: string, resourceUri: string): void => {
-  setTimeout(() => {
-    console.log(`${documentoId}: limpiando recurso "${resourceUri}" (deleteSendingResource)`);
+const uploadResource = async (documentoId: string, resourceUri: string): Promise<void> => {
+  const state: RootState = store.getState();
+  try {
+    const s3Client = new S3Client({
+      credentials: {
+        accessKeyId: Config.S3_AWS_ACCESS_KEY_ID,
+        secretAccessKey: Config.S3_AWS_SECRET_ACCESS_KEY
+      },
+      region: 'us-east-2'
+    });
+
+    const splittedPath = (resourceUri as string).split('/');
+    const filename = splittedPath[splittedPath.length -1];
+
+    const command = new PutObjectCommand({
+      Bucket: 'hse-app',
+      Key: `formularios/${documentoId}/${filename}`,
+    });
+
+    const signedUrl = await getSignedUrl(s3Client, command, {expiresIn: 1800});
+
+    const options: UploadOptions = {
+      url: signedUrl,
+      path: resourceUri.replace('file:', ''),
+      method: 'PUT',
+      type: 'raw',
+      headers: {
+        'content-type': 'application/octet-stream'
+      },
+      notification: {
+        autoClear: true
+      }
+    };
+
+    const uploadId: string = await Upload.startUpload(options);
+    Upload.addListener('error', uploadId, (data) => {
+      console.warn(data.error);
+      store.dispatch(deleteSendingResource(documentoId));
+    });
+    Upload.addListener('completed', uploadId, () => {
+      const newResourceUri = `https://hse-app.s3.us-east-2.amazonaws.com/formularios/${documentoId}/${filename}`;
+      const documento: IDocumento = state.documentos.documentos
+        .filter(documento => documento._id === documentoId)[0];
+      const resource = (documento.resources || [])
+        .find(resource => resource.url === resourceUri);
+
+      store.dispatch(saveResource({
+        url: newResourceUri,
+        type: 'object',
+        localData: resourceUri
+      }));
+
+      if (resource) {
+        store.dispatch(saveDocumento({
+          ...documento,
+          resources: [
+            ...(documento.resources?.filter(resource => resource.url !== resourceUri && resource.url !== newResourceUri) || []),
+            {
+              name: resource.name,
+              url: newResourceUri,
+              type: 'object'
+            }
+          ]
+        }));
+      }
+
+      store.dispatch(deletePendingResource(documentoId, resourceUri));
+      store.dispatch(deleteSendingResource(documentoId));
+    });
+  } catch (error) {
+    console.warn(error);
     store.dispatch(deleteSendingResource(documentoId));
-  }, floor((Math.random() * 10000)));
+  }
 };
 
 const uploadDocumento = (documentoId: string): void => {
