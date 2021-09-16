@@ -1,10 +1,12 @@
 import _ from 'lodash';
 import ajv from 'ajv';
 import jmespath from 'jmespath';
+import { generateRandomString } from 'utils/rng';
 import { DocumentoFactory } from './DocumentoFactory';
 import { OutputValueChangeCallBack } from 'types/documentofactory';
 import { IControl, ILocalResource, IResource } from 'types/formulariodinamico';
 import { RootState, store } from 'state/store/store';
+import { saveResource } from 'state/formulariodinamico/actions';
 
 export class ControlBridge {
   requiredProperties: Array<string> = [
@@ -24,7 +26,9 @@ export class ControlBridge {
   }
 
   get OutputValue(): any {
-    return this.control.outputValue;
+    return this.catchValue(
+      this.control.outputValue
+    );
   }
 
   set OutputValue(value: any) {
@@ -39,6 +43,30 @@ export class ControlBridge {
 
   get ReadOnly(): boolean {
     return this.factory.isReadOnly;
+  }
+
+  createResource(uri: string) {
+    const resourceName: string = generateRandomString(12);
+    let resource: IResource = {
+      name: resourceName,
+      type: 'object',
+      url: uri
+    };
+    const localResource: ILocalResource = {
+      url: uri,
+      type: 'object',
+      localData: uri
+    };
+
+    store.dispatch(saveResource(localResource));
+
+    if(!this.factory.Documento.resources)
+      this.factory.Documento.resources = [];
+    this.factory.Documento.resources.push(resource);
+
+    return {
+      '!code': `resource('${resourceName}')`
+    };
   }
 
   property(propertyName: string): any {

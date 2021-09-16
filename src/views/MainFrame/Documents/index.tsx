@@ -81,7 +81,8 @@ class Documents extends Component<Props> {
                     }}
                     icon={<Icon type="material" name="send" color="#ffffff" />}
                     onPress={() =>
-                      changeStatusDocumento(item._id, DocumentoStatus.sending)
+                      console.warn('No implementado')
+                      // changeStatusDocumento(item._id, DocumentoStatus.sending)
                     }
                   />
                 }
@@ -113,7 +114,8 @@ class Documents extends Component<Props> {
                     buttonStyle={{backgroundColor: 'red', height: '100%'}}
                     icon={<Icon type="material" name="cancel" color="white" />}
                     onPress={() =>
-                      changeStatusDocumento(item._id, DocumentoStatus.draft)
+                      console.warn('No implementado')
+                      // changeStatusDocumento(item._id, DocumentoStatus.draft)
                     }
                   />
                 }
