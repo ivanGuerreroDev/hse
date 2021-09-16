@@ -7,6 +7,7 @@ import RNBootSplash from 'react-native-bootsplash';
 import Index from 'index';
 import {lightTheme} from 'components/Theme/theme';
 import 'utils/network';
+import 'utils/sendingManager';
 
 class App extends Component {
   componentDidMount() {
