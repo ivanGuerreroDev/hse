@@ -12,6 +12,7 @@ import {
 } from '../formulariodinamico/reducers';
 import {currentUserReducer, userReducer} from '../user/reducers';
 import {netInfoStateReducer, settingsReducer} from 'state/settings/reducers';
+import { pendingManagerReducer, sendingManagerReducer } from 'state/sendingManager/reducers';
 
 export default combineReducers({
   currentUser: currentUserReducer,
@@ -24,6 +25,8 @@ export default combineReducers({
   capacitacion: capacitacionReducer,
   observacion: observacionReducer,
   inspeccion: inspeccionReducer,
+  pendingManager: pendingManagerReducer,
+  sendingManager: sendingManagerReducer,
   settings: settingsReducer,
   user: userReducer,
 });
