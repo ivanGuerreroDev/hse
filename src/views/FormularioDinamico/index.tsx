@@ -20,6 +20,7 @@ import { ControlBridge } from 'utils/formulariodinamico/ControlBridge';
 import { DocumentoFactory } from 'utils/formulariodinamico/DocumentoFactory';
 import { OutputValueChangeCallBack, OutputValueChangedEvent } from 'types/documentofactory';
 import { DocumentoStatus, IDocumento } from 'utils/types/formulariodinamico';
+import { createPendingTask } from 'utils/sendingManager';
 
 type State = {
   tabIndex: number,
@@ -95,7 +96,8 @@ class FormularioDinamico extends Component<Props, State> {
           titleStyle={{fontSize: 12}} buttonStyle={{backgroundColor: '#FDAE01'}}
           icon={<Icon type='material' name='cancel' color='white'/>}
           onPress={() => {
-            changeStatusDocumento(Documento._id, DocumentoStatus.draft);
+            // changeStatusDocumento(Documento._id, DocumentoStatus.draft);
+            console.warn('Función no implementada');
             navigation.goBack();
           }}/>
       );
@@ -110,6 +112,7 @@ class FormularioDinamico extends Component<Props, State> {
               console.log(JSON.stringify(messages));
             } else {
               changeStatusDocumento(Documento._id, DocumentoStatus.sending);
+              createPendingTask(Documento);
               navigation.goBack();
             }
           }}/>
