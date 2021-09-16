@@ -1,4 +1,3 @@
-import { floor } from 'lodash';
 import {
   addPendingTask,
   addSendingResource,
@@ -11,15 +10,16 @@ import {
   stopSending
 } from 'state/sendingManager/actions';
 import { IPendingTask, ISendingTask } from 'state/sendingManager/types';
+import { changeStatusDocumento, saveDocumento, saveResource } from 'state/formulariodinamico/actions';
 import { RootState, store } from 'state/store/store';
-import { IDocumento, IResource } from 'types/formulariodinamico';
+import { DocumentoStatus, IDocumento, IResource } from 'types/formulariodinamico';
 import { isNetworkAllowed } from './network';
 import { stateMonitor } from './stateMonitor';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import Upload, { UploadOptions } from 'react-native-background-upload';
+import axios from 'axios';
 import Config from 'react-native-config';
-import { saveDocumento, saveResource } from 'state/formulariodinamico/actions';
 
 export const createPendingTask = (documento: IDocumento): void => {
   const state: RootState = store.getState();
@@ -153,12 +153,25 @@ const uploadResource = async (documentoId: string, resourceUri: string): Promise
   }
 };
 
-const uploadDocumento = (documentoId: string): void => {
-  console.log(`${documentoId}: enviando documento (deleteSendingResource)`);
+const uploadDocumento = async (documentoId: string): Promise<void> => {
+  const state: RootState = store.getState();
   store.dispatch(deleteSendingResource(documentoId));
 
-  setTimeout(() => {
-    console.log(`${documentoId}: limpiando documento (deleteSendingTask)`);
+  try {
+    const documento: IDocumento = state.documentos.documentos
+      .filter(documento => documento._id === documentoId)[0];
+
+    const response = await axios.post(
+      `${Config.UrlFormularios}/documentos`,
+      documento
+    );
+
+    store.dispatch(deletePendingTask(documentoId));
+    store.dispatch(changeStatusDocumento(documentoId, DocumentoStatus.sent));
+    console.log(response.data);
+  } catch (error) {
+    console.warn(error);
+  } finally {
     store.dispatch(deleteSendingTask(documentoId));
-  }, floor((Math.random() * 10000)));
+  }
 };
