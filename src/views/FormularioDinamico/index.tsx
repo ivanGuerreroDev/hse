@@ -176,7 +176,7 @@ class FormularioDinamico extends Component<Props, State> {
           </View>
         </View>
 
-        <ScrollView style={styles.controlsContent}>
+        <ScrollView keyboardShouldPersistTaps='handled' style={styles.controlsContent}>
           <ControlContainer
             controlBridges={ControlBridgeList}
             path={getPagesBridge()[this.state.tabIndex].Path}
