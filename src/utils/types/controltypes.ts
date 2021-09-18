@@ -1,1 +1,1 @@
-export type ControlType = 'Check' | 'Page' | 'Remarks' | 'Text' | 'Label';
+export type ControlType = 'Check' | 'Label' | 'List' | 'Page' | 'Remarks' | 'Text';
