@@ -7,6 +7,7 @@ type ListControlModalProps = {
   data: Array<any>;
   onSuccess: (output: any) => void;
   selectedData: any;
+  displayField?: string;
 };
 
 class ListControlModal extends React.Component<ListControlModalProps> {
@@ -15,10 +16,10 @@ class ListControlModal extends React.Component<ListControlModalProps> {
   };
 
   render() {
-    const { data, onSuccess, selectedData} = this.props;
+    const { data, onSuccess, selectedData, displayField } = this.props;
 
     const filteredData = data
-      .filter(item => item.toLowerCase().includes(this.state.searchText.toLowerCase()));
+      .filter(item => (displayField ? item[displayField] : item).toLowerCase().includes(this.state.searchText.toLowerCase()));
 
     return (
       <SafeAreaView style={{flex: 1}}>
@@ -31,8 +32,8 @@ class ListControlModal extends React.Component<ListControlModalProps> {
           renderItem={({item}) => {
             const regexpResult = RegExp(
               `^(.*)(${this.state.searchText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})(.*)$`, 'i'
-            ).exec(item) || [];
-            const selected: boolean = item === selectedData;
+            ).exec(displayField ? item[displayField] : item) || [];
+            const selected: boolean = (displayField ? item[displayField] : item) === selectedData;
 
             return <View style={{padding: 2, width: '100%'}}>
               <Text
@@ -68,6 +69,7 @@ export default class ListControl extends ControlComponent {
 
   render() {
     const { controlBridge, navigation } = this.props;
+
      return (
       <View style={{width: '100%', paddingHorizontal: 10, paddingBottom: 25}}>
         <Text
@@ -80,10 +82,11 @@ export default class ListControl extends ControlComponent {
             <ListControlModal
               data={controlBridge.property('data')}
               onSuccess={(output) => { controlBridge.OutputValue = output; navigation.goBack()}}
-              selectedData={controlBridge.OutputValue}/>
+              selectedData={controlBridge.OutputValue}
+              displayField={controlBridge.property('displayfield')}
           )}
           style={{fontSize: 18, minHeight: 40, borderColor: '#0000001F', borderBottomWidth: 1, paddingVertical: 5}}>
-          {controlBridge.OutputValue || controlBridge.property('placeholder') || ''}
+          {(controlBridge.property('displayfield') ? controlBridge.OutputValue?.[controlBridge.property('displayfield')] : controlBridge.OutputValue) || controlBridge.property('placeholder') || ''}
         </Text>
       </View>
     );
