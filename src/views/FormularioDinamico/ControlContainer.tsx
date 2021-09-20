@@ -8,8 +8,9 @@ import {RootMainStackParamList} from 'types/navigations';
 import {ControlBridge} from 'utils/formulariodinamico/ControlBridge';
 
 import CheckControl from './Controls/CheckControl';
-import TextControl from './Controls/TextControl';
 import LabelControl from './Controls/LabelControl';
+import ListControl from './Controls/ListControl';
+import TextControl from './Controls/TextControl';
 
 type MapControlBridgesProps = {
   controlBridges: ControlBridge[];
@@ -74,11 +75,14 @@ const controlComponent: ControlComponentSelectType = (
     case 'Check':
       controlType = CheckControl;
       break;
-    case 'Text':
-      controlType = TextControl;
-      break;
     case 'Label':
       controlType = LabelControl;
+      break;
+    case 'List':
+      controlType = ListControl;
+      break;
+    case 'Text':
+      controlType = TextControl;
       break;
     default:
       break;
