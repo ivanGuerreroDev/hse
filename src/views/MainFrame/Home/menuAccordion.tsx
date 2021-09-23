@@ -66,8 +66,6 @@ class MenuAccordion extends Component<Props> {
   }
 
   render() {
-    console.log('Acordion', this.state.MenuAccordion);
-
     return (
       <View style={styles.container}>
         {this.state.MenuAccordion.map((item: any, i: any) => (
@@ -103,7 +101,6 @@ class MenuAccordion extends Component<Props> {
                 style={styles.menusubcontainer}
                 onPress={() => {
                   if (subitem.Formulario[0]) {
-                    console.log('formuilario', subitem.Formulario[0]);
                     this.props.navigation.navigate('FormularioDinamico', {
                       documento: DocumentoFactory.createFromFormulario(
                         subitem.Formulario[0],

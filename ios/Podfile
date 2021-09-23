@@ -16,6 +16,8 @@ target 'hsezimexa' do
 
   pod 'react-native-fetch-blob', :path => '../node_modules/react-native-fetch-blob'
 
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
   target 'hsezimexaTests' do
     inherit! :complete
     # Pods for testing

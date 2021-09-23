@@ -40,8 +40,6 @@ class MenuList extends Component<Props> {
     ),
   };
   render() {
-    console.log('ab', this.state.List);
-
     return (
       <View style={styles.container}>
         {this.state.List[0].Observacion.map((item: any, i: any) => (
@@ -54,7 +52,6 @@ class MenuList extends Component<Props> {
             style={styles.contentMenu}
             onPress={() => {
               if (item.Formulario[0]) {
-                console.log('formuilario', item.Formulario[0]);
                 this.props.navigation.navigate('FormularioDinamico', {
                   documento: DocumentoFactory.createFromFormulario(
                     item.Formulario[0],

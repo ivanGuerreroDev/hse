@@ -25,7 +25,6 @@ export const saveCapacitacionAsyncThunk: SaveCapacitacionAsync = (
             Empresa: userData.Empresa,
           },
         });
-        console.log(response.data);
 
         dispatch(saveCapacitacion(response.data));
       } catch (error) {

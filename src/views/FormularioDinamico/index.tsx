@@ -162,7 +162,7 @@ class FormularioDinamico extends Component<Props, State> {
           }
         />
 
-        <View style={{overflow: 'hidden', paddingBottom: 3}}>
+        <View style={{overflow: 'hidden', paddingBottom: '3%'}}>
           <View style={styles.tabsBar}>
             <Tab
               value={this.state.tabIndex}
@@ -176,7 +176,9 @@ class FormularioDinamico extends Component<Props, State> {
           </View>
         </View>
 
-        <ScrollView keyboardShouldPersistTaps='handled' style={styles.controlsContent}>
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          style={styles.controlsContent}>
           <ControlContainer
             controlBridges={ControlBridgeList}
             path={getPagesBridge()[this.state.tabIndex].Path}

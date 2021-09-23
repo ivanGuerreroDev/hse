@@ -1,12 +1,5 @@
 import React, {Component} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import {Text, View, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainFrameStackParamList} from 'utils/types/navigations';
 
@@ -15,7 +8,8 @@ import {RootState} from 'state/store/store';
 import {IMenu} from 'utils/types/menu';
 
 import Layout from 'views/MainFrame/layaut';
-import Config from 'react-native-config';
+/* import Config from 'react-native-config'; */
+import {FadeInImage} from 'components/FadeImage/FadeInImage';
 
 type Props = {
   navigation: StackNavigationProp<MainFrameStackParamList>;
@@ -27,8 +21,6 @@ class Menu extends Component<Props> {
   };
 
   render() {
-    console.log(this.props.menu);
-
     return (
       <Layout>
         <View style={styles.container}>
@@ -38,14 +30,20 @@ class Menu extends Component<Props> {
             keyExtractor={item => item.Id}
             data={this.state.menu}
             renderItem={({item}) => {
+              const iconmenu =
+                item.NombreMenu === 'Observaciones'
+                  ? require('components/Assets/Menu/Observaciones.png')
+                  : item.NombreMenu === 'Inspecciones'
+                  ? require('components/Assets/Menu/Inspecciones.png')
+                  : item.NombreMenu === 'Capacitaciones'
+                  ? require('components/Assets/Menu/Capacitaciones.png')
+                  : '';
+
               let tintColor;
               let opacity = 1;
-              let navigate = '';
               if (!item.Estado) {
                 tintColor = '#808080';
                 opacity = 0.7;
-              } else {
-                /* navigate = item.navigate; */
               }
               return (
                 <TouchableOpacity
@@ -56,11 +54,11 @@ class Menu extends Component<Props> {
                         titulo: item.NombreMenu,
                       });
                   }}>
-                  <View style={styles.cardHeader}></View>
-                  <Image
-                    style={{...styles.cardImage, tintColor}}
-                    source={{uri: `${Config.s3}${item.NombreMenu}.png`}}
-                    resizeMode={'contain'}
+                  <View style={styles.cardHeader} />
+
+                  <FadeInImage
+                    uri={iconmenu}
+                    image={{...styles.cardImage, tintColor}}
                   />
 
                   <View style={styles.cardFooter}>

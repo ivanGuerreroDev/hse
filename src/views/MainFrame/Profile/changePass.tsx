@@ -115,7 +115,7 @@ class ChangePass extends Component<Props> {
       return;
     }
     Keyboard.dismiss();
-    console.log('entre');
+
     changePassword(
       this.props.currentUser?.UserTokens.AccessToken,
       this.state.Password,

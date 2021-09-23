@@ -14,7 +14,6 @@ export const savePerfilesAsync: SavePerfilAsync = (
   ): Promise<void> => {
     return new Promise<void>(async (resolve, reject) => {
       try {
-        console.log('perfil', userData);
         const response: AxiosResponse<IPerfil> = await axios({
           method: 'post',
           url: `${Config.UrlApi}/perfil`,
@@ -23,7 +22,6 @@ export const savePerfilesAsync: SavePerfilAsync = (
             Empresa: userData.Empresa,
           },
         });
-        console.log('perfil', response.data);
         dispatch(savePerfil(response.data));
       } catch (error) {
         reject(error);

@@ -18,7 +18,6 @@ export const saveInspeccionAsyncThunk: SaveInspeccionAsync = (
   ): Promise<void> => {
     return new Promise<void>(async (resolve, reject) => {
       try {
-        console.log('inspecciones', userData);
         const response: AxiosResponse<IInspecciones> = await axios({
           method: 'post',
           url: `${Config.UrlApi}/inspecciones`,
@@ -27,7 +26,6 @@ export const saveInspeccionAsyncThunk: SaveInspeccionAsync = (
             Empresa: userData.Empresa,
           },
         });
-        console.log('inspecciones', response.data);
 
         dispatch(saveInspeccion(response.data));
       } catch (error) {
