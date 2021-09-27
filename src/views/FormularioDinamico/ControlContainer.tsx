@@ -10,6 +10,7 @@ import {ControlBridge} from 'utils/formulariodinamico/ControlBridge';
 import CheckControl from './Controls/CheckControl';
 import LabelControl from './Controls/LabelControl';
 import ListControl from './Controls/ListControl';
+import RemarksControl from './Controls/RemarksControl';
 import TextControl from './Controls/TextControl';
 
 type MapControlBridgesProps = {
@@ -80,6 +81,9 @@ const controlComponent: ControlComponentSelectType = (
       break;
     case 'List':
       controlType = ListControl;
+      break;
+    case 'Remarks':
+      controlType = RemarksControl;
       break;
     case 'Text':
       controlType = TextControl;
