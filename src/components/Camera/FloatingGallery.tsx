@@ -1,50 +1,18 @@
 import React, { Component } from 'react';
-import { FlatList, GestureResponderEvent, Image, Pressable, StyleSheet, View, ViewProps } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import CameraRoll, { GetPhotosParams, PhotoIdentifier } from '@react-native-community/cameraroll';
-import { Icon } from 'react-native-elements/dist/icons/Icon';
-
-type FloatingFrameProps = {
-  onPress?: ((event: GestureResponderEvent) => void) | null | undefined;
-  photoIdentifier: PhotoIdentifier;
-  selected?: boolean;
-};
-
-class FloatingFrame extends Component<FloatingFrameProps> {
-  private _onPress = (event: GestureResponderEvent) => this.props.onPress?.(event);
-
-  render() {
-    let videoIcon: JSX.Element | undefined = undefined;
-    if (this.props.photoIdentifier.node.type.includes('video')) {
-      videoIcon =
-        <View style={styles.floatingFrameVideoIcon}>
-          <Icon type='material' name='videocam' color='white'/>
-        </View>
-    }
-
-    return (
-      <View style={styles.floatingFrame}>
-        <Pressable
-          style={[{flex: 1}, this.props.selected ? styles.pressedFloatingFrame : undefined]}
-          onPress={(event) => this._onPress(event)}
-        >
-          <Image source={{uri: this.props.photoIdentifier.node.image.uri}} style={{flex: 1}}/>
-          {videoIcon}
-        </Pressable>
-      </View>
-    );
-  }
-}
+import Galleryframe from './GalleryFrame';
 
 export interface FloatingGalleryPressItemEvent {
   pressedItemUri: string;
 };
 
-type FloatingGalleryProps = {
+type Props = {
   onPressItem?: ((event: FloatingGalleryPressItemEvent) => void) | undefined;
   selectedItemsUri?: Array<string>;
 };
 
-export default class FloatingGallery extends Component<FloatingGalleryProps> {
+export default class FloatingGallery extends Component<Props> {
   state = {
     photoIdentifiers: new Array<PhotoIdentifier>()
   };
@@ -86,7 +54,7 @@ export default class FloatingGallery extends Component<FloatingGalleryProps> {
           horizontal={true}
           maxToRenderPerBatch={8}
           renderItem={({item}) =>
-            <FloatingFrame photoIdentifier={item}
+            <Galleryframe photoIdentifier={item}
               selected={this.props.selectedItemsUri?.includes(item.node.image.uri)}
               onPress={() => this.props.onPressItem?.({pressedItemUri: item.node.image.uri})}
             />
@@ -101,19 +69,5 @@ const styles = StyleSheet.create({
     bottom: -25,
     position: 'absolute',
     width: '100%'
-  },
-  floatingFrame: {
-    height: 80,
-    width: 80,
-    paddingHorizontal: 4
-  },
-  floatingFrameVideoIcon: {
-    bottom: 0,
-    left: 1,
-    position: 'absolute'
-  },
-  pressedFloatingFrame: {
-    borderColor: 'orange',
-    borderWidth: 2
   }
 });
