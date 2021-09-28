@@ -145,7 +145,6 @@ export default class ListControl extends ControlComponent {
           {selectedValues
             ?.map(selectedValue => (controlBridge.property('displayfield') ? selectedValue[controlBridge.property('displayfield')] : selectedValue))
             .join('\n') || controlBridge.property('placeholder') || ''}
-          {/* {(controlBridge.property('displayfield') ? controlBridge.OutputValue?.[controlBridge.property('displayfield')] : controlBridge.OutputValue) || controlBridge.property('placeholder') || ''} */}
         </Text>
       </View>
     );
