@@ -71,7 +71,7 @@ class SignIn extends Component<Props> {
     remember: false,
 
     autenticate: false,
-
+    percentage: 30,
     // Validation
     Errorutempresa: '',
     Errorusername: '',
@@ -118,6 +118,8 @@ class SignIn extends Component<Props> {
     }
     new Promise(async (resolve: (value: IUser) => void, reject) => {
       try {
+        this.setState({percentage: this.state.percentage + 10});
+
         let signin: InitiateAuthCommandOutput = await signIn(
           this.state.rutempresa.slice(0, -2),
           this.state.username,
@@ -135,6 +137,7 @@ class SignIn extends Component<Props> {
         /*  if (signin.ChallengeName) {
           resolve();
         } */
+        this.setState({percentage: 90});
         if (signin.AuthenticationResult?.AccessToken) {
           let accessToken: string = signin.AuthenticationResult.AccessToken;
           let userData: GetUserCommandOutput = await getUser(accessToken);
@@ -144,15 +147,16 @@ class SignIn extends Component<Props> {
               Username: userData.Username,
               UserTokens: signin.AuthenticationResult,
             };
+            this.props.saveFormulariosAsync();
             this.props.savePerfilesAsync(user);
             this.props.saveMenusAsyncThunk(user);
             this.props.saveCapacitacionAsyncThunk(user);
             this.props.saveObservacionAsyncThunk(user);
             this.props.saveInspeccionAsyncThunk(user);
-            this.props.saveFormulariosAsync();
             resolve(user);
           }
         }
+        this.setState({percentage: 100});
       } catch (err) {
         reject(err);
       }
@@ -162,6 +166,7 @@ class SignIn extends Component<Props> {
       })
       .catch(err => {
         // console.log(err);
+        this.setState({percentage: this.state.percentage + 10});
         this.setState({autenticate: false});
         switch (err.name) {
           case 'NotAuthorizedException':
@@ -295,6 +300,14 @@ class SignIn extends Component<Props> {
             </TouchableOpacity>
           ) : (
             <View style={{alignItems: 'center'}}>
+              {/* <ProgressCircle
+                percent={this.state.percentage}
+                radius={20}
+                borderWidth={8}
+                color="#FDAE01"
+                shadowColor="#999"
+                bgColor="#fff"
+              /> */}
               <ActivityIndicator size="large" color="#FDAE01" />
             </View>
           )}
