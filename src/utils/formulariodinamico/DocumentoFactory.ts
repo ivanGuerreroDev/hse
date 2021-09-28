@@ -1,15 +1,23 @@
-import _ from 'lodash'
-import { formatRFC3339 } from 'date-fns';
-import { generateUUID4 } from 'utils/rng';
+import _ from 'lodash';
+import {formatRFC3339} from 'date-fns';
+import {generateUUID4} from 'utils/rng';
 
-import { ControlBridge } from './ControlBridge';
-import { DocumentoStatus, IControl, IDocumento, IFormulario } from 'types/formulariodinamico';
-import { OutputValueChangeCallBack, OutputValueChangedEvent } from 'types/documentofactory';
+import {ControlBridge} from './ControlBridge';
+import {
+  DocumentoStatus,
+  IControl,
+  IDocumento,
+  IFormulario,
+} from 'types/formulariodinamico';
+import {
+  OutputValueChangeCallBack,
+  OutputValueChangedEvent,
+} from 'types/documentofactory';
 
 export class DocumentoFactory {
   static createFromFormulario(formulario: IFormulario): IDocumento {
     const creationDate = {
-      $date: formatRFC3339(new Date(), {fractionDigits: 3})
+      $date: formatRFC3339(new Date(), {fractionDigits: 3}),
     };
 
     return _.cloneDeep({
@@ -18,17 +26,19 @@ export class DocumentoFactory {
       _formId: formulario._id,
       creationDate: creationDate,
       modifiedDate: creationDate,
-      sentDate: { $date: '' },
+      sentDate: {$date: ''},
       status: DocumentoStatus.draft,
       geolocation: undefined,
       profile: undefined,
       user: {},
-      device: {}
+      device: {},
     });
   }
 
   private bridgeList: ControlBridge[] = [];
-  private outputValueChangeCallBack: OutputValueChangeCallBack = (event: OutputValueChangedEvent) => {
+  private outputValueChangeCallBack: OutputValueChangeCallBack = (
+    event: OutputValueChangedEvent,
+  ) => {
     this.onOutputValueChange?.(event);
   };
 
@@ -37,16 +47,18 @@ export class DocumentoFactory {
 
   constructor(private documento: IDocumento) {
     const redundantRegister = (parentPath: string, controls: IControl[]) => {
-      controls.sort((a, b) => a.order - b.order).forEach(control => {
-        const path: string = parentPath + control.order;
-        let bridge: ControlBridge = new ControlBridge(this, control, path);
-        bridge.onOutputValueChange = this.outputValueChangeCallBack;
+      controls
+        .sort((a, b) => a.order - b.order)
+        .forEach(control => {
+          const path: string = parentPath + control.order;
+          let bridge: ControlBridge = new ControlBridge(this, control, path);
+          bridge.onOutputValueChange = this.outputValueChangeCallBack;
 
-        this.bridgeList.push(bridge);
+          this.bridgeList.push(bridge);
 
-        control.controls && redundantRegister(`${path}.`, control.controls);
-      });
-    }
+          control.controls && redundantRegister(`${path}.`, control.controls);
+        });
+    };
     redundantRegister('', documento.pages);
   }
 

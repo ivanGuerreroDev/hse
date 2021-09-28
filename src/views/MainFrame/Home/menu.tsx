@@ -17,7 +17,7 @@ type Props = {
 };
 class Menu extends Component<Props> {
   state = {
-    menu: this.props.menu[0],
+    isLoading: this.props.menu[0] ? false : true,
   };
 
   render() {
@@ -28,8 +28,10 @@ class Menu extends Component<Props> {
             style={styles.list}
             numColumns={2}
             keyExtractor={item => item.Id}
-            data={this.state.menu}
+            data={this.props.menu[0]}
             renderItem={({item}) => {
+              console.log('flat list', item);
+
               const iconmenu =
                 item.NombreMenu === 'Observaciones'
                   ? require('components/Assets/Menu/Observaciones.png')

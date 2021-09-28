@@ -1,21 +1,23 @@
 import _ from 'lodash';
 import ajv from 'ajv';
 import jmespath from 'jmespath';
-import { generateRandomString } from 'utils/rng';
-import { DocumentoFactory } from './DocumentoFactory';
-import { OutputValueChangeCallBack } from 'types/documentofactory';
-import { IControl, ILocalResource, IResource } from 'types/formulariodinamico';
-import { RootState, store } from 'state/store/store';
-import { saveResource } from 'state/formulariodinamico/actions';
+import {generateRandomString} from 'utils/rng';
+import {DocumentoFactory} from './DocumentoFactory';
+import {OutputValueChangeCallBack} from 'types/documentofactory';
+import {IControl, ILocalResource, IResource} from 'types/formulariodinamico';
+import {RootState, store} from 'state/store/store';
+import {saveResource} from 'state/formulariodinamico/actions';
 
 export class ControlBridge {
-  requiredProperties: Array<string> = [
-    'visible'
-  ];
+  requiredProperties: Array<string> = ['visible'];
 
   onOutputValueChange?: OutputValueChangeCallBack;
 
-  constructor(private factory: DocumentoFactory, private control: IControl, private path: string) {}
+  constructor(
+    private factory: DocumentoFactory,
+    private control: IControl,
+    private path: string,
+  ) {}
 
   get Control(): IControl {
     return this.control;
@@ -26,9 +28,7 @@ export class ControlBridge {
   }
 
   get OutputValue(): any {
-    return this.catchValue(
-      this.control.outputValue
-    );
+    return this.catchValue(this.control.outputValue);
   }
 
   set OutputValue(value: any) {
@@ -37,7 +37,7 @@ export class ControlBridge {
     this.onOutputValueChange?.({
       path: this.Path,
       newValue: value,
-      oldValue: oldValue
+      oldValue: oldValue,
     });
   }
 
@@ -50,29 +50,29 @@ export class ControlBridge {
     let resource: IResource = {
       name: resourceName,
       type: 'object',
-      url: uri
+      url: uri,
     };
     const localResource: ILocalResource = {
       url: uri,
       type: 'object',
-      localData: uri
+      localData: uri,
     };
 
     store.dispatch(saveResource(localResource));
 
-    if(!this.factory.Documento.resources)
+    if (!this.factory.Documento.resources)
       this.factory.Documento.resources = [];
     this.factory.Documento.resources.push(resource);
 
     return {
-      '!code': `resource('${resourceName}')`
+      '!code': `resource('${resourceName}')`,
     };
   }
 
   property(propertyName: string): any {
     const propertyValue: any = jmespath.search(
       this.control.properties || [],
-      `[?name=='${propertyName}']|[0].value`
+      `[?name=='${propertyName}']|[0].value`,
     );
 
     return this.catchValue(propertyValue);
@@ -81,14 +81,20 @@ export class ControlBridge {
   validateOutputValue(): string | undefined {
     if (this.control.outputMetadata?.validateSchema) {
       const schemaValidator = new ajv();
-      const validate = schemaValidator.compile(this.control.outputMetadata.schema);
+      const validate = schemaValidator.compile(
+        this.control.outputMetadata.schema,
+      );
       if (!validate(this.control.outputValue)) {
-        return this.control.outputMetadata.outputValidationErrorMessage || 'unknown';
+        return (
+          this.control.outputMetadata.outputValidationErrorMessage || 'unknown'
+        );
       }
     }
     if (this.control.outputMetadata?.customValidation) {
       return this.excecuteValueCode(
-        `const value = ${JSON.stringify(this.control.outputValue)};\n${this.control.outputMetadata.customValidation}`
+        `const value = ${JSON.stringify(this.control.outputValue)};\n${
+          this.control.outputMetadata.customValidation
+        }`,
       );
     }
   }
@@ -98,7 +104,7 @@ export class ControlBridge {
       return param.map(item => this.catchValue(item));
     }
     if (typeof param === 'object' && param !== null) {
-      if('!code' in param) {
+      if ('!code' in param) {
         return this.excecuteValueCode(param['!code']);
       }
 
@@ -112,29 +118,34 @@ export class ControlBridge {
 
   private excecuteValueCode(valueCode: string): any {
     const control = (path: string) => {
-      const controlBridge: ControlBridge | undefined = this.factory.ControlBridgeList.filter(controlBridge => {
-        return controlBridge.Path === path;
-      })?.[0];
+      const controlBridge: ControlBridge | undefined =
+        this.factory.ControlBridgeList.filter(controlBridge => {
+          return controlBridge.Path === path;
+        })?.[0];
 
       return controlBridge?.OutputValue;
     };
 
     const resource = (resourceName: string): any => {
-      if (!this.factory.Documento.resources) throw `Este documento no tiene configurado los recursos`;
+      if (!this.factory.Documento.resources)
+        throw `Este documento no tiene configurado los recursos`;
 
-      const documentoResources: IResource[] = this.factory.Documento.resources
-        ?.filter(resource => resource.name === resourceName);
-      if (documentoResources.length === 0) throw `El recurso ${resourceName} no existe en este documento`;
+      const documentoResources: IResource[] =
+        this.factory.Documento.resources?.filter(
+          resource => resource.name === resourceName,
+        );
+      if (documentoResources.length === 0)
+        throw `El recurso ${resourceName} no existe en este documento`;
       const documentoResource: IResource = documentoResources[0];
 
       const state: RootState = store.getState();
-      const localResource: ILocalResource = state.resources.resources
-        .filter(item =>
+      const localResource: ILocalResource = state.resources.resources.filter(
+        item =>
           item.url === documentoResource.url &&
           item.type === documentoResource.type &&
           item.method === documentoResource.method &&
-          item.body === documentoResource.body)
-        [0];
+          item.body === documentoResource.body,
+      )[0];
 
       return localResource.localData;
     };

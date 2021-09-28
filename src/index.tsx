@@ -65,7 +65,7 @@ type Props = StateProps & DispatchProps;
 
 class Index extends Component<Props> {
   state = {
-    isLoading: true,
+    isLoading: false,
     isValidate: true,
   };
 
@@ -104,7 +104,7 @@ class Index extends Component<Props> {
             props.forgiveUser();
           })
           .finally(() => {
-            this.setState({isValidate: false});
+            this.setState({isValidate: false, isLoading: true});
           });
       } else {
         this.state.isValidate = false;
@@ -115,6 +115,7 @@ class Index extends Component<Props> {
       } else {
         props.forgiveUser();
       }
+      this.state.isLoading = false;
       this.state.isValidate = false;
     }
   }
