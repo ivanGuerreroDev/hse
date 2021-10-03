@@ -1,18 +1,23 @@
-import _ from 'lodash';
-import React, { FC, useState, useCallback } from 'react';
-import { ScrollView, View } from 'react-native';
+import _, { toInteger } from 'lodash';
+import React, { Component } from 'react';
+import { Dimensions, FlatList, SectionList, View } from 'react-native';
 import { Button, Icon, Text } from 'react-native-elements';
 import GalleryFrame from './GalleryFrame';
-import CameraRoll, { GetPhotosParams, PhotoIdentifier } from '@react-native-community/cameraroll';
+import CameraRoll, { GetPhotosParams } from '@react-native-community/cameraroll';
 import fs from 'react-native-fs';
 
 export interface GalleryPressItemEvent {
   pressedItemUri: string;
 };
 
-interface IAllImages {
-  cached: Array<string>;
-  gallery: Array<string>;
+interface IImagesSection {
+  title: string;
+  data: Array<{
+    list: Array<{
+      imageUri: string,
+      isVideo: boolean
+    }>
+  }>
 };
 
 type Props = {
@@ -21,72 +26,117 @@ type Props = {
   selectedItemsUri?: Array<string>;
 };
 
-const Gallery: FC<Props> = (props: Props) => {
-  const [imagesState, setImagesState] = useState<IAllImages>({cached: [], gallery: []});
+export default class Gallery extends Component<Props> {
+  state = {
+    images: new Array<IImagesSection>()
+  };
 
-  const responseImagesCallback = useCallback(
-    response => setImagesState(response), []
-  );
+  constructor(props: Props) { console.log('construct gallery');
+    super(props);
 
-  _getImages()
-    .then(responseImagesCallback)
-    .catch(error => console.warn(error));
+    _getImages()
+      .then(response => this.setState({images: response}))
+      .catch(error => console.warn(error));
+  }
 
-  return (
-    <View style={{flex: 1, paddingHorizontal: 10}}>
-      <View style={{flex: 0, flexDirection: 'row', borderBottomColor: 'gray', borderBottomWidth: 1}}>
-        <Button
-          title='Volver a la cámara'
-          icon={<Icon type='material' name='arrow-back' color='white' size={16}/>}
-          buttonStyle={{backgroundColor: 'transparent'}}
-          containerStyle={{flex: 0}}
-          titleStyle={{color: 'white', fontSize: 14, fontWeight: 'bold'}}
-          onPress={() => props.onPressReturn?.()}/>
-
-        <View style={{flex: 1}}></View>
-
-        <View style={{flex: 0, justifyContent: 'center'}}>
-          <Text style={{flex: 0, color: 'white', fontSize: 14, fontWeight: 'bold'}}>
-            {`${props.selectedItemsUri?.length || 0} Items Seleccionados`}
-          </Text>
+  render() {
+    const SectionDataList = (list: Array<{imageUri: string, isVideo: boolean}>) =>
+      <FlatList
+        data={list}
+        keyExtractor={(item, index) => index.toString()}
+        numColumns={toInteger(Dimensions.get('window').width/100)}
+        renderItem={({item}) =>
+        <View style={{borderColor: 'white', borderWidth: 2}}>
+          <GalleryFrame
+            imageUri={item.imageUri}
+            isVideo={item.isVideo}
+            size={100}
+            selected={this.props.selectedItemsUri?.includes(item.imageUri)}
+            onPress={() => this.props.onPressItem?.({pressedItemUri: item.imageUri})}
+          />
         </View>
+      }/>;
+
+    const SectionHeader = (title: string) =>
+      <View style={{borderBottomWidth: 1, borderColor: 'white', marginVertical: 5}}>
+        <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>
+          {title}
+        </Text>
       </View>
 
-      <ScrollView style={{paddingTop: 20}}>
-        <RenderGroupImages
-          imagesUri={imagesState.cached}
-          groupName='Zimexa'
-          onPressItem={(event) => props.onPressItem?.(event)}
-          selectedItemsUri={props.selectedItemsUri}/>
-        <RenderGroupImages
-          imagesUri={imagesState.gallery}
-          groupName='Galería'
-          onPressItem={(event) => props.onPressItem?.(event)}
-          selectedItemsUri={props.selectedItemsUri}/>
-      </ScrollView>
-    </View>
-  );
+    return (
+      <View style={{flex: 1, paddingHorizontal: 10}}>
+        <View style={{flex: 0, flexDirection: 'row', borderBottomColor: 'gray', borderBottomWidth: 1}}>
+          <Button
+            title='Volver a la cámara'
+            icon={<Icon type='material' name='arrow-back' color='white' size={16}/>}
+            buttonStyle={{backgroundColor: 'transparent'}}
+            containerStyle={{flex: 0}}
+            titleStyle={{color: 'white', fontSize: 14, fontWeight: 'bold'}}
+            onPress={() => this.props.onPressReturn?.()}/>
+
+          <View style={{flex: 1}}></View>
+
+          <View style={{flex: 0, justifyContent: 'center'}}>
+            <Text style={{flex: 0, color: 'white', fontSize: 14, fontWeight: 'bold'}}>
+              {`${this.props.selectedItemsUri?.length || 0} Items Seleccionados`}
+            </Text>
+          </View>
+        </View>
+
+        <SectionList
+          sections={this.state.images}
+          keyExtractor={(item, index) => index.toString()}
+          renderSectionHeader={({section}) => SectionHeader(section.title)}
+          renderSectionFooter={() => <View style={{height: 20}}/>}
+          renderItem={({item}) => SectionDataList(item.list)}
+          />
+      </View>
+    );
+  }
 }
 
-const _getImages: () => Promise<IAllImages> = async () => {
+const _getImages: () => Promise<Array<IImagesSection>> = async () => {
   const cachedItems = await fs.readDir(fs.CachesDirectoryPath);
   const cachedCameraDir = cachedItems.find(item => item.name === 'Camera');
 
-  let cachedImages: Array<string> = [];
+  let cachedImagesSection: IImagesSection = {
+    title: 'Zimexa',
+    data: [
+      {
+        list: []
+      }
+    ]
+  };
   if (cachedCameraDir) {
-    cachedImages = (await fs.readDir(cachedCameraDir.path))
-      .map(item => item.path);
+    (await fs.readDir(cachedCameraDir.path))
+      .forEach(item => cachedImagesSection.data[0].list.push({
+        imageUri: item.path,
+        isVideo: ['mp4', 'mov'].includes(_.last(item.name.split('.')) || '')
+      }));
   }
 
   let CameraRollOptions: GetPhotosParams = {
     first: 10
   };
-  let photoIdentifiers: Array<PhotoIdentifier> = [];
+  let galleryImagesSection: IImagesSection = {
+    title: 'Galería',
+    data: [
+      {
+        list: []
+      }
+    ]
+  };
   let nextPage: boolean = true;
 
   while (nextPage) {
     const photoIdentifiersPage = await CameraRoll.getPhotos(CameraRollOptions);
-    photoIdentifiers.push(...photoIdentifiersPage.edges);
+    photoIdentifiersPage.edges.forEach(item => {
+      galleryImagesSection.data[0].list.push({
+        imageUri: item.node.image.uri,
+        isVideo: item.node.type.includes('video')
+      });
+    });
 
     if (photoIdentifiersPage.page_info.has_next_page) {
       CameraRollOptions = {
@@ -98,43 +148,11 @@ const _getImages: () => Promise<IAllImages> = async () => {
     nextPage = photoIdentifiersPage.page_info.has_next_page;
   }
 
-  return {
-    cached: cachedImages,
-    gallery: photoIdentifiers.map(item => item.node.image.uri)
-  }
+  let returnData: Array<IImagesSection> = [];
+  if (cachedImagesSection.data[0].list.length > 0)
+    returnData.push(cachedImagesSection);
+  if (galleryImagesSection.data[0].list.length > 0)
+    returnData.push(galleryImagesSection);
+
+  return returnData;
 };
-
-type GroupImagesProps = {
-  imagesUri: Array<string>;
-  groupName: string;
-  onPressItem?: ((event: GalleryPressItemEvent) => void) | undefined;
-  selectedItemsUri?: Array<string>;
-};
-
-const RenderGroupImages: FC<GroupImagesProps> = (props: GroupImagesProps) => {
-  const renderImageFrameCallback = useCallback(
-    (imageUri: string, index: number) => {
-      const fileExtension = _.last(imageUri.split('.'));
-
-      return <GalleryFrame
-        key={index}
-        imageUri={imageUri}
-        isVideo={['mp4', 'mov'].includes(fileExtension || '')}
-        onPress={() => props.onPressItem?.({pressedItemUri: imageUri})}
-        selected={props.selectedItemsUri?.includes(imageUri)}
-        size={100}
-      />
-    }, [props.selectedItemsUri]
-  );
-
-  return (
-    <View>
-      <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>{props.groupName}</Text>
-      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-        {props.imagesUri.map(renderImageFrameCallback)}
-      </View>
-    </View>
-  );
-};
-
-export default Gallery;

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { Component } from 'react';
 import {
   GestureResponderEvent,
   Image,
@@ -16,33 +16,42 @@ type Props = {
   size: number;
 };
 
-const GalleryFrame: FC<Props> = (props: Props) => {
-  const _onPress = (event: GestureResponderEvent) => props.onPress?.(event);
-
-  let videoIcon: JSX.Element | undefined = undefined;
-  if (props.isVideo) {
-    videoIcon =
-      <View style={styles.galleryFrameVideoIcon}>
-        <Icon type='material' name='videocam' color='white'/>
-      </View>
+export default class GalleryFrame extends Component<Props> {
+  constructor(props: Props) { console.log('construct gallery frame', props.imageUri);
+    super(props);
   }
 
-  return (
-    <View style={{
-      height: props.size,
-      width: props.size-props.size/20,
-      padding: props.size/20
-    }}>
-      <Pressable
-        style={[{flex: 1}, props.selected ? styles.pressedGalleryFrame : undefined]}
-        onPress={(event) => _onPress(event)}
-      >
-        <Image source={{uri: props.imageUri}} style={{flex: 1}}
-          testID={'thumbnail-image-background'}/>
-        {videoIcon}
-      </Pressable>
-    </View>
-  );
+  shouldComponentUpdate(nextProps: Props) {
+    return this.props.selected !== nextProps.selected;
+  }
+
+  render() { console.log('render gallery frame', this.props.imageUri);
+    const props = this.props;
+
+    let videoIcon: JSX.Element | undefined = undefined;
+    if (props.isVideo) {
+      videoIcon =
+        <View style={styles.galleryFrameVideoIcon}>
+          <Icon type='material' name='videocam' color='white' size={props.size/4}/>
+        </View>
+    }
+
+    return (
+      <View style={{
+        height: props.size,
+        width: props.size-props.size/20,
+        padding: props.size/20
+      }}>
+        <Pressable
+          style={[{flex: 1}, props.selected ? styles.pressedGalleryFrame : undefined]}
+          onPress={(event) => props.onPress?.(event)}
+        >
+          <Image source={{uri: props.imageUri}} style={{ width: '100%', height: '100%'}}/>
+          {videoIcon}
+        </Pressable>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -56,5 +65,3 @@ const styles = StyleSheet.create({
     borderWidth: 2
   }
 });
-
-export default GalleryFrame;
