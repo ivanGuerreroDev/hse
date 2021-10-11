@@ -1,5 +1,8 @@
 import { Method } from 'axios';
 import { ControlType } from './controltypes';
+import { IPerfil } from './perfil';
+import { GeolocationInfo, StaticDeviceInfo } from './deviceInfo';
+import { IUser } from 'state/user/types';
 export interface ITaggeable {
   keywords?: INameValue[];
   tags?: string[];
@@ -34,17 +37,11 @@ export enum DocumentoStatus {
 export interface IDocumento extends IFormulario {
   _formId: string;
   sentDate: IDate | undefined;
-  status: DocumentoStatus,
-  geolocation: {
-    type: string;
-    precision: number;
-    X: number;
-    Y: number;
-    Z: number;
-  } | undefined;
-  profile: any;
-  user: object;
-  device: object;
+  status: DocumentoStatus;
+  geolocation: GeolocationInfo;
+  profile: IPerfil;
+  user: IUser | undefined;
+  device: StaticDeviceInfo;
 }
 
 export interface IFormulario extends ITaggeable {
