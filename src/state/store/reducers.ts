@@ -11,13 +11,14 @@ import {
   resourcesReducer,
 } from '../formulariodinamico/reducers';
 import {currentUserReducer, userReducer} from '../user/reducers';
-import {netInfoStateReducer, settingsReducer} from 'state/settings/reducers';
+import {geolocationReducer, netInfoStateReducer, settingsReducer} from 'state/settings/reducers';
 import { pendingManagerReducer, sendingManagerReducer } from 'state/sendingManager/reducers';
 
 export default combineReducers({
   currentUser: currentUserReducer,
   documentos: documentosReducer,
   formularios: formulariosReducer,
+  geolocation: geolocationReducer,
   netInfoState: netInfoStateReducer,
   resources: resourcesReducer,
   perfiles: perfilReducer,
