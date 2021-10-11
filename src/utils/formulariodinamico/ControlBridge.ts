@@ -32,7 +32,9 @@ export class ControlBridge {
   }
 
   get OutputValue(): any {
-    return this.catchValue(this.control.outputValue);
+    return this.catchValue(
+      _.cloneDeep(this.control.outputValue)
+    );
   }
 
   set OutputValue(value: any) {
