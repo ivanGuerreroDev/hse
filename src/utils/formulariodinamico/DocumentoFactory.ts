@@ -14,11 +14,17 @@ import {
   OutputValueChangedEvent,
 } from 'types/documentofactory';
 
+import {store} from 'state/store/store';
+
 export class DocumentoFactory {
   static createFromFormulario(formulario: IFormulario): IDocumento {
     const creationDate = {
       $date: formatRFC3339(new Date(), {fractionDigits: 3}),
     };
+
+    const currentUser = store.getState().currentUser.user;
+    const currentProfile = store.getState().perfiles.perfiles
+      .filter(item => item.NombreUsuario === currentUser?.Username)[0]
 
     return _.cloneDeep({
       ...formulario,
@@ -28,10 +34,10 @@ export class DocumentoFactory {
       modifiedDate: creationDate,
       sentDate: {$date: ''},
       status: DocumentoStatus.draft,
-      geolocation: undefined,
-      profile: undefined,
-      user: {},
-      device: {},
+      geolocation: store.getState().deviceInfo.geolocation,
+      profile: currentProfile,
+      user: currentUser,
+      device: store.getState().deviceInfo.info,
     });
   }
 
