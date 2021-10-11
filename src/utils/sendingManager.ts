@@ -21,6 +21,7 @@ import Upload, { UploadOptions } from 'react-native-background-upload';
 import axios from 'axios';
 import Config from 'react-native-config';
 import { Platform } from 'react-native';
+import { formatRFC3339 } from 'date-fns';
 
 export const createPendingTask = (documento: IDocumento): void => {
   const checkResourceIsInUse = (resource: IResource): boolean => {
@@ -173,8 +174,14 @@ const uploadDocumento = async (documentoId: string): Promise<void> => {
   store.dispatch(deleteSendingResource(documentoId));
 
   try {
-    const documento: IDocumento = store.getState().documentos.documentos
-      .filter(documento => documento._id === documentoId)[0];
+    const documento: IDocumento = {
+      ...store.getState().documentos.documentos
+        .filter(documento => documento._id === documentoId)[0],
+      sentDate: {
+        $date: formatRFC3339(new Date(), {fractionDigits: 3})
+      }
+    };
+    store.dispatch(saveDocumento(documento));
 
     const response = await axios.post(
       `${Config.UrlFormularios}/documentos`,
