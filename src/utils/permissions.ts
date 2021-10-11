@@ -109,5 +109,6 @@ export const checkLocationPermission = (): Promise<PermissionStatus> => {
     }
 
     console.debug(`Returning location permissions: ${locationPermission}`);
+    resolve(locationPermission);
   });
 }
