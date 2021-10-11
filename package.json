@@ -33,6 +33,7 @@
     "react-native-calendars": "^1.1267.0",
     "react-native-camera": "^4.2.1",
     "react-native-config": "^1.4.2",
+    "react-native-device-info": "^8.4.0",
     "react-native-elements": "^3.4.2",
     "react-native-fs": "^2.18.0",
     "react-native-gesture-handler": "^1.10.3",
