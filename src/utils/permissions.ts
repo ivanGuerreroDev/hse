@@ -85,3 +85,29 @@ export const checkMicrophonePermission = (): Promise<PermissionStatus> => {
     resolve(microphonePermission);
   });
 };
+
+export const checkLocationPermission = (): Promise<PermissionStatus> => {
+  return new Promise<PermissionStatus>(async (resolve, reject) => {
+    let locationPermission: PermissionStatus = RESULTS.UNAVAILABLE;
+    let locationPermissionId: Permission;
+
+    switch (Platform.OS) {
+      case 'ios':
+        locationPermissionId = PERMISSIONS.IOS.LOCATION_WHEN_IN_USE;
+        break;
+
+      default:
+        locationPermissionId = PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION;
+        break;
+    }
+
+    console.debug('Check location permission');
+    locationPermission = await check(locationPermissionId);
+    if (locationPermission === RESULTS.DENIED) {
+      console.debug('Request location permission');
+      locationPermission = await request(locationPermissionId);
+    }
+
+    console.debug(`Returning location permissions: ${locationPermission}`);
+  });
+}
