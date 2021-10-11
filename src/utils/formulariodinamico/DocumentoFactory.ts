@@ -35,7 +35,7 @@ export class DocumentoFactory {
       modifiedDate: creationDate,
       sentDate: {$date: ''},
       status: DocumentoStatus.draft,
-      geolocation: undefined,
+      geolocation: store.getState().geolocation,
       profile: currentProfile,
       user: currentUser,
       device: {
