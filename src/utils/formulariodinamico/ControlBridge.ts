@@ -27,6 +27,10 @@ export class ControlBridge {
     return this.path;
   }
 
+  get RawOutputValue(): any {
+    return this.control.outputValue;
+  }
+
   get OutputValue(): any {
     return this.catchValue(this.control.outputValue);
   }
@@ -67,6 +71,15 @@ export class ControlBridge {
     return {
       '!code': `resource('${resourceName}')`,
     };
+  }
+
+  rawProperty(propertyName: string): any {
+    const propertyValue: any = jmespath.search(
+      this.control.properties || [],
+      `[?name=='${propertyName}']|[0].value`,
+    );
+
+    return propertyValue;
   }
 
   property(propertyName: string): any {
