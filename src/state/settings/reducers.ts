@@ -1,6 +1,36 @@
 import { AnyAction } from 'redux';
-import { NetInfoStateAction, NETINFOSTATE_ACTIONS, SettingsState } from './types';
+import { GeolocationAction, GEOLOCATION_ACTIONS, NetInfoStateAction, NETINFOSTATE_ACTIONS, SettingsState } from './types';
 import { NetInfoCellularGeneration, NetInfoState, NetInfoStateType } from '@react-native-community/netinfo';
+import { GeolocationResponse } from '@react-native-community/geolocation';
+
+const geolocationInitialState: GeolocationResponse = {
+  coords: {
+    latitude: NaN,
+    longitude: NaN,
+    altitude: null,
+    accuracy: NaN,
+    altitudeAccuracy: null,
+    heading: null,
+    speed: null
+  },
+  timestamp: NaN
+};
+
+export const geolocationReducer = (
+  state: GeolocationResponse = geolocationInitialState,
+  action: GeolocationAction
+): GeolocationResponse => {
+  switch (action.type) {
+    case GEOLOCATION_ACTIONS.UPDATE_GEOLOCATION: {
+      const geolocationResponse = action.payload;
+
+      return geolocationResponse;
+    }
+
+    default:
+      return state;
+  }
+};
 
 const netInfoInitialState: NetInfoState = {
   type: NetInfoStateType.unknown,
@@ -34,7 +64,7 @@ const settingsInitialState: SettingsState = {
     allowedMinWifiStrength: 50,
     allowedMinCellularGeneration: NetInfoCellularGeneration['4g']
   }
-}
+};
 
 export const settingsReducer = (
   state: SettingsState = settingsInitialState,
@@ -44,4 +74,4 @@ export const settingsReducer = (
     default:
       return state;
   }
-}
+};

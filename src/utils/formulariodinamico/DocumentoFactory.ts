@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import {formatRFC3339} from 'date-fns';
 import {generateUUID4} from 'utils/rng';
+import deviceInfoModule from 'react-native-device-info';
 
 import {ControlBridge} from './ControlBridge';
 import {
@@ -14,11 +15,17 @@ import {
   OutputValueChangedEvent,
 } from 'types/documentofactory';
 
+import {store} from 'state/store/store';
+
 export class DocumentoFactory {
   static createFromFormulario(formulario: IFormulario): IDocumento {
     const creationDate = {
       $date: formatRFC3339(new Date(), {fractionDigits: 3}),
     };
+
+    const currentUser = store.getState().currentUser.user;
+    const currentProfile = store.getState().perfiles.perfiles
+      .filter(item => item.NombreUsuario === currentUser?.Username)[0]
 
     return _.cloneDeep({
       ...formulario,
@@ -28,10 +35,27 @@ export class DocumentoFactory {
       modifiedDate: creationDate,
       sentDate: {$date: ''},
       status: DocumentoStatus.draft,
-      geolocation: undefined,
-      profile: undefined,
-      user: {},
-      device: {},
+      geolocation: store.getState().geolocation,
+      profile: currentProfile,
+      user: currentUser,
+      device: {
+        applicationBuildNumber: parseInt(deviceInfoModule.getBuildNumber()),
+        applicationBundleId: parseInt(deviceInfoModule.getBundleId()),
+        applicationName: deviceInfoModule.getApplicationName(),
+        applicationVersion: deviceInfoModule.getVersion(),
+        availableLocationProviders: deviceInfoModule.getAvailableLocationProvidersSync(),
+        buildId: deviceInfoModule.getBuildIdSync(),
+        brand: deviceInfoModule.getBrand(),
+        deviceId: deviceInfoModule.getDeviceId(),
+        deviceName: deviceInfoModule.getDeviceNameSync(),
+        deviceType: deviceInfoModule.getDeviceType(),
+        freeDiskStorage: deviceInfoModule.getFreeDiskStorageSync(),
+        manufacturer: deviceInfoModule.getManufacturerSync(),
+        systemName: deviceInfoModule.getSystemName(),
+        systemVersion: deviceInfoModule.getSystemVersion(),
+        totalMemory: deviceInfoModule.getTotalMemorySync(),
+        uniqueId: deviceInfoModule.getUniqueId()
+      },
     });
   }
 

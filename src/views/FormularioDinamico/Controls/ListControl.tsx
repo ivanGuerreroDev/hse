@@ -37,7 +37,7 @@ class ListControlModal extends React.Component<ListControlModalProps> {
       .filter(item => (displayField ? item[displayField] : item).toLowerCase().includes(this.state.searchText.toLowerCase()));
 
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
         <View style={{flex: 0}}>
           <Text style={{color: '#86939e', fontSize: 16, fontWeight: 'bold'}}>Seleccionado</Text>
           <FlatList

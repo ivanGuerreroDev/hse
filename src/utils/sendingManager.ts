@@ -20,11 +20,30 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import Upload, { UploadOptions } from 'react-native-background-upload';
 import axios from 'axios';
 import Config from 'react-native-config';
+import { Platform } from 'react-native';
+import { formatRFC3339 } from 'date-fns';
 
 export const createPendingTask = (documento: IDocumento): void => {
-  const state: RootState = store.getState();
+  const checkResourceIsInUse = (resource: IResource): boolean => {
+    return JSON.stringify(documento).includes(
+      `resource('${resource.name}')`
+    );
+  };
 
-  const existingPendingTask = state.pendingManager.pendingTasks
+  store.dispatch(saveDocumento({
+    ...documento,
+    resources: [
+      ...(documento.resources
+        ?.filter(resource =>
+          resource.type !== 'object' || checkResourceIsInUse(resource)
+        ) || [])
+    ]
+  }));
+
+  documento = store.getState().documentos.documentos
+    .find(item => item._id === documento._id) || documento;
+
+  const existingPendingTask = store.getState().pendingManager.pendingTasks
     .filter(item => item.documentoId === documento._id);
 
   if (existingPendingTask.length === 0) {
@@ -37,8 +56,7 @@ export const createPendingTask = (documento: IDocumento): void => {
     };
 
     store.dispatch(addPendingTask(pendingTask));
-  } else
-    store.dispatch(deletePendingTask(documento._id));
+  }
 }
 
 stateMonitor(store, 'netInfoState', () => startSendingManager());
@@ -60,11 +78,10 @@ stateMonitor(store, 'sendingManager.sendingTasks', (newValue: ISendingTask[], ol
 });
 
 const startSendingManager = (): void => {
-  const state: RootState = store.getState();
-  if (isNetworkAllowed() && !state.sendingManager.isSending && state.pendingManager.pendingTasks.length > 0) {
+  if (isNetworkAllowed() && !store.getState().sendingManager.isSending && store.getState().pendingManager.pendingTasks.length > 0) {
     store.dispatch(startSending());
 
-    state.pendingManager.pendingTasks.forEach(pendingTask => {
+    store.getState().pendingManager.pendingTasks.forEach(pendingTask => {
       store.dispatch(addSendingTask({ documentoId: pendingTask.documentoId, totalResources: 1}));
 
       pendingTask.pendingResourcesUri.forEach(pendingResource => {
@@ -79,7 +96,6 @@ const startSendingManager = (): void => {
 };
 
 const uploadResource = async (documentoId: string, resourceUri: string): Promise<void> => {
-  const state: RootState = store.getState();
   try {
     const s3Client = new S3Client({
       credentials: {
@@ -101,7 +117,7 @@ const uploadResource = async (documentoId: string, resourceUri: string): Promise
 
     const options: UploadOptions = {
       url: signedUrl,
-      path: resourceUri.replace('file:', ''),
+      path: fixPath(resourceUri),
       method: 'PUT',
       type: 'raw',
       headers: {
@@ -119,8 +135,9 @@ const uploadResource = async (documentoId: string, resourceUri: string): Promise
     });
     Upload.addListener('completed', uploadId, () => {
       const newResourceUri = `https://hse-app.s3.us-east-2.amazonaws.com/formularios/${documentoId}/${filename}`;
-      const documento: IDocumento = state.documentos.documentos
+      const documento: IDocumento = store.getState().documentos.documentos
         .filter(documento => documento._id === documentoId)[0];
+
       const resource = (documento.resources || [])
         .find(resource => resource.url === resourceUri);
 
@@ -154,12 +171,17 @@ const uploadResource = async (documentoId: string, resourceUri: string): Promise
 };
 
 const uploadDocumento = async (documentoId: string): Promise<void> => {
-  const state: RootState = store.getState();
   store.dispatch(deleteSendingResource(documentoId));
 
   try {
-    const documento: IDocumento = state.documentos.documentos
-      .filter(documento => documento._id === documentoId)[0];
+    const documento: IDocumento = {
+      ...store.getState().documentos.documentos
+        .filter(documento => documento._id === documentoId)[0],
+      sentDate: {
+        $date: formatRFC3339(new Date(), {fractionDigits: 3})
+      }
+    };
+    store.dispatch(saveDocumento(documento));
 
     const response = await axios.post(
       `${Config.UrlFormularios}/documentos`,
@@ -168,10 +190,17 @@ const uploadDocumento = async (documentoId: string): Promise<void> => {
 
     store.dispatch(deletePendingTask(documentoId));
     store.dispatch(changeStatusDocumento(documentoId, DocumentoStatus.sent));
-    console.log(response.data);
+    console.debug(response.data);
   } catch (error) {
     console.warn(error);
   } finally {
     store.dispatch(deleteSendingTask(documentoId));
   }
+};
+
+const fixPath = (path: string): string => {
+  if (Platform.OS === 'android')
+   return (/^(file:\/*){1}(\/.*){1}$/.exec(path) || ['','',path])[2]
+  else
+    return path;
 };

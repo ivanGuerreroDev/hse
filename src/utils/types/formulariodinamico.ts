@@ -1,5 +1,8 @@
 import { Method } from 'axios';
 import { ControlType } from './controltypes';
+import { IPerfil } from './perfil';
+import { IUser } from 'state/user/types';
+import { GeolocationResponse } from '@react-native-community/geolocation';
 export interface ITaggeable {
   keywords?: INameValue[];
   tags?: string[];
@@ -34,17 +37,28 @@ export enum DocumentoStatus {
 export interface IDocumento extends IFormulario {
   _formId: string;
   sentDate: IDate | undefined;
-  status: DocumentoStatus,
-  geolocation: {
-    type: string;
-    precision: number;
-    X: number;
-    Y: number;
-    Z: number;
-  } | undefined;
-  profile: any;
-  user: object;
-  device: object;
+  status: DocumentoStatus;
+  geolocation: GeolocationResponse | undefined;
+  profile: IPerfil;
+  user: IUser | undefined;
+  device: {
+    applicationBuildNumber: number,
+    applicationBundleId: number,
+    applicationName: string,
+    applicationVersion: string,
+    availableLocationProviders: any,
+    buildId: string,
+    brand: string,
+    deviceId: string,
+    deviceName: string,
+    deviceType: string,
+    freeDiskStorage: number,
+    manufacturer: string,
+    systemName: string,
+    systemVersion: string,
+    totalMemory: number,
+    uniqueId: string
+  }
 }
 
 export interface IFormulario extends ITaggeable {

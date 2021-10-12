@@ -26,9 +26,11 @@ import {
   DeleteDocumento,
 } from 'state/formulariodinamico/types';
 import {DocumentoStatus, IDocumento} from 'types/formulariodinamico';
+import { IUser } from 'state/user/types';
 
 type StateProps = {
   documentos: IDocumento[];
+  currentUser: IUser | undefined;
 };
 
 type DispatchProps = {
@@ -50,10 +52,10 @@ class Documents extends Component<Props> {
   };
 
   renderList() {
-    const {documentos, navigation, changeStatusDocumento, deleteDocumento} =
-      this.props;
+    const {currentUser, documentos, navigation, deleteDocumento} = this.props;
     const filteredDocumentos = (filter: DocumentoStatus) =>
       documentos
+        .filter(documento => documento.user?.Username === currentUser?.Username)
         .filter(documento => documento.status === filter)
         .sort(
           (a, b) =>
@@ -185,6 +187,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state: RootState): StateProps => {
   return {
     documentos: state.documentos.documentos,
+    currentUser: state.currentUser.user
   };
 };
 
