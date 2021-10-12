@@ -162,7 +162,7 @@ class FormularioDinamico extends Component<Props, State> {
           }
         />
 
-        <View style={{overflow: 'hidden', paddingBottom: '3%'}}>
+        <View style={{overflow: 'hidden', paddingBottom: '4%'}}>
           <View style={styles.tabsBar}>
             <Tab
               value={this.state.tabIndex}

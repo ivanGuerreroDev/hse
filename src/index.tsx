@@ -115,7 +115,6 @@ class Index extends Component<Props> {
       } else {
         props.forgiveUser();
       }
-      this.state.isLoading = false;
       this.state.isValidate = false;
     }
   }

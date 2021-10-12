@@ -16,8 +16,19 @@ export const getUserPool = async (Rut: string) => {
   }
 };
 
-export function validateEmail(email: string) {
-  const re =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(email);
-}
+export const capitalize = (value: any, type: number) => {
+  if (typeof value !== 'string' || isNaN(type)) return value;
+  switch (type) {
+      case 1:
+          return value.trim().toUpperCase();
+      case 2:
+          return value.trim().charAt(0).toUpperCase() + value.slice(1);
+      case 3:
+          return value.trim()
+              .split(" ")
+              .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+              .join(" ");
+      default:
+          return value;
+  };
+};

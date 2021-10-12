@@ -300,14 +300,6 @@ class SignIn extends Component<Props> {
             </TouchableOpacity>
           ) : (
             <View style={{alignItems: 'center'}}>
-              {/* <ProgressCircle
-                percent={this.state.percentage}
-                radius={20}
-                borderWidth={8}
-                color="#FDAE01"
-                shadowColor="#999"
-                bgColor="#fff"
-              /> */}
               <ActivityIndicator size="large" color="#FDAE01" />
             </View>
           )}
@@ -364,7 +356,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     paddingVertical: '5%',
-    /*   paddingLeft: '1%', */
     paddingTop: '10%',
     paddingRight: '4%',
   },
@@ -417,7 +408,7 @@ const styles = StyleSheet.create({
   },
   inputError: {
     paddingTop: 0,
-    marginTop: 1,
+    marginTop: 1 /*  */,
     marginBottom: '2%',
   },
   inputStyle: {

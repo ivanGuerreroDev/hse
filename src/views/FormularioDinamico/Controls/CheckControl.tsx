@@ -16,11 +16,11 @@ export default class CheckControl extends ControlComponent {
     const options = (controlBridge.property('options') as []).map(
       (option: any, index) => {
         const selectionStyle = {
-          opacity: option.code === controlBridge.OutputValue?.code ? 1 : 0.6,
+          opacity: option.code === controlBridge.OutputValue?.code ? 1 : 0.3,
         };
 
         return (
-          <View key={index} style={{flex: 1, paddingHorizontal: 20}}>
+          <View key={index} style={{flex: 1, paddingHorizontal: 15, paddingTop: 5}}>
             <Button
               onPress={() => {
                 controlBridge.OutputValue = {
@@ -55,9 +55,9 @@ export default class CheckControl extends ControlComponent {
     );
 
     return (
-      <View style={{flex: 1, paddingTop: 5, paddingBottom: 10}}>
+      <View style={{flex: 1, paddingTop: 5, paddingBottom: 12}}>
         <Text
-          style={{flex: 1, fontSize: 16, color: '#808080', paddingBottom: 5}}>
+          style={{flex: 1, fontSize: 15, color: '#00000099', fontWeight: 'bold' ,fontFamily: 'Roboto-Medium',paddingBottom: 5}}>
           {controlBridge.property('label')}
         </Text>
         <View

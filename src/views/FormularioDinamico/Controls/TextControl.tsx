@@ -2,6 +2,7 @@ import React from 'react';
 import ControlComponent from '../ControlComponent';
 import {ScrollView, View} from 'react-native';
 import {Input, Text} from 'react-native-elements';
+import { capitalize } from 'utils';
 
 export default class TextControl extends ControlComponent {
   state = {
@@ -29,14 +30,14 @@ export default class TextControl extends ControlComponent {
               '\\$&',
             )})(.*)$`,
             'i',
-          ).exec(item) || [];
+          ).exec(capitalize(item, 3)) || [];
 
         return (
           <Text
             key={index}
-            style={{padding: 2, textDecorationLine: 'underline'}}
+            style={{padding: 20}}
             onPress={() => {
-              controlBridge.OutputValue = item;
+              controlBridge.OutputValue = capitalize(item, 3);
               this.setState({onEdit: false});
             }}>
             <Text>{regexpResult[1]}</Text>
@@ -52,7 +53,7 @@ export default class TextControl extends ControlComponent {
         ? controlBridge.validateOutputValue() || ''
         : '';
 
-    const errorHeight: number = errorMessage && !this.state.onEdit ? 20 : 0;
+    const errorHeight: number = errorMessage && !this.state.onEdit ? 15 : 0;
     return (
       <View style={{paddingBottom: 25 - errorHeight}}>
         <Input
@@ -94,12 +95,11 @@ export default class TextControl extends ControlComponent {
             nestedScrollEnabled={true}
             style={{
               position: 'absolute',
-              left: '10%',
               top: 0,
               backgroundColor: 'white',
               zIndex: 999,
-              width: '80%',
-              maxHeight: this.state.onEdit ? 125 : 0,
+              width: '100%',
+              maxHeight: this.state.onEdit ? 200 : 0,
             }}>
             {autoCompleteList}
           </ScrollView>

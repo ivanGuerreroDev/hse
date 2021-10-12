@@ -42,11 +42,13 @@ export const saveLocalResourceAsync: SaveLocalResourceAsync = (resource: IResour
     return new Promise<ILocalResource>(async (resolve, reject) => {
       try {
         if (resource.type === 'api') {
+
           const response: AxiosResponse<any> = await axios({
             url: resource.url,
             method: resource.method,
             data: resource.body
           });
+          console.log('resource',resource);
 
           const localResource: ILocalResource = {
             url: resource.url,
