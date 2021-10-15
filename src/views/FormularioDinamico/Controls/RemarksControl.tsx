@@ -128,7 +128,7 @@ export default class RemarksControl extends ControlComponent {
             <View style={{padding: 13}}>
               <Calendar
                 markedDates={markedDate}
-                onDayPress={date => setValue(date.dateString)}
+                onDayPress={(date: any) => setValue(date.dateString)}
               />
             </View>
 
@@ -291,7 +291,7 @@ export default class RemarksControl extends ControlComponent {
       return (
         <View style={{justifyContent: 'center', alignItems: 'center', padding: 5}}>
           <View style={{width: 40, height: 40}}>
-            <Icon type='material' name={name} size={40} color='#808080'/>
+            <Icon type='material' name={name} size={name === 'calendar-today' ? 35 : 40} color='#808080'/>
             <Badge status='warning'
               value={<Icon type='materila' name='done' color='white' size={12}/>}
               containerStyle={badgeStyle}/>

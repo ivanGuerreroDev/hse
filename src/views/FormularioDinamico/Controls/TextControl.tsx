@@ -1,13 +1,32 @@
 import React from 'react';
-import ControlComponent from '../ControlComponent';
+import ControlComponent, {Props} from '../ControlComponent';
 import {ScrollView, View} from 'react-native';
 import {Input, Text} from 'react-native-elements';
 import { capitalize } from 'utils';
 
-export default class TextControl extends ControlComponent {
+export default class TextControl extends ControlComponent{
   state = {
-    onEdit: false,
+    onEdit: false
   };
+
+
+  constructor(props: Props) {
+    super(props);
+
+    props.controlBridge.OutputValue = props.controlBridge.property('data') ? props.controlBridge.property('data') : props.controlBridge.OutputValue
+  }
+
+  shouldComponentUpdate(){
+    const {controlBridge} = this.props;
+    if(controlBridge.property('data')){
+      if(controlBridge.OutputValue != controlBridge.property('data')){
+        controlBridge.OutputValue = controlBridge.property('data')
+        return true
+      }
+      return false
+    }
+    return true
+  }
 
   render() {
     const {controlBridge} = this.props;
@@ -37,7 +56,7 @@ export default class TextControl extends ControlComponent {
             key={index}
             style={{padding: 20}}
             onPress={() => {
-              controlBridge.OutputValue = capitalize(item, 3);
+              controlBridge.OutputValue = item;
               this.setState({onEdit: false});
             }}>
             <Text>{regexpResult[1]}</Text>
@@ -54,16 +73,22 @@ export default class TextControl extends ControlComponent {
         : '';
 
     const errorHeight: number = errorMessage && !this.state.onEdit ? 15 : 0;
+
+    let newData = controlBridge.property('data') ? controlBridge.property('data') : controlBridge.OutputValue
+    console.log(controlBridge.OutputValue);
+
+
+
     return (
       <View style={{paddingBottom: 25 - errorHeight}}>
         <Input
           label={controlBridge.property('title')}
           placeholder={controlBridge.property('placeholder')}
           errorMessage={errorMessage}
-          onChangeText={value => {
+          onChangeText={ value => {
             (controlBridge.OutputValue = value), this.setState({onEdit: true});
           }}
-          value={controlBridge.OutputValue}
+          value={newData}
           onBlur={() => {
             this.setState({onEdit: false});
           }}
@@ -86,7 +111,7 @@ export default class TextControl extends ControlComponent {
             height: errorHeight,
           }}
           placeholderTextColor="#00000061"
-          editable={!controlBridge.ReadOnly}
+          editable={!controlBridge.property('editable') ? false : !controlBridge.ReadOnly }
         />
 
         <View>

@@ -45,10 +45,13 @@ export const saveLocalResourceAsync: SaveLocalResourceAsync = (resource: IResour
 
           const response: AxiosResponse<any> = await axios({
             url: resource.url,
+            headers: {
+              'Content-Type': 'application/json'
+            },
             method: resource.method,
             data: resource.body
           });
-          console.log('resource',resource);
+
 
           const localResource: ILocalResource = {
             url: resource.url,
@@ -62,6 +65,7 @@ export const saveLocalResourceAsync: SaveLocalResourceAsync = (resource: IResour
           resolve(localResource);
         }
       } catch (error) {
+        console.log(error, resource.body);
         reject(error);
       }
     });
