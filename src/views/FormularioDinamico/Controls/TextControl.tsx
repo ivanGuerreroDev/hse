@@ -6,18 +6,18 @@ import { capitalize } from 'utils';
 
 export default class TextControl extends ControlComponent{
   state = {
-    onEdit: false
+    onEdit: false,
+    color: ''
   };
-
 
   constructor(props: Props) {
     super(props);
-
     props.controlBridge.OutputValue = props.controlBridge.property('data') ? props.controlBridge.property('data') : props.controlBridge.OutputValue
   }
 
   shouldComponentUpdate(){
     const {controlBridge} = this.props;
+
     if(controlBridge.property('data')){
       if(controlBridge.OutputValue != controlBridge.property('data')){
         controlBridge.OutputValue = controlBridge.property('data')
@@ -75,9 +75,6 @@ export default class TextControl extends ControlComponent{
     const errorHeight: number = errorMessage && !this.state.onEdit ? 15 : 0;
 
     let newData = controlBridge.property('data') ? controlBridge.property('data') : controlBridge.OutputValue
-    console.log(controlBridge.OutputValue);
-
-
 
     return (
       <View style={{paddingBottom: 25 - errorHeight}}>
@@ -92,7 +89,7 @@ export default class TextControl extends ControlComponent{
           onBlur={() => {
             this.setState({onEdit: false});
           }}
-          inputContainerStyle={{borderColor: '#0000001F', borderBottomWidth: 1}}
+          inputContainerStyle={{borderColor: '#0000001F', borderBottomWidth: 1, }}
           labelStyle={{
             fontSize: 13,
             color: '#00000099',
@@ -103,6 +100,8 @@ export default class TextControl extends ControlComponent{
             paddingVertical: 5,
             fontSize: 15,
             fontFamily: 'Roboto-Medium',
+            backgroundColor: controlBridge.property('color'),
+            borderRadius: 5
           }}
           errorStyle={{
             paddingTop: 0,

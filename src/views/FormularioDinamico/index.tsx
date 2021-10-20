@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {Alert, ScrollView, StyleSheet, ToastAndroid, View} from 'react-native';
 import {Button, Header, Icon, Tab, Text} from 'react-native-elements';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {TabItem} from './TabItemComponent';
@@ -134,14 +134,26 @@ class FormularioDinamico extends Component<Props, State> {
           buttonStyle={{backgroundColor: '#FDAE01'}}
           icon={<Icon type="material" name="send" color="white" />}
           onPress={() => {
-            let messages = this.documentoFactory.validateOutputValues();
-            if (messages.length > 0) {
-              console.log(JSON.stringify(messages));
-            } else {
-              changeStatusDocumento(Documento._id, DocumentoStatus.sending);
-              createPendingTask(Documento);
-              navigation.goBack();
-            }
+            Alert.alert('Ops', 'Esta seguro de enviar el formulario', [
+              {
+                text: 'Cancelar',
+                onPress: () => {}
+              },
+              {
+                text: 'Aceptar',
+                onPress: () => {
+                  let messages = this.documentoFactory.validateOutputValues();
+                  if (messages.length > 0) {
+                    console.log(JSON.stringify(messages));
+                  } else {
+                    changeStatusDocumento(Documento._id, DocumentoStatus.sending);
+                    createPendingTask(Documento);
+                    navigation.goBack();
+                    ToastAndroid.show('El documento se ha guardado con exito', ToastAndroid.SHORT)
+                  }
+                }
+              }
+            ], {cancelable: true})
           }}
         />,
       );

@@ -14,9 +14,19 @@ export default class TextControl extends ControlComponent {
     const {children, controlBridge} = this.props;
 
     return (
-      <View style={{flex: 1, paddingTop: 2, paddingBottom: 10}}>
+      <View style={{
+              flex: 1,
+              paddingTop: controlBridge.property('ptop'),
+              paddingBottom: controlBridge.property('pbot'),
+              alignItems: controlBridge.property('aling'),
+            }}>
         <Text
-          style={{flex: 1, fontSize: 18, color: '#FDAE01', fontWeight: 'bold'}}>
+          style={{
+            flex: 1,
+            fontSize: controlBridge.property('fontSize'),
+            color: controlBridge.property('color'),
+            fontWeight: 'bold'
+            }}>
           {controlBridge.property('title')}
         </Text>
         {children}

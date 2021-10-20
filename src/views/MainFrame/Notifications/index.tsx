@@ -28,7 +28,7 @@ class Notifications extends Component<Props> {
   render() {
     return (
       <Layout>
-        <View>
+{/*         <View>
           {this.props.formularios.map((formulario, index) => (
             <Button
               key={index * 2}
@@ -53,7 +53,7 @@ class Notifications extends Component<Props> {
               }}
             />
           ))}
-        </View>
+        </View> */}
       </Layout>
     );
   }
