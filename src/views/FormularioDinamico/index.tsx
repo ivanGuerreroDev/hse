@@ -32,6 +32,7 @@ import {
 } from 'types/documentofactory';
 import {DocumentoStatus, IDocumento} from 'utils/types/formulariodinamico';
 import {createPendingTask} from 'utils/sendingManager';
+import { isNetworkAllowed } from 'utils/network';
 
 type State = {
   tabIndex: number;
@@ -134,26 +135,36 @@ class FormularioDinamico extends Component<Props, State> {
           buttonStyle={{backgroundColor: '#FDAE01'}}
           icon={<Icon type="material" name="send" color="white" />}
           onPress={() => {
-            Alert.alert('Ops', 'Esta seguro de enviar el formulario', [
-              {
-                text: 'Cancelar',
-                onPress: () => {}
-              },
-              {
-                text: 'Aceptar',
-                onPress: () => {
-                  let messages = this.documentoFactory.validateOutputValues();
-                  if (messages.length > 0) {
-                    console.log(JSON.stringify(messages));
-                  } else {
-                    changeStatusDocumento(Documento._id, DocumentoStatus.sending);
-                    createPendingTask(Documento);
-                    navigation.goBack();
-                    ToastAndroid.show('El documento se ha guardado con exito', ToastAndroid.SHORT)
+        /*     if(Documento.status !== 0){ */
+              Alert.alert('Ops',
+                    isNetworkAllowed() ?
+                    'Esta seguro de enviar el formulario' :
+                    'Esta seguro de guardar el formulario', [
+                {
+                  text: 'Cancelar',
+                  onPress: () => {}
+                },
+                {
+                  text: 'Aceptar',
+                  onPress: () => {
+                    let messages = this.documentoFactory.validateOutputValues();
+                    console.log(messages);
+
+                    if (messages.length > 0) {
+
+                      console.log(JSON.stringify(messages));
+                    } else {
+                      changeStatusDocumento(Documento._id, DocumentoStatus.sending);
+                      createPendingTask(Documento);
+                      navigation.goBack();
+                      isNetworkAllowed() ?
+                          ToastAndroid.show('El documento se ha enviado con exito', ToastAndroid.SHORT) :
+                          ToastAndroid.show('El documento se ha guardado con exito', ToastAndroid.SHORT)
+                    }
                   }
                 }
-              }
-            ], {cancelable: true})
+              ], {cancelable: true})
+           /*  } */
           }}
         />,
       );

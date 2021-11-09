@@ -52,7 +52,6 @@ export const saveLocalResourceAsync: SaveLocalResourceAsync = (resource: IResour
             data: resource.body
           });
 
-
           const localResource: ILocalResource = {
             url: resource.url,
             type: resource.type,

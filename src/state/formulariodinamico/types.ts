@@ -1,6 +1,7 @@
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { DocumentoStatus, IDocumento, IFormulario, ILocalResource, IResource } from 'types/formulariodinamico';
+import { IPerfil } from 'utils/types/perfil';
 
 //#region State Interface
 

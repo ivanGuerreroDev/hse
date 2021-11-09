@@ -50,7 +50,6 @@ export default class TextControl extends ControlComponent{
             )})(.*)$`,
             'i',
           ).exec(capitalize(item, 3)) || [];
-
         return (
           <Text
             key={index}

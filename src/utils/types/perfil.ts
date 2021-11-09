@@ -9,6 +9,7 @@ export interface IPerfil {
   ApellidoMaterno: string;
   TelefonoPersona: string;
   NombreEmpresa: string;
+  IdNv2: number,
   NombreNV2: string;
   Mascara: string;
   NombreCargo: string;

@@ -184,7 +184,19 @@ export default class RemarksControl extends ControlComponent {
       return (
         <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
           <View style={{flex: 0}}>
-            <Text style={{color: '#86939e', fontSize: 16, fontWeight: 'bold'}}>Seleccionado</Text>
+            <Text
+               style={{
+                paddingTop: 5,
+                paddingLeft: 5,
+                color: '#00000099',
+                paddingVertical: 5,
+                fontSize: 16,
+                fontFamily: 'Roboto-Medium',
+                fontWeight: 'bold'
+               }}
+            >
+                Seleccionado
+            </Text>
             <FlatList
               data={selectedData}
               keyExtractor={(item, index) => index.toString()}
@@ -198,9 +210,9 @@ export default class RemarksControl extends ControlComponent {
                         .filter((data: any) => data !== item)
                       ): props.onSuccess(undefined)}
                     style={{
-                      fontSize: 18,
-                      borderWidth: 1,
-                      borderColor: 'cyan',
+                      paddingVertical: 5,
+                      fontSize: 15,
+                      fontFamily: 'Roboto-Medium',
                       borderRadius: 6,
                       padding: 5
                     }}>
@@ -209,7 +221,19 @@ export default class RemarksControl extends ControlComponent {
                 </View>
               }/>
           </View>
-          <Text style={{color: '#86939e', fontSize: 16, fontWeight: 'bold', flex: 0}}>Selecione</Text>
+          <Text
+            style={{
+                paddingLeft: 5,
+                paddingHorizontal: 10,
+                color: '#00000099',
+                paddingVertical: 5,
+                fontSize: 16,
+                fontFamily: 'Roboto-Medium',
+                fontWeight: 'bold', flex: 0
+            }}
+          >
+            Seleccione
+          </Text>
           <FlatList
             data={filteredData}
             keyExtractor={(item, index) => index.toString()}
@@ -225,8 +249,6 @@ export default class RemarksControl extends ControlComponent {
                   onPress={() => props.multiple ? setSelectedData([...selectedData, item]) : props.onSuccess(item)}
                   style={{
                     fontSize: 18,
-                    borderWidth: 1,
-                    borderColor: 'grey',
                     borderRadius: 6,
                     padding: 5
                   }}>
@@ -236,9 +258,9 @@ export default class RemarksControl extends ControlComponent {
                 </Text>
               </View>
             }}/>
-          <View style={{flex: 0, flexDirection: 'row'}}>
+          <View style={{flex: 0, flexDirection: 'row', borderWidth: 1}}>
             <TextInput
-              style={{flex: 1}}
+              style={{flex: 1, paddingLeft: 5}}
               autoFocus={true}
               value={searchText}
               onChangeText={(value) => setSearchText(value)}

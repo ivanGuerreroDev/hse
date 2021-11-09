@@ -217,13 +217,12 @@ class SignIn extends Component<Props> {
         <View style={styles.containerInput}>
           <Input
             autoCapitalize="none"
-            placeholder="RUT Empresa (12345678-9)"
             errorMessage={this.state.Errorutempresa}
             onSubmitEditing={() => inputUserRef?.focus()}
             onChangeText={rutempresa =>
               this.setState({rutempresa, Errorutempresa: ''})
             }
-            label={this.state.rutempresa ? 'RUT Empresa (12345678-9)' : ''}
+            label={"RUT Empresa (12345678-9)"}
             value={this.state.rutempresa}
             labelStyle={styles.inputLabel}
             inputContainerStyle={styles.inputContainer}
@@ -234,13 +233,12 @@ class SignIn extends Component<Props> {
             ref={ref => (inputUserRef = ref)}
             autoCapitalize="none"
             keyboardType="email-address"
-            placeholder="Usuario"
             errorMessage={this.state.Errorusername}
             onSubmitEditing={() => inputPasswordRef?.focus()}
             onChangeText={username =>
               this.setState({username, Errorusername: ''})
             }
-            label={this.state.username ? 'Usuario' : ''}
+            label={"Usuario"}
             value={this.state.username}
             labelStyle={styles.inputLabel}
             inputContainerStyle={styles.inputContainer}
@@ -251,14 +249,13 @@ class SignIn extends Component<Props> {
             ref={ref => (inputPasswordRef = ref)}
             autoCapitalize="none"
             secureTextEntry={this.state.showpassword}
-            placeholder="Contraseña"
             errorMessage={this.state.Errorpassword}
             onChangeText={password =>
               this.setState({password, Errorpassword: ''})
             }
             value={this.state.password}
             rightIcon={securePassIcon}
-            label={this.state.password ? 'Contraseña' : ''}
+            label={'Contraseña'}
             rightIconContainerStyle={{width: '20%'}}
             labelStyle={styles.inputLabel}
             inputContainerStyle={styles.inputContainer}

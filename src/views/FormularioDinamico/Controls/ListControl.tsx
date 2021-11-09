@@ -80,9 +80,9 @@ class ListControlModal extends React.Component<ListControlModalProps> {
                 onPress={() => multiple ? this.setState({selectedData: [...this.state.selectedData, item]}) : onSuccess(item)}
                 style={{
                   fontSize: 18,
-                  borderWidth: 1,
+                 /*  borderWidth: 1,
                   borderColor: 'grey',
-                  borderRadius: 6,
+                  borderRadius: 6, */
                   padding: 5
                 }}>
                 <Text>{regexpResult[1]}</Text>
