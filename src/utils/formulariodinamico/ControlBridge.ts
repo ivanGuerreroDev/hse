@@ -165,6 +165,17 @@ export class ControlBridge {
       return localResource.localData;
     };
 
+/*     const lineCode = valueCode.startsWith('return') ? valueCode : `return ${valueCode}`;
+
+    return new Function(
+      'control',
+      'resource',
+      lineCode
+    )(
+      control,
+      resource
+    ); */
+
     return eval(valueCode);
   }
 }

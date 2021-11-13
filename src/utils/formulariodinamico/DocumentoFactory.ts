@@ -96,11 +96,12 @@ export class DocumentoFactory {
 
   validateOutputValues(): Array<string> {
     let errorStack: Array<string> = [];
-    this.bridgeList.forEach(controlBridge => {
-      const validate = controlBridge.validateOutputValue();
+    this.bridgeList.forEach(function (controlBridge) {
+        const validate = controlBridge.validateOutputValue();
 
-      if (validate) errorStack.push(validate);
-    });
+        if (validate)
+          errorStack.push(validate);
+      });
 
     return errorStack;
   }

@@ -89,13 +89,12 @@ class Index extends Component<Props> {
                 },
               };
               props.saveUser(user, true);
-
-              props.saveFormulariosAsync();
               props.savePerfilesAsync(props.rememberUser);
               props.saveMenusAsyncThunk(props.rememberUser);
               props.saveCapacitacionAsyncThunk(props.rememberUser);
               props.saveObservacionAsyncThunk(props.rememberUser);
               props.saveInspeccionAsyncThunk(props.rememberUser);
+              props.saveFormulariosAsync(props.rememberUser);
             } else {
               props.forgiveUser();
             }
@@ -127,29 +126,29 @@ class Index extends Component<Props> {
     );
 
     const AppNavigator = (
-       <MainStack.Navigator headerMode="none"
-      //  mode='modal'
-      // screenOptions={{
-      //   headerShown: false,
-      //   cardStyle: { backgroundColor: 'transparent' },
-      //   cardOverlayEnabled: true,
-      //   cardStyleInterpolator: ({ current: { progress } }) => ({
-      //     cardStyle: {
-      //       opacity: progress.interpolate({
-      //         inputRange: [0, 0.5, 0.9, 1],
-      //         outputRange: [0, 0.25, 0.7, 1],
-      //       }),
-      //     },
-      //     overlayStyle: {
-      //       opacity: progress.interpolate({
-      //         inputRange: [0, 1],
-      //         outputRange: [0, 0.5],
-      //         extrapolate: 'clamp',
-      //       }),
-      //     },
-      //   }),
-      // }}
-      >
+      <MainStack.Navigator
+        headerMode="none"
+        mode="modal"
+        screenOptions={{
+          headerShown: false,
+          cardStyle: {backgroundColor: 'transparent'},
+          cardOverlayEnabled: true,
+          cardStyleInterpolator: ({current: {progress}}) => ({
+            cardStyle: {
+              opacity: progress.interpolate({
+                inputRange: [0, 0.5, 0.9, 1],
+                outputRange: [0, 0.25, 0.7, 1],
+              }),
+            },
+            overlayStyle: {
+              opacity: progress.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 0.5],
+                extrapolate: 'clamp',
+              }),
+            },
+          }),
+        }}>
         <MainStack.Screen name="MainFrame" component={MainFrame} />
         <MainStack.Screen
           name="FormularioDinamico"
@@ -183,7 +182,7 @@ const mapDispatchToProps = (
     forgiveUser: () => dispatch(forgiveUser()),
     saveUser: (user: IUser, remember: boolean) =>
       dispatch(saveUser(user, remember)),
-    saveFormulariosAsync: () => dispatch(saveFormulariosAsync()),
+    saveFormulariosAsync: (user: IUser) => dispatch(saveFormulariosAsync(user)),
     savePerfilesAsync: (user: IUser) => dispatch(savePerfilesAsync(user)),
     saveMenusAsyncThunk: (user: IUser) => dispatch(saveMenusAsyncThunk(user)),
     saveCapacitacionAsyncThunk: (user: IUser) =>

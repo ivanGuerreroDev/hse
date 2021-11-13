@@ -1,5 +1,6 @@
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
+import { IUser } from 'state/user/types';
 import { DocumentoStatus, IDocumento, IFormulario, ILocalResource, IResource } from 'types/formulariodinamico';
 import { IPerfil } from 'utils/types/perfil';
 
@@ -91,9 +92,9 @@ export type SaveLocalResourceAsyncThunk = ThunkAction<Promise<ILocalResource>, {
 
 //#region Thunk func types
 
-export type SaveFormularioAsync = () => SaveFormularioAsyncThunk;
+export type SaveFormularioAsync = (user: IUser) => SaveFormularioAsyncThunk;
 
-export type SaveLocalResourceAsync = (resource: IResource) => SaveLocalResourceAsyncThunk;
+export type SaveLocalResourceAsync = (resource: IResource, user:IUser) => SaveLocalResourceAsyncThunk;
 
 //#endregion
 

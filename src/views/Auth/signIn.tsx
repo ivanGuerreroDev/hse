@@ -147,7 +147,7 @@ class SignIn extends Component<Props> {
               Username: userData.Username,
               UserTokens: signin.AuthenticationResult,
             };
-            this.props.saveFormulariosAsync();
+            this.props.saveFormulariosAsync(user);
             this.props.savePerfilesAsync(user);
             this.props.saveMenusAsyncThunk(user);
             this.props.saveCapacitacionAsyncThunk(user);
@@ -314,7 +314,7 @@ const mapDispatchToProps = (
   return {
     saveUser: (user: IUser, remember: boolean) =>
       dispatch(saveUser(user, remember)),
-    saveFormulariosAsync: () => dispatch(saveFormulariosAsync()),
+    saveFormulariosAsync: (user: IUser) => dispatch(saveFormulariosAsync(user)),
     savePerfilesAsync: (user: IUser) => dispatch(savePerfilesAsync(user)),
     saveMenusAsyncThunk: (user: IUser) => dispatch(saveMenusAsyncThunk(user)),
     saveCapacitacionAsyncThunk: (user: IUser) =>
