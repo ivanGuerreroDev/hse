@@ -80,6 +80,7 @@ class FormularioDinamico extends Component<Props, State> {
   }
 
   render() {
+
     const {ControlBridgeList, Documento} = this.documentoFactory;
     const {changeStatusDocumento, deleteDocumento, navigation} = this.props;
 
@@ -127,6 +128,7 @@ class FormularioDinamico extends Component<Props, State> {
         />,
       );
     if (Documento.status === DocumentoStatus.draft)
+
       FooterButtons.push(
         <Button
           title="Enviar"
@@ -135,8 +137,7 @@ class FormularioDinamico extends Component<Props, State> {
           buttonStyle={{backgroundColor: '#FDAE01'}}
           icon={<Icon type="material" name="send" color="white" />}
           onPress={() => {
-        /*     if(Documento.status !== 0){ */
-              Alert.alert('Ops',
+               Alert.alert('Ops',
                     isNetworkAllowed() ?
                     'Esta seguro de enviar el formulario' :
                     'Esta seguro de guardar el formulario', [
@@ -148,24 +149,23 @@ class FormularioDinamico extends Component<Props, State> {
                   text: 'Aceptar',
                   onPress: () => {
                     let messages = this.documentoFactory.validateOutputValues();
-                    console.log(messages);
 
                     if (messages.length > 0) {
-
                       console.log(JSON.stringify(messages));
                     } else {
                       changeStatusDocumento(Documento._id, DocumentoStatus.sending);
                       createPendingTask(Documento);
                       navigation.goBack();
-                      isNetworkAllowed() ?
+
+                       isNetworkAllowed() ?
                           ToastAndroid.show('El documento se ha enviado con exito', ToastAndroid.SHORT) :
                           ToastAndroid.show('El documento se ha guardado con exito', ToastAndroid.SHORT)
                     }
                   }
                 }
               ], {cancelable: true})
-           /*  } */
-          }}
+            }
+          }
         />,
       );
 
@@ -274,3 +274,4 @@ export default connect<{}, DispatchProps, {}, RootState>(
   null,
   mapDispatchToProps,
 )(FormularioDinamico);
+

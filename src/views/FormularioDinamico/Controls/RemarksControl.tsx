@@ -60,6 +60,7 @@ export default class RemarksControl extends ControlComponent {
                 placeholder='Escribe aquí tu comentario'
                 value={value}
                 onChangeText={value => setValue(value)}/>
+
             </View>
 
             <View style={{paddingTop: 46, flexDirection: 'row-reverse'}}>
@@ -109,7 +110,7 @@ export default class RemarksControl extends ControlComponent {
       LocaleConfig.defaultLocale = 'es';
 
       const [value, setValue] = useState(
-        props.value || format(new Date(), 'yyyy-MM-dd')
+        props.value || format(new Date((new Date()).getTime()+24*60*60*1000*controlBridge.property("plazo")), 'yyyy-MM-dd')
       );
 
       let markedDate: any = {};
@@ -127,6 +128,7 @@ export default class RemarksControl extends ControlComponent {
 
             <View style={{padding: 13}}>
               <Calendar
+                current={value}
                 markedDates={markedDate}
                 onDayPress={(date: any) => setValue(date.dateString)}
               />
@@ -288,13 +290,11 @@ export default class RemarksControl extends ControlComponent {
         }}
       />
     );
-
-
   }
 
   render() {
     const { controlBridge } = this.props;
-
+    console.log('Bumm',controlBridge.property("label") );
     const buttonOption = (name: string, value: boolean): JSX.Element => {
       let badgeStyle: StyleProp<ViewStyle>;
 
@@ -338,6 +338,11 @@ export default class RemarksControl extends ControlComponent {
           {!controlBridge.property("noOwner") && <Pressable style={{flex: 1}} onPress={() => this.useOwner()}>
             {buttonOption('engineering', (controlBridge?.OutputValue?.owners !== undefined))}
           </Pressable>}
+        </View>
+        <View style= {{alignItems: 'center'}}>
+        <Text style= {{fontSize: 16, color: '#FDAE01', fontWeight: 'bold'}}>
+          { !controlBridge.property("obsg") ? !controlBridge?.OutputValue?.comment && 'La observacion es requerida' : ''}
+        </Text>
         </View>
       </View>
     );
