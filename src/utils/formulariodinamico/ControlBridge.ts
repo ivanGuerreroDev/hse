@@ -159,13 +159,14 @@ export class ControlBridge {
           item.url === documentoResource.url &&
           item.type === documentoResource.type &&
           item.method === documentoResource.method &&
-          item.body === documentoResource.body,
+          item.data === documentoResource.data &&
+          item.headers === documentoResource.headers
       )[0];
 
       return localResource.localData;
     };
 
-/*     const lineCode = valueCode.startsWith('return') ? valueCode : `return ${valueCode}`;
+    const lineCode = valueCode.startsWith('return') ? valueCode : `return ${valueCode}`;
 
     return new Function(
       'control',
@@ -174,8 +175,6 @@ export class ControlBridge {
     )(
       control,
       resource
-    ); */
-
-    return eval(valueCode);
+    );
   }
 }

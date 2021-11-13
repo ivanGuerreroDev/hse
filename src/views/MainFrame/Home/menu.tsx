@@ -28,11 +28,11 @@ class Menu extends Component<Props> {
             renderItem={({item}) => {
               const iconmenu =
                 item.NombreMenu === 'Observaciones'
-                  ? require('components/Assets/Menu/Observaciones.png')
+                  ? require('components/Assets/Menu/observaciones.png')
                   : item.NombreMenu === 'Inspecciones'
-                  ? require('components/Assets/Menu/Inspecciones.png')
+                  ? require('components/Assets/Menu/inspecciones.png')
                   : item.NombreMenu === 'Capacitaciones'
-                  ? require('components/Assets/Menu/Capacitaciones.png')
+                  ? require('components/Assets/Menu/capacitaciones.png')
                   : '';
 
               let tintColor;

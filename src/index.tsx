@@ -6,7 +6,7 @@ import {
   RootMainStackParamList,
 } from 'utils/types/navigations';
 import {refreshToken} from 'utils/cognito/cognito-wrapper';
-import {isNetworkAllowed} from 'utils/network';
+import {isNetworkAllowed, isNetworkMounted} from 'utils/network';
 
 // Redux
 import {connect} from 'react-redux';
@@ -65,13 +65,17 @@ type Props = StateProps & DispatchProps;
 
 class Index extends Component<Props> {
   state = {
-    isLoading: false,
+    isLoading: true,
     isValidate: true,
   };
 
-  constructor(props: Props) {
-    super(props);
+  componentDidMount() {
+    const { props } = this;
 
+    new Promise(async () => {
+      while (!isNetworkMounted()) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
     if (isNetworkAllowed()) {
       if (props.rememberUser && props.rememberUser.UserTokens.RefreshToken) {
         refreshToken(
@@ -106,7 +110,7 @@ class Index extends Component<Props> {
             this.setState({isValidate: false, isLoading: true});
           });
       } else {
-        this.state.isValidate = false;
+          this.setState({isValidate: false});
       }
     } else {
       if (props.rememberUser) {
@@ -114,8 +118,9 @@ class Index extends Component<Props> {
       } else {
         props.forgiveUser();
       }
-      this.state.isValidate = false;
+        this.setState({isValidate: false});
     }
+    }).finally(() => {});
   }
 
   render() {

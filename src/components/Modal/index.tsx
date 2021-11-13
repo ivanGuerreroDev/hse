@@ -1,5 +1,15 @@
-import { Component } from 'react';
-import { LogBox } from 'react-native';
+import React, { Component } from 'react';
+import {
+  Animated,
+  Dimensions,
+  EmitterSubscription,
+  Keyboard,
+  KeyboardEvent,
+  KeyboardEventListener,
+  LogBox,
+  Platform
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { RouteProp } from '@react-navigation/native';
 import { RootMainStackParamList } from 'types/navigations';
 
@@ -12,7 +22,59 @@ type Props = {
 }
 
 export default class Modal extends Component<Props> {
-  render() {
-    return this.props.route.params;
+  keyboardWillShow: EmitterSubscription | undefined;
+  keyboardWillHide: EmitterSubscription | undefined;
+  state = {
+    keyboardHeight: new Animated.Value(0)
+  };
+
+  constructor(props: Props) {
+    super(props);
+
+    if (Platform.OS === 'ios') {
+      this.keyboardWillShow = Keyboard.addListener('keyboardWillShow', this.handleKeyboardWillShow);
+      this.keyboardWillHide = Keyboard.addListener('keyboardWillHide', this.handleKeyboardWillHide);
+    }
   }
+
+  componentWillUnmount() {
+    if (Platform.OS === 'ios') {
+      this.keyboardWillShow && Keyboard.removeSubscription(this.keyboardWillShow);
+      this.keyboardWillHide && Keyboard.removeSubscription(this.keyboardWillHide);
+    }
+  }
+
+  render() {
+    return (
+      <SafeAreaView style={{flex: 1}}>
+        {this.props.route.params}
+        <Animated.View style={{height: this.state.keyboardHeight}}/>
+      </SafeAreaView>
+    );
+  }
+
+  handleKeyboardWillShow: KeyboardEventListener = (event: KeyboardEvent) => {
+    const { height } = Dimensions.get('window');
+    const keyboardHeight = event.endCoordinates.height;
+
+    Animated.timing(
+      this.state.keyboardHeight,
+      {
+        toValue: keyboardHeight,
+        duration: 250,
+        useNativeDriver: false
+      }
+    ).start();
+  };
+
+  handleKeyboardWillHide: KeyboardEventListener = (event: KeyboardEvent) => {
+    Animated.timing(
+      this.state.keyboardHeight,
+      {
+        toValue: 0,
+        duration: 250,
+        useNativeDriver: false
+      }
+    ).start();
+  };
 }

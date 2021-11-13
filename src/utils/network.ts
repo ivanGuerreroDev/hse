@@ -2,6 +2,7 @@ import NetInfo, { NetInfoCellularGeneration, NetInfoState, NetInfoStateType } fr
 import { updateNetInfoState } from 'state/settings/actions';
 import { RootState, store } from 'state/store/store';
 import { NetworkSettings } from 'state/settings/types';
+import { Platform } from 'react-native';
 
 NetInfo.addEventListener((netInfoState: NetInfoState) => {
   store.dispatch(updateNetInfoState(netInfoState));
@@ -11,6 +12,9 @@ export const isNetworkAllowed = (): boolean => {
   const state: RootState = store.getState();
   const netInfoState: NetInfoState = state.netInfoState;
   const networkSettings: NetworkSettings = state.settings.networkSettings;
+
+  if (Platform.OS === "ios" && netInfoState.type === NetInfoStateType.wifi)
+    netInfoState.details.strength = 100;
 
   return (
     (
@@ -28,3 +32,6 @@ export const isNetworkAllowed = (): boolean => {
   )
 };
 
+export const isNetworkMounted = (): boolean => {
+  return store.getState().netInfoState.isInternetReachable !== null;
+}

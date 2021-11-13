@@ -87,13 +87,15 @@ export interface IResource {
   url: string;
   type: 'object' | 'api';
   method?: Method;
-  body?: any;
+  data?: any;
+  headers?: any;
 }
 
 export interface ILocalResource {
   url: string;
   type: 'object' | 'api';
   method?: Method;
-  body?: any;
+  data?: any;
+  headers?: any;
   localData: any;
 }

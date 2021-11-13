@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Platform} from 'react-native';
 import {ThemeProvider} from 'react-native-elements';
 import {Provider as ReduxProvider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
@@ -11,8 +12,10 @@ import 'utils/sendingManager';
 
 class App extends Component {
   componentDidMount() {
-    RNBootSplash.hide({fade: true});
+    if (Platform.OS === 'android')
+      RNBootSplash.hide({fade: true});
   }
+
   render() {
     return (
       <ReduxProvider store={store}>

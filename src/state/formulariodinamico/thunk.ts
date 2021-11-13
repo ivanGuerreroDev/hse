@@ -85,7 +85,7 @@ export const saveLocalResourceAsync: SaveLocalResourceAsync = (
             url: resource.url,
             type: resource.type,
             method: resource.method,
-            body: resource.body,
+            data: resource.data,
             localData: response.data,
           };
 
@@ -93,7 +93,7 @@ export const saveLocalResourceAsync: SaveLocalResourceAsync = (
           resolve(localResource);
         }
       } catch (error) {
-        console.log(error, resource.body);
+        console.log(error, resource.data);
         reject(error);
       }
     });
