@@ -1,9 +1,9 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, '10.0'
+platform :ios, '11.0'
 
-target 'hsezimexa' do
+target 'zimexahse' do
   config = use_native_modules!
 
   use_react_native!(
@@ -12,13 +12,14 @@ target 'hsezimexa' do
     :hermes_enabled => false
   )
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+  # Permissions Pods
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+  pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
+  pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone"
+  pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
 
-  pod 'react-native-fetch-blob', :path => '../node_modules/react-native-fetch-blob'
-
-  pod 'RNSVG', :path => '../node_modules/react-native-svg'
-
-  target 'hsezimexaTests' do
+  target 'zimexahseTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -31,5 +32,6 @@ target 'hsezimexa' do
 
   post_install do |installer|
     react_native_post_install(installer)
+    __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
 end
