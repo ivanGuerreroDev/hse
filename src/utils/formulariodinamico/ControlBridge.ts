@@ -107,9 +107,10 @@ export class ControlBridge {
     }
     if (this.control.outputMetadata?.customValidation) {
       return this.excecuteValueCode(
-        `const value = ${JSON.stringify(this.control.outputValue)};\n${
-          this.control.outputMetadata.customValidation
-        }`,
+        `(() => {\n\
+          const value = ${JSON.stringify(this.control.outputValue)};\n\
+          return ${this.control.outputMetadata.customValidation}\n\
+        })()`,
       );
     }
   }
