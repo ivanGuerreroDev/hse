@@ -12,6 +12,14 @@ export type Props = {
 };
 
 export default class ControlComponent extends Component<Props> {
+  componentDidMount() {
+    this.props.controlBridge.updateDevaultValue();
+  }
+
+  componentDidUpdate() {
+    this.props.controlBridge.updateDevaultValue();
+  }
+
   render() {
     const { children, controlBridge } = this.props;
 

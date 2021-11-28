@@ -51,6 +51,17 @@ export class ControlBridge {
     return this.factory.isReadOnly;
   }
 
+  updateDevaultValue() {
+    if (this.control.outputMetadata?.defaultValue) {
+      if (this.control.outputMetadata.updateOnChanges || !this.OutputValue) {
+        const newValue = this.catchValue(this.control.outputMetadata.defaultValue);
+
+        if (!_.isEqual(this.OutputValue, newValue))
+          this.OutputValue = newValue;
+      }
+    }
+  }
+
   createResource(uri: string) {
     const resourceName: string = generateRandomString(12);
     let resource: IResource = {
