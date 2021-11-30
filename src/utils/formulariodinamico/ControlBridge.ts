@@ -51,6 +51,17 @@ export class ControlBridge {
     return this.factory.isReadOnly;
   }
 
+  updateDevaultValue() {
+    if (this.control.outputMetadata?.defaultValue) {
+      if (this.control.outputMetadata.updateOnChanges || !this.OutputValue) {
+        const newValue = this.catchValue(this.control.outputMetadata.defaultValue);
+
+        if (!_.isEqual(this.OutputValue, newValue))
+          this.OutputValue = newValue;
+      }
+    }
+  }
+
   createResource(uri: string) {
     const resourceName: string = generateRandomString(12);
     let resource: IResource = {
@@ -133,13 +144,73 @@ export class ControlBridge {
   }
 
   private excecuteValueCode(valueCode: string): any {
-    const control = (path: string) => {
+    const formatControlReturn = (
+      controlBridge: ControlBridge | undefined,
+      properties: Array<string> | undefined,
+      output: boolean
+    ): any => {
+
+      if (controlBridge === undefined)
+        return undefined;
+      else if ((!properties || properties.length === 0) && output)
+        return controlBridge.OutputValue;
+      else if (properties && properties.length > 0 && !output)
+        return properties.reduce((prev: {[key: string]: any}, curr: string) => {
+          prev[curr] = controlBridge.property(curr);
+          return prev;
+        }, {});
+      else if (properties && properties.length > 0 && output)
+        return {
+          properties: properties.reduce((prev: {[key: string]: any}, curr: string) => {
+              prev[curr] = controlBridge.property(curr);
+              return prev;
+            }, {}),
+          outputValue: controlBridge.OutputValue
+        };
+      else
+        return undefined;
+    };
+
+    const control = (
+      path: string,
+      properties: Array<string> | undefined = undefined,
+      output: boolean = true
+    ): any => {
       const controlBridge: ControlBridge | undefined =
         this.factory.ControlBridgeList.filter(controlBridge => {
           return controlBridge.Path === path;
         })?.[0];
 
-      return controlBridge?.OutputValue;
+      return formatControlReturn(controlBridge, properties, output);
+    };
+
+    const controls = (
+      filters: Array<{type: string, path: string}>,
+      properties: Array<string> | undefined = undefined,
+      output: boolean = true
+    ): Array<any> => {
+      let controlBridges: Array<ControlBridge> = [];
+      filters.forEach(filter => {
+        const controlBridgesFound: Array<ControlBridge> =
+          this.factory.ControlBridgeList.filter(controlBridge => {
+            return controlBridge.Path.startsWith(filter.path)
+              && (controlBridge.Control.type === filter.type || filter.type === '*');
+          });
+
+        controlBridgesFound.forEach(controlBridge => {
+          if (!controlBridges.map(controlBridge => controlBridge.Path).includes(controlBridge.Path))
+            controlBridges.push(controlBridge);
+        });
+      });
+
+      return controlBridges.map(controlBridge => formatControlReturn(controlBridge, properties, output));
+    };
+
+    const me = (
+      properties: Array<string> | undefined = undefined,
+      output: boolean = true
+    ): any => {
+      return formatControlReturn(this, properties, output);
     };
 
     const resource = (resourceName: string): any => {
@@ -171,10 +242,14 @@ export class ControlBridge {
 
     return new Function(
       'control',
+      'controls',
+      'me',
       'resource',
       lineCode
     )(
       control,
+      controls,
+      me,
       resource
     );
   }
