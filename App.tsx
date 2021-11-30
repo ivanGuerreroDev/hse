@@ -14,6 +14,7 @@ class App extends Component {
   componentDidMount() {
     if (Platform.OS === 'android')
       RNBootSplash.hide({fade: true});
+      console.disableYellowBox = true
   }
 
   render() {

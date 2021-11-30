@@ -21,7 +21,6 @@ import {SaveFormularioAsync} from 'state/formulariodinamico/types';
 // Perfill
 import {savePerfilesAsync} from 'state/perfil/thunk';
 import {SavePerfilAsync} from 'state/perfil/types';
-import {IPerfil} from 'utils/types/perfil';
 // Menu
 import {saveMenusAsyncThunk} from 'state/menu/thunk';
 import {SaveMenuAsync} from 'state/menu/types';
@@ -34,6 +33,9 @@ import {SaveObservacionAsync} from 'state/observacion/types';
 // Inspecciones
 import {saveInspeccionAsyncThunk} from 'state/inspeccion/thunk';
 import {SaveInspeccionAsync} from 'state/inspeccion/types';
+// Credentials
+import {saveCredentialsAsyncThunk} from 'state/credentials/thunk';
+import {SaveCredentialsAsync} from 'state/credentials/types';
 
 import Lottie from 'components/Lottie';
 
@@ -59,6 +61,7 @@ type DispatchProps = {
   saveCapacitacionAsyncThunk: SaveCapacitacionAsync;
   saveObservacionAsyncThunk: SaveObservacionAsync;
   saveInspeccionAsyncThunk: SaveInspeccionAsync;
+  saveCredentialsAsyncThunk: SaveCredentialsAsync
 };
 
 type Props = StateProps & DispatchProps;
@@ -99,6 +102,7 @@ class Index extends Component<Props> {
               props.saveObservacionAsyncThunk(props.rememberUser);
               props.saveInspeccionAsyncThunk(props.rememberUser);
               props.saveFormulariosAsync(props.rememberUser);
+              props.saveCredentialsAsyncThunk();
             } else {
               props.forgiveUser();
             }
@@ -180,22 +184,17 @@ const mapStateToProps = (state: RootState): StateProps => {
   };
 };
 
-const mapDispatchToProps = (
-  dispatch: ThunkDispatch<{}, {}, any>,
-): DispatchProps => {
+const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): DispatchProps => {
   return {
     forgiveUser: () => dispatch(forgiveUser()),
-    saveUser: (user: IUser, remember: boolean) =>
-      dispatch(saveUser(user, remember)),
+    saveUser: (user: IUser, remember: boolean) => dispatch(saveUser(user, remember)),
     saveFormulariosAsync: (user: IUser) => dispatch(saveFormulariosAsync(user)),
     savePerfilesAsync: (user: IUser) => dispatch(savePerfilesAsync(user)),
     saveMenusAsyncThunk: (user: IUser) => dispatch(saveMenusAsyncThunk(user)),
-    saveCapacitacionAsyncThunk: (user: IUser) =>
-      dispatch(saveCapacitacionAsyncThunk(user)),
-    saveObservacionAsyncThunk: (user: IUser) =>
-      dispatch(saveObservacionAsyncThunk(user)),
-    saveInspeccionAsyncThunk: (user: IUser) =>
-      dispatch(saveInspeccionAsyncThunk(user)),
+    saveCapacitacionAsyncThunk: (user: IUser) => dispatch(saveCapacitacionAsyncThunk(user)),
+    saveObservacionAsyncThunk: (user: IUser) => dispatch(saveObservacionAsyncThunk(user)),
+    saveInspeccionAsyncThunk: (user: IUser) => dispatch(saveInspeccionAsyncThunk(user)),
+    saveCredentialsAsyncThunk: () => dispatch(saveCredentialsAsyncThunk())
   };
 };
 

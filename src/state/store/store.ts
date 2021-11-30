@@ -7,16 +7,15 @@ import thunk from 'redux-thunk';
 import reducers from './reducers';
 
 const storage = createSensitiveStorage({
-  keychainService:
-    '4y3u87BqTK7CgxDdgdhDvEfHtLl1XiD8XR1OdqpJTm62/1XkcKvD43Wk5/wc+3yA',
-  sharedPreferencesName:
-    '2rx1Q94+6DfSCVxuXDhPis0m7eMXS8Of1a7mnGlOvdSU1Kmzimh+cCpfvnOCG7IA',
+  keychainService: '4y3u87BqTK7CgxDdgdhDvEfHtLl1XiD8XR1OdqpJTm62/1XkcKvD43Wk5/wc+3yA',
+  sharedPreferencesName: '2rx1Q94+6DfSCVxuXDhPis0m7eMXS8Of1a7mnGlOvdSU1Kmzimh+cCpfvnOCG7IA',
 });
 
 const config = {
   key: 'root',
   storage,
   whitelist: [
+    'credentials',
     'inspeccion',
     'observacion',
     'capacitacion',

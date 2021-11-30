@@ -32,7 +32,7 @@ import {
 } from 'types/documentofactory';
 import {DocumentoStatus, IDocumento} from 'utils/types/formulariodinamico';
 import {createPendingTask} from 'utils/sendingManager';
-import { isNetworkAllowed } from 'utils/network';
+import {isNetworkAllowed} from 'utils/network';
 
 type State = {
   tabIndex: number;
@@ -80,7 +80,6 @@ class FormularioDinamico extends Component<Props, State> {
   }
 
   render() {
-
     const {ControlBridgeList, Documento} = this.documentoFactory;
     const {changeStatusDocumento, deleteDocumento, navigation} = this.props;
 
@@ -128,7 +127,6 @@ class FormularioDinamico extends Component<Props, State> {
         />,
       );
     if (Documento.status === DocumentoStatus.draft)
-
       FooterButtons.push(
         <Button
           title="Enviar"
@@ -137,13 +135,15 @@ class FormularioDinamico extends Component<Props, State> {
           buttonStyle={{backgroundColor: '#FDAE01'}}
           icon={<Icon type="material" name="send" color="white" />}
           onPress={() => {
-               Alert.alert('Ops',
-                    isNetworkAllowed() ?
-                    'Esta seguro de enviar el formulario' :
-                    'Esta seguro de guardar el formulario', [
+            Alert.alert(
+              'Ops',
+              isNetworkAllowed()
+                ? 'Esta seguro de enviar el formulario'
+                : 'Esta seguro de guardar el formulario',
+              [
                 {
                   text: 'Cancelar',
-                  onPress: () => {}
+                  onPress: () => {},
                 },
                 {
                   text: 'Aceptar',
@@ -151,21 +151,47 @@ class FormularioDinamico extends Component<Props, State> {
                     let messages = this.documentoFactory.validateOutputValues();
 
                     if (messages.length > 0) {
-                      console.log(JSON.stringify(messages));
+
+                       console.log(JSON.stringify(messages).indexOf('requerido' || 'requerida'));
+                       console.log(messages[0].indexOf('requerido' || 'requerida'));
+                       console.log(messages.indexOf('Falta'));
+
+                      Alert.alert(
+                        'Ops',
+                        `${JSON.stringify(messages).indexOf('requerido' || 'requerida') > 0 && '- Faltan campos por rellenar' || '' }
+                         ${JSON.stringify(messages).indexOf('Falta') > 0 && '\n- Debe responder todas las preguntas'}`,
+                        [
+                          {
+                            text: 'Aceptar',
+                            onPress: () => { },
+                          },
+                        ],
+                        {cancelable: true},
+                      );
                     } else {
-                      changeStatusDocumento(Documento._id, DocumentoStatus.sending);
+                      changeStatusDocumento(
+                        Documento._id,
+                        DocumentoStatus.sending,
+                      );
                       createPendingTask(Documento);
                       navigation.goBack();
 
-                       isNetworkAllowed() ?
-                          ToastAndroid.show('El documento se ha enviado con exito', ToastAndroid.SHORT) :
-                          ToastAndroid.show('El documento se ha guardado con exito', ToastAndroid.SHORT)
+                      isNetworkAllowed()
+                        ? ToastAndroid.show(
+                            'El documento se ha enviado con exito',
+                            ToastAndroid.SHORT,
+                          )
+                        : ToastAndroid.show(
+                            'El documento se ha guardado con exito',
+                            ToastAndroid.SHORT,
+                          );
                     }
-                  }
-                }
-              ], {cancelable: true})
-            }
-          }
+                  },
+                },
+              ],
+              {cancelable: true},
+            );
+          }}
         />,
       );
 
@@ -221,6 +247,23 @@ class FormularioDinamico extends Component<Props, State> {
   }
 }
 
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<{}, {}, any>,
+): DispatchProps => {
+  return {
+    changeStatusDocumento: (id: string, status: DocumentoStatus) =>
+      dispatch(changeStatusDocumento(id, status)),
+    deleteDocumento: (id: string) => dispatch(deleteDocumento(id)),
+    saveDocumento: (documento: IDocumento) =>
+      dispatch(saveDocumento(documento)),
+  };
+};
+
+export default connect<{}, DispatchProps, {}, RootState>(
+  null,
+  mapDispatchToProps,
+)(FormularioDinamico);
+
 const styles = StyleSheet.create({
   centerTitle: {
     color: 'white',
@@ -233,7 +276,7 @@ const styles = StyleSheet.create({
   },
   safeContainer: {
     flex: 1,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   tabsBar: {
     flex: 0,
@@ -258,20 +301,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapDispatchToProps = (
-  dispatch: ThunkDispatch<{}, {}, any>,
-): DispatchProps => {
-  return {
-    changeStatusDocumento: (id: string, status: DocumentoStatus) =>
-      dispatch(changeStatusDocumento(id, status)),
-    deleteDocumento: (id: string) => dispatch(deleteDocumento(id)),
-    saveDocumento: (documento: IDocumento) =>
-      dispatch(saveDocumento(documento)),
-  };
-};
-
-export default connect<{}, DispatchProps, {}, RootState>(
-  null,
-  mapDispatchToProps,
-)(FormularioDinamico);
 

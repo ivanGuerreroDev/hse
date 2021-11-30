@@ -294,7 +294,6 @@ export default class RemarksControl extends ControlComponent {
 
   render() {
     const { controlBridge } = this.props;
-    console.log('Bumm',controlBridge.property("label") );
     const buttonOption = (name: string, value: boolean): JSX.Element => {
       let badgeStyle: StyleProp<ViewStyle>;
 

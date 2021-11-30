@@ -22,6 +22,8 @@ import axios from 'axios';
 import Config from 'react-native-config';
 import { Platform } from 'react-native';
 import { formatRFC3339 } from 'date-fns';
+import {ICredentials} from './types/credentials'
+
 
 export const createPendingTask = (documento: IDocumento): void => {
   const checkResourceIsInUse = (resource: IResource): boolean => {
@@ -87,7 +89,7 @@ const startSendingManager = (): void => {
       pendingTask.pendingResourcesUri.forEach(pendingResource => {
         store.dispatch(addSendingResource(pendingTask.documentoId));
 
-        uploadResource(pendingTask.documentoId, pendingResource);
+        uploadResource(pendingTask.documentoId, pendingResource );
       });
 
       store.dispatch(deleteSendingResource(pendingTask.documentoId));
@@ -96,7 +98,10 @@ const startSendingManager = (): void => {
 };
 
 const uploadResource = async (documentoId: string, resourceUri: string): Promise<void> => {
+
+
   try {
+
     const s3Client = new S3Client({
       credentials: {
         accessKeyId: Config.S3_AWS_ACCESS_KEY_ID,

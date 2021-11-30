@@ -78,14 +78,12 @@ export const saveLocalResourceAsync: SaveLocalResourceAsync = (
               Empresa: user.Empresa,
             },
           });
-          console.table('response', response);
-
 
           const localResource: ILocalResource = {
             url: resource.url,
             type: resource.type,
             method: resource.method,
-            data: resource.data,
+            /* data: resource.data, */
             localData: response.data,
           };
 
