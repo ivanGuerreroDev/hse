@@ -43,6 +43,9 @@ import Auth from 'views/Auth';
 import MainFrame from 'views/MainFrame';
 import FormularioDinamico from 'views/FormularioDinamico';
 import Modal from 'components/Modal';
+import Capacitaciones from 'views/Capacitaciones';
+import Relator from 'views/Capacitaciones/Relator';
+import List from 'views/Capacitaciones/List';
 
 const AuthStack = createStackNavigator<RootAuthStackParamList>();
 const MainStack = createStackNavigator<RootMainStackParamList>();
@@ -159,11 +162,11 @@ class Index extends Component<Props> {
           }),
         }}>
         <MainStack.Screen name="MainFrame" component={MainFrame} />
-        <MainStack.Screen
-          name="FormularioDinamico"
-          component={FormularioDinamico}
-        />
+        <MainStack.Screen name="FormularioDinamico" component={FormularioDinamico} />
         <MainStack.Screen name="Modal" component={Modal} />
+        <MainStack.Screen name="Capacitaciones" component={Capacitaciones} />
+        <MainStack.Screen name="Relator" component={Relator} />
+        <MainStack.Screen name="List" component={List} />
       </MainStack.Navigator>
     );
 

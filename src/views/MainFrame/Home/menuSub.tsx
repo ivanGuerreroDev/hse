@@ -22,19 +22,22 @@ import {RootState} from 'state/store/store';
 import {ICapacitacion, IObservaciones, IInspecciones} from 'utils/types/menu';
 import {IFormulario} from 'utils/types/formulariodinamico';
 
-type Props = {
+type StateProps = {
+  submenuList: IObservaciones[] | any[];
+  submenuCard: ICapacitacion[] | any[];
+  submenuAccordion: IInspecciones[] | any[];
+  formularios: IFormulario[];
+};
+
+type Navigation ={
   route: RouteProp<MainFrameStackParamList, 'SubMenu'>;
   navigation: CompositeNavigationProp<
     NavigationProp<MainFrameStackParamList, 'SubMenu'>,
     NavigationProp<RootMainStackParamList>
   >;
-
-  submenuList: IObservaciones[] | any[];
-
-  submenuCard: ICapacitacion[] | any[];
-  submenuAccordion: IInspecciones[] | any[];
-  formularios: IFormulario[];
 };
+
+type Props = StateProps & Navigation
 class SubMenu extends Component<Props> {
   state = {
     list: this.props.submenuList,
@@ -68,7 +71,10 @@ class SubMenu extends Component<Props> {
             )}
             {this.props.route.params.titulo === 'Capacitaciones' && (
               <View>
-                <MenuCard Card={this.state.card} />
+                <MenuCard
+                  Card={this.state.card}
+                  navigation={this.props.navigation}
+                 />
               </View>
             )}
           </View>

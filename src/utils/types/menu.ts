@@ -16,10 +16,13 @@ export interface IObservaciones {
   Formulario: string;
 }
 export interface ICapacitacion {
-  IdCapacitacion: string;
-  IdTipoCapacitacion: string;
+  IdDetalleCapacitacion: number;
+  IdCapacitacion: number;
   Tipo: string;
   Titulo: string;
+  Descripcion: string;
   Categoria: string;
-  Cargo: string | undefined;
+  IdPersona: number,
+  EstadoParticipante: boolean
+  NombreCompleto: string
 }

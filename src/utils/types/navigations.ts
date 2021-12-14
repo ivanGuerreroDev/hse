@@ -1,5 +1,6 @@
 import {NavigatorScreenParams} from '@react-navigation/native';
 import {IDocumento} from 'types/formulariodinamico';
+import { ICapacitacion } from 'utils/types/menu';
 
 export type AuthStackParamList = {
   SignIn: undefined;
@@ -23,10 +24,8 @@ export type MainFrameStackParamList = {
   SubMenu: {
     titulo: string;
   };
-
   Documents: undefined;
   Notifications: undefined;
-
   Profile: undefined;
   changePass: undefined;
 };
@@ -42,4 +41,11 @@ export type RootMainStackParamList = {
     readOnly?: boolean;
   };
   Modal: JSX.Element;
+  Capacitaciones: {
+    selected: any
+  };
+  Relator: undefined;
+  List: {
+    participantes: any
+  }
 };

@@ -1,27 +1,82 @@
+import {
+  CompositeNavigationProp,
+  NavigationProp,
+} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import React, {Component} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Card} from 'react-native-elements';
 import TouchableScale from 'react-native-touchable-scale';
+import {
+  MainFrameStackParamList,
+  RootMainStackParamList,
+} from 'utils/types/navigations';
 
-type Props = {
+type StateProps = {
   Card: any;
 };
 
+type Navigation = {
+  navigation: CompositeNavigationProp<
+    NavigationProp<MainFrameStackParamList, 'SubMenu'>,
+    NavigationProp<RootMainStackParamList>
+  >;
+};
+
+type Props = StateProps & Navigation;
 class MenuCard extends Component<Props> {
+  state = {
+    MenuCard: Object.keys(
+      this.props.Card.reduce((a: any, e: any) => {
+        let groupByKeyName = e['IdCapacitacion'];
+        (a[groupByKeyName]
+          ? a[groupByKeyName]
+          : (a[groupByKeyName] = null || [])
+        ).push(e);
+        return a;
+      }, {}),
+    ).map(
+      (abuelo, i) =>
+        abuelo && {
+          IdCapacitacion: abuelo,
+          Capacitacion: [
+            {
+              Tipo: this.props.Card.find((x: any) => x.IdCapacitacion.toString() === abuelo).Tipo,
+              Titulo: this.props.Card.find((x: any) => x.IdCapacitacion.toString() === abuelo).Titulo,
+              Descripcion: this.props.Card.find((x: any) => x.IdCapacitacion.toString() === abuelo).Descripcion,
+              Categoria: this.props.Card.find((x: any) => x.IdCapacitacion.toString() === abuelo).Categoria,
+              Selected: this.props.Card.filter((x: any) => x.IdCapacitacion.toString() === abuelo),
+            },
+          ],
+        },
+    ),
+  };
+
   render() {
     return (
       <View style={styles.container}>
-        {this.props.Card.map((item: any, i: any) => (
+        {this.state.MenuCard.map((item: any, i: any) => (
           <TouchableScale
             key={i}
             friction={90}
             tension={100}
-            activeScale={0.95}>
+            activeScale={0.95}
+            onPress={() =>
+              this.props.navigation.navigate('Capacitaciones', {
+                selected: item.Capacitacion,
+              })
+            }>
             <Card>
               <View style={styles.cardcontainer}>
-                <Text style={styles.Title}>{item.Tipo}</Text>
-                <Text style={styles.subTitle}>{item.Titulo}</Text>
-                <Text style={styles.cargo}>Cargo: {item.Cargo}</Text>
+                <Text style={styles.Title}>
+                  {item.Capacitacion.map((x: any) => x.Tipo)}
+                </Text>
+                <Text style={styles.subTitle}>
+                  {item.Capacitacion.map((x: any) => x.Titulo)}
+                </Text>
+                <Text style={styles.cargo}>
+                  Cargo: {item.Capacitacion.map((x: any) => x.Categoria === 'Trabajador' ? 'Varios' : x.Categoria) }
+                </Text>
                 <View>
                   <Text style={styles.buttonText}>COMENZAR</Text>
                 </View>
