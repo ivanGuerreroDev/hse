@@ -5,7 +5,6 @@ import {menuReducer} from 'state/menu/reducers';
 import {capacitacionReducer} from 'state/capacitacion/reducers';
 import {observacionReducer} from 'state/observacion/reducers';
 import {inspeccionReducer} from 'state/inspeccion/reducers';
-import {credentialsReducer} from 'state/credentials/reducers';
 import {
   documentosReducer,
   formulariosReducer,
@@ -21,7 +20,6 @@ export default combineReducers({
   deviceInfo: deviceInfoReducer,
   documentos: documentosReducer,
   formularios: formulariosReducer,
-  credentials: credentialsReducer,
   geolocation: geolocationReducer,
   netInfoState: netInfoStateReducer,
   resources: resourcesReducer,

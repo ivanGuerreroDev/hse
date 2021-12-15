@@ -15,7 +15,6 @@ const config = {
   key: 'root',
   storage,
   whitelist: [
-    'credentials',
     'inspeccion',
     'observacion',
     'capacitacion',

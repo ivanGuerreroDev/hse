@@ -33,9 +33,6 @@ import {SaveObservacionAsync} from 'state/observacion/types';
 // Inspecciones
 import {saveInspeccionAsyncThunk} from 'state/inspeccion/thunk';
 import {SaveInspeccionAsync} from 'state/inspeccion/types';
-// Credentials
-import {saveCredentialsAsyncThunk} from 'state/credentials/thunk';
-import {SaveCredentialsAsync} from 'state/credentials/types';
 
 import Lottie from 'components/Lottie';
 
@@ -64,7 +61,6 @@ type DispatchProps = {
   saveCapacitacionAsyncThunk: SaveCapacitacionAsync;
   saveObservacionAsyncThunk: SaveObservacionAsync;
   saveInspeccionAsyncThunk: SaveInspeccionAsync;
-  saveCredentialsAsyncThunk: SaveCredentialsAsync
 };
 
 type Props = StateProps & DispatchProps;
@@ -105,7 +101,6 @@ class Index extends Component<Props> {
               props.saveObservacionAsyncThunk(props.rememberUser);
               props.saveInspeccionAsyncThunk(props.rememberUser);
               props.saveFormulariosAsync(props.rememberUser);
-              props.saveCredentialsAsyncThunk();
             } else {
               props.forgiveUser();
             }
@@ -197,7 +192,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): DispatchProps
     saveCapacitacionAsyncThunk: (user: IUser) => dispatch(saveCapacitacionAsyncThunk(user)),
     saveObservacionAsyncThunk: (user: IUser) => dispatch(saveObservacionAsyncThunk(user)),
     saveInspeccionAsyncThunk: (user: IUser) => dispatch(saveInspeccionAsyncThunk(user)),
-    saveCredentialsAsyncThunk: () => dispatch(saveCredentialsAsyncThunk())
   };
 };
 

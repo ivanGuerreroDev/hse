@@ -91,7 +91,6 @@ export const saveLocalResourceAsync: SaveLocalResourceAsync = (
           resolve(localResource);
         }
       } catch (error) {
-        console.log(error, resource.data);
         reject(error);
       }
     });

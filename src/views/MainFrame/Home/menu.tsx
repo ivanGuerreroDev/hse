@@ -16,6 +16,7 @@ type Props = {
   menu: IMenu[] | any[];
 };
 class Menu extends Component<Props> {
+
   render() {
     return (
       <Layout>

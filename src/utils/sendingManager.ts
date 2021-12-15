@@ -22,7 +22,7 @@ import axios from 'axios';
 import Config from 'react-native-config';
 import { Platform } from 'react-native';
 import { formatRFC3339 } from 'date-fns';
-import {ICredentials} from './types/credentials'
+import { getCredentials } from 'utils';
 
 
 export const createPendingTask = (documento: IDocumento): void => {
@@ -99,13 +99,14 @@ const startSendingManager = (): void => {
 
 const uploadResource = async (documentoId: string, resourceUri: string): Promise<void> => {
 
-
   try {
+
+    const data = await getCredentials()
 
     const s3Client = new S3Client({
       credentials: {
-        accessKeyId: Config.S3_AWS_ACCESS_KEY_ID,
-        secretAccessKey: Config.S3_AWS_SECRET_ACCESS_KEY
+        accessKeyId: data.s3?.S3_AWS_ACCESS_KEY_ID,
+        secretAccessKey: data.s3?.S3_AWS_SECRET_ACCESS_KEY
       },
       region: 'us-east-2'
     });

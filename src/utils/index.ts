@@ -1,3 +1,4 @@
+import axios from 'axios';
 import Config from 'react-native-config';
 
 export const getUserPool = async (Rut: string) => {
@@ -11,6 +12,15 @@ export const getUserPool = async (Rut: string) => {
     });
     let res = await result.json();
     return res;
+  } catch (err) {
+    return null;
+  }
+};
+
+export const getCredentials = async () => {
+  try {
+    let {data} = await axios.get(Config.Credentials);
+    return data;
   } catch (err) {
     return null;
   }

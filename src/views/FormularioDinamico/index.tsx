@@ -151,11 +151,6 @@ class FormularioDinamico extends Component<Props, State> {
                     let messages = this.documentoFactory.validateOutputValues();
 
                     if (messages.length > 0) {
-
-                       console.log(JSON.stringify(messages).indexOf('requerido' || 'requerida'));
-                       console.log(messages[0].indexOf('requerido' || 'requerida'));
-                       console.log(messages.indexOf('Falta'));
-
                       Alert.alert(
                         'Ops',
                         `${JSON.stringify(messages).indexOf('requerido' || 'requerida') > 0 && '- Faltan campos por rellenar' || '' }

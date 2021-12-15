@@ -18,7 +18,7 @@ import {
 } from 'utils/types/navigations';
 
 import Layaut from './layaut';
-import { capitalize } from 'utils';
+import { capitalize, getCredentials } from 'utils';
 
 type StateProps = {
   capacitacion: any;
@@ -92,9 +92,9 @@ class List extends Component<Props> {
     // this.setState({Capacitacion: newArr.map((x: any) => x.Participantes)});
   }
 
-
-
   render() {
+
+
     return (
       <Layaut
         Titulo={'Seleccione Participantes'}
@@ -133,11 +133,11 @@ class List extends Component<Props> {
             <TouchableOpacity
               style={{...styles.goButton, backgroundColor: '#00000033'}}
               onPress={() =>
-                /* this.props.navigation.navigate('List') */ console.log(
-                  'asdasd',
-                )
+                /* this.props.navigation.navigate('List') */
+                console.log('hi')
+
               }>
-              <Text style={styles.goText}>Guardar</Text>
+              <Text style={styles.goText}>Guardars</Text>
             </TouchableOpacity>
           </View>
         </View>
