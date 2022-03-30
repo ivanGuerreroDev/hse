@@ -159,7 +159,7 @@ export class ControlBridge {
           prev[curr] = controlBridge.property(curr);
           return prev;
         }, {});
-      else if (properties && properties.length > 0 && output)
+      else if (properties && properties?.length > 0 && output)
         return {
           properties: properties.reduce((prev: {[key: string]: any}, curr: string) => {
               prev[curr] = controlBridge.property(curr);

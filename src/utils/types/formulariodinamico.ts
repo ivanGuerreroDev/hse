@@ -21,7 +21,7 @@ export interface IControl extends ITaggeable {
     defaultValue?: any;
     updateOnChanges?: boolean | string;
   };
-  controls?: IControl[];
+  controls?: IControl[]
 }
 
 export interface IDate {

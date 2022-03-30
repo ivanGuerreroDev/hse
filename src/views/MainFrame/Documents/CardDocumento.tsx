@@ -16,7 +16,13 @@ class CardDocumento extends Component<Props> {
   render() {
     const {documento, onCardPress, leftOption, rightOption} = this.props;
     const modifiedDate = new Date(documento.modifiedDate.$date);
-
+    console.log(
+      documento.pages.map(x =>
+        x.controls.map(
+          i => i.properties?.filter(a => a.value === 'Nombre') && i.outputValue,
+        ),
+      ),
+    );
     return (
       <View style={styles.container}>
         <ListItem.Swipeable
@@ -33,7 +39,7 @@ class CardDocumento extends Component<Props> {
               </View>
               <View style={styles.documentoAbrevContainer}>
                 <Text style={styles.documentoAbrev}>
-                  Lorem Ipsum Dolor sit amet
+                  {documento.pages.map(x => x.controls.map(i => i.properties?.filter(a => a.value === 'Nombre') && `${i.outputValue || ''} `))}
                 </Text>
               </View>
             </Pressable>

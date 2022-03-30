@@ -17,8 +17,10 @@ import {IPerfil} from 'utils/types/perfil';
 //Navigation
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainFrameStackParamList} from 'utils/types/navigations';
+import {store} from 'state/store/store';
 
 import Layout from 'views/MainFrame/layaut';
+import Geolocation from '@react-native-community/geolocation';
 
 type StateProps = {
   currentUser: IUser | undefined;
@@ -32,13 +34,35 @@ type DispatchProps = {
 
 type Props = StateProps & DispatchProps;
 class Profile extends Component<Props> {
+  state = {
+    geo: store.getState().geolocation
+  }
   render() {
+    console.log(this.state.geo);
+    console.log(Geolocation.getCurrentPosition(info => console.log(info)));
+
+    // //SOLO GPS:
+    // const age = (1000*60*30);
+    // const time = (1000*1*20);
+    // Geolocation.getCurrentPosition((position) => {
+    //   let p = {...position};p.Tipo = "GPS";
+    //   this.enviar_aux(p);
+    // },(error) => {
+    //     //SEGUNDO INTENTO POR WIFI:
+    //     Geolocation.getCurrentPosition((position) => {
+    //       let p = {...position};p.Tipo = "WIFI";
+    //       this.enviar_aux(p);
+    //     },(error) => {
+    //       this.enviar_aux(null);
+    //     },{ enableHighAccuracy: false, timeout: time, maximumAge: age });
+    // },{ enableHighAccuracy: true, timeout: time, maximumAge: age });
+
     return (
       <Layout>
         {this.props.perfil[this.props.perfil.length - 1] && (
           <>
             <View style={{alignItems: 'flex-end', paddingEnd: 5}}>
-              <Text style={styles.vtext}>V. 1.1.0</Text>
+              <Text style={styles.vtext}>V. 1.1.12</Text>
             </View>
             <View style={styles.avatar}>
               <Avatar

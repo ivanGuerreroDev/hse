@@ -14,42 +14,39 @@ import {
 import {IUser} from 'state/user/types';
 
 export const saveFormulariosAsync: SaveFormularioAsync = (
-  user: IUser,
+  userData: IUser,
 ): SaveFormularioAsyncThunk => {
   return async (
     dispatch: ThunkDispatch<{}, {}, SaveFormularioAction>,
   ): Promise<void> => {
     return new Promise<void>(async (resolve, reject) => {
       try {
-        const response: AxiosResponse<IFormulario[]> = await axios.get(
-          `${Config.UrlFormularios}/formularios`,
-          {
-            data: {
-              Empresa: user.Empresa,
-              Usuario: user.Username,
-            },
+        const response: AxiosResponse<IFormulario[]> = await axios.post(
+          `${Config.UrlFormularios}/formularios`,{
+          data: {
+            Empresa: userData.Empresa,
+            Usuario: userData.Username
           },
-        );
+        });
 
         response.data.forEach((formulario: IFormulario) => {
           dispatch(saveFormulario(formulario));
-
           formulario.resources?.forEach((resource: IResource) =>
-            dispatch(saveLocalResourceAsync(resource, user)),
+            dispatch(saveLocalResourceAsync(resource, userData,)),
           );
         });
       } catch (error) {
         reject(error);
-      } finally {
+      } /* finally {
         resolve();
-      }
+      } */
     });
   };
 };
 
 export const saveLocalResourceAsync: SaveLocalResourceAsync = (
   resource: IResource,
-  user: IUser,
+  userData: IUser,
 ): SaveLocalResourceAsyncThunk => {
   return async (
     dispatch: ThunkDispatch<{}, {}, SaveResourceAction>,
@@ -74,8 +71,8 @@ export const saveLocalResourceAsync: SaveLocalResourceAsync = (
             method: 'post',
             url: resource.url,
             data: {
-              Username: user.Username,
-              Empresa: user.Empresa,
+              Username: userData.Username,
+              Empresa: userData.Empresa,
             },
           });
 

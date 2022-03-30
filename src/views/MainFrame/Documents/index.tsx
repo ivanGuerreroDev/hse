@@ -75,19 +75,19 @@ class Documents extends Component<Props> {
                 onCardPress={() =>
                   navigation.navigate('FormularioDinamico', {documento: item})
                 }
-                leftOption={
-                  <Button
-                    buttonStyle={{
-                      backgroundColor: 'green',
-                      height: '100%',
-                    }}
-                    icon={<Icon type="material" name="send" color="#ffffff" />}
-                    onPress={() =>
-                      console.warn('No implementado')
-                      // changeStatusDocumento(item._id, DocumentoStatus.sending)
-                    }
-                  />
-                }
+                // leftOption={
+                //   <Button
+                //     buttonStyle={{
+                //       backgroundColor: 'green',
+                //       height: '100%',
+                //     }}
+                //     icon={<Icon type="material" name="send" color="#ffffff" />}
+                //     onPress={() =>
+                //       console.warn('No implementado')
+                //       // changeStatusDocumento(item._id, DocumentoStatus.sending)
+                //     }
+                //   />
+                // }
                 rightOption={
                   <Button
                     buttonStyle={{backgroundColor: 'red', height: '100%'}}

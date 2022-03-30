@@ -27,7 +27,7 @@ export default class TextControl extends ControlComponent {
             color: controlBridge.property('color'),
             fontWeight: 'bold'
             }}>
-          {controlBridge.property('title')}
+          {controlBridge.property('title').replace('.', ',')}
         </Text>
         {children}
       </View>

@@ -135,42 +135,39 @@ class FormularioDinamico extends Component<Props, State> {
           buttonStyle={{backgroundColor: '#FDAE01'}}
           icon={<Icon type="material" name="send" color="white" />}
           onPress={() => {
-            Alert.alert(
-              'Ops',
-              isNetworkAllowed()
-                ? 'Esta seguro de enviar el formulario'
-                : 'Esta seguro de guardar el formulario',
-              [
-                {
-                  text: 'Cancelar',
-                  onPress: () => {},
-                },
-                {
-                  text: 'Aceptar',
-                  onPress: () => {
-                    let messages = this.documentoFactory.validateOutputValues();
-
-                    if (messages.length > 0) {
-                      Alert.alert(
-                        'Ops',
-                        `${JSON.stringify(messages).indexOf('requerido' || 'requerida') > 0 && '- Faltan campos por rellenar' || '' }
-                         ${JSON.stringify(messages).indexOf('Falta') > 0 && '\n- Debe responder todas las preguntas'}`,
-                        [
-                          {
-                            text: 'Aceptar',
-                            onPress: () => { },
-                          },
-                        ],
-                        {cancelable: true},
-                      );
-                    } else {
+            let messages = this.documentoFactory.validateOutputValues();
+            if (messages.length > 0) {
+              Alert.alert(
+                'Faltan por rellenar los siguientes campos',
+                `${messages.map(x => x)}`,
+                [
+                  {
+                    text: 'Aceptar',
+                    onPress: () => {},
+                  },
+                ],
+                {cancelable: true},
+              );
+            } else {
+              Alert.alert(
+                'Confirmación',
+                isNetworkAllowed()
+                  ? 'Esta seguro de enviar el formulario'
+                  : 'Esta seguro de guardar el formulario',
+                [
+                  {
+                    text: 'Cancelar',
+                    onPress: () => {},
+                  },
+                  {
+                    text: 'Aceptar',
+                    onPress: () => {
                       changeStatusDocumento(
                         Documento._id,
                         DocumentoStatus.sending,
                       );
                       createPendingTask(Documento);
                       navigation.goBack();
-
                       isNetworkAllowed()
                         ? ToastAndroid.show(
                             'El documento se ha enviado con exito',
@@ -180,12 +177,12 @@ class FormularioDinamico extends Component<Props, State> {
                             'El documento se ha guardado con exito',
                             ToastAndroid.SHORT,
                           );
-                    }
+                    },
                   },
-                },
-              ],
-              {cancelable: true},
-            );
+                ],
+                {cancelable: true},
+              );
+            }
           }}
         />,
       );
@@ -295,5 +292,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-

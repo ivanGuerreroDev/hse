@@ -135,10 +135,12 @@ const uploadResource = async (documentoId: string, resourceUri: string): Promise
     };
 
     const uploadId: string = await Upload.startUpload(options);
+
     Upload.addListener('error', uploadId, (data) => {
       console.warn(data.error);
       store.dispatch(deleteSendingResource(documentoId));
     });
+
     Upload.addListener('completed', uploadId, () => {
       const newResourceUri = `https://hse-app.s3.us-east-2.amazonaws.com/formularios/${documentoId}/${filename}`;
       const documento: IDocumento = store.getState().documentos.documentos

@@ -123,8 +123,6 @@ export default class ListControl extends ControlComponent {
     else
       selectedValues = undefined;
 
-
-
      return (
       <View style={{width: '100%', paddingHorizontal: 10, paddingBottom: 25}}>
         <Text

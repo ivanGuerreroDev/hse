@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
   footer: {
     height: height * 0.1,
     alignItems: 'center',
+    backgroundColor: '#ffffff',
   },
   footerLogo: {
     width: 200,
