@@ -63,12 +63,15 @@ export class ControlBridge {
   }
 
   createResource(uri: string) {
+
+    console.log(uri)
     const resourceName: string = generateRandomString(12);
     let resource: IResource = {
       name: resourceName,
       type: 'object',
       url: uri,
     };
+
     const localResource: ILocalResource = {
       url: uri,
       type: 'object',
@@ -226,6 +229,7 @@ export class ControlBridge {
       const documentoResource: IResource = documentoResources[0];
 
       const state: RootState = store.getState();
+
       const localResource: ILocalResource = state.resources.resources.filter(
         item =>
           item.url === documentoResource.url &&

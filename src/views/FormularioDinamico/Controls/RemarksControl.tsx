@@ -1,7 +1,6 @@
-import React, {useState, useRef } from 'react';
+import React, {useState} from 'react';
 import ControlComponent from '../ControlComponent';
 import {
-  InteractionManager,
   FlatList,
   Pressable,
   StyleProp,
@@ -17,8 +16,8 @@ import {format} from 'date-fns';
 import {es} from 'date-fns/locale';
 import _ from 'lodash';
 
+let multi = 0;
 export default class RemarksControl extends ControlComponent {
-
   useCamera() {
     const {controlBridge, navigation} = this.props;
     this.props.navigation.navigate(
@@ -26,11 +25,22 @@ export default class RemarksControl extends ControlComponent {
       <Camera
         onCancel={() => navigation.goBack()}
         onSuccess={items => {
+          /* controlBridge.OutputValue = {
+            ...controlBridge.RawOutputValue,
+            media: items.map(item =>
+              ImageResizer.createResizedImage(item, 80, 80, 'JPEG', 100, 0, undefined, false, {  mode: 'contain', onlyScaleDown: false })
+                .then(resizedImage => {
+                  controlBridge.createResource(resizedImage.path)
+                }) .catch(err => {
+                     console.log(err);
+                 })
+            ),
+          }; */
+
           controlBridge.OutputValue = {
             ...controlBridge.RawOutputValue,
             media: items.map(item => controlBridge.createResource(item)),
           };
-
           navigation.goBack();
         }}
         selectedMediaUris={controlBridge.OutputValue?.media}
@@ -41,9 +51,6 @@ export default class RemarksControl extends ControlComponent {
   }
 
   useComment() {
-
-
-
     const {controlBridge, navigation} = this.props;
 
     type CommentModalProps = {
@@ -53,7 +60,6 @@ export default class RemarksControl extends ControlComponent {
     };
 
     const CommentModal = (props: CommentModalProps) => {
-
       const [value, setValue] = useState(props.value || '');
       let inputRef: TextInput | null;
 
@@ -89,7 +95,7 @@ export default class RemarksControl extends ControlComponent {
             <View style={{padding: 13}}>
               <Input
                 ref={ref => (inputRef = ref)}
-                onLayout={()=> inputRef?.focus()}
+                onLayout={() => inputRef?.focus()}
                 multiline={true}
                 numberOfLines={2}
                 inputContainerStyle={{
@@ -243,7 +249,6 @@ export default class RemarksControl extends ControlComponent {
   }
 
   useOwner() {
-
     const {controlBridge, navigation} = this.props;
 
     type ownerModalProps = {
@@ -255,7 +260,6 @@ export default class RemarksControl extends ControlComponent {
     };
 
     const OwnerModal = (props: ownerModalProps) => {
-
       let inputRef: TextInput | null;
       const [searchText, setSearchText] = useState('');
       const [selectedData, setSelectedData] = useState(
@@ -336,7 +340,7 @@ export default class RemarksControl extends ControlComponent {
               fontWeight: 'bold',
               flex: 0,
             }}>
-            Seleccione
+            Seleccione un responsable
           </Text>
           <FlatList
             data={filteredData}
@@ -375,15 +379,37 @@ export default class RemarksControl extends ControlComponent {
               );
             }}
           />
-          <View style={{flex: 0, flexDirection: 'row', borderWidth: 1}}>
-            <TextInput
+          <View style={{flex: 0, flexDirection: 'row', borderWidth: 0.5}}>
+            {/* <TextInput
               ref={ref => (inputRef = ref)}
-              onLayout={()=> inputRef?.focus()}
+              onLayout={() => inputRef?.focus()}
               style={{flex: 1, paddingLeft: 5}}
               placeholder={'Escriba y Seleccione el Nombre'}
               value={searchText}
               onChangeText={value => setSearchText(value)}
+            /> */}
+
+            <Input
+              ref={ref => (inputRef = ref)}
+              onLayout={() => inputRef?.focus()}
+              multiline={true}
+              numberOfLines={2}
+              /* inputContainerStyle={{
+                maxHeight: 250,
+              }} */
+              inputStyle={{
+                flex: 1,
+              }}
+              errorStyle={{
+                paddingTop: 0,
+                marginTop: 0,
+                marginBottom: 0,
+              }}
+              placeholder="Escriba y Seleccione el Nombre"
+              value={searchText}
+              onChangeText={value => setSearchText(value)}
             />
+
             <Icon
               name="check-circle"
               type="material"
@@ -411,6 +437,106 @@ export default class RemarksControl extends ControlComponent {
           controlBridge.OutputValue = {
             ...controlBridge.RawOutputValue,
             owners: value,
+          };
+          navigation.goBack();
+        }}
+      />,
+    );
+  }
+
+  useMulti() {
+    const {controlBridge} = this.props;
+
+    controlBridge.OutputValue = {
+      ...controlBridge.RawOutputValue,
+      multi: multi++,
+    };
+  }
+
+  multiComment() {
+    const {controlBridge, navigation} = this.props;
+
+    type CommentModalProps = {
+      value: string | undefined;
+      onCancel: () => void;
+      onSuccess: (value: string) => void;
+    };
+
+    const CommentModal = (props: CommentModalProps) => {
+      const [value, setValue] = useState(props.value || '');
+      let inputRef: TextInput | null;
+
+      return (
+        <View
+          style={{
+            justifyContent: 'center',
+            flex: 1,
+            backgroundColor: 'transparent',
+            paddingHorizontal: 16,
+          }}>
+          <View style={{backgroundColor: 'white', borderRadius: 2}}>
+            <View
+              style={{
+                backgroundColor: '#FDAE01',
+                flexDirection: 'row',
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+                alignItems: 'center',
+              }}>
+              <Icon
+                type="material"
+                name="chat"
+                color="white"
+                size={20}
+                style={{padding: 10}}
+              />
+              <Text style={{color: 'white', fontWeight: 'bold', fontSize: 20}}>
+                Comentario
+              </Text>
+            </View>
+
+            <View style={{padding: 13}}>
+              <Input
+                ref={ref => (inputRef = ref)}
+                onLayout={() => inputRef?.focus()}
+                multiline={true}
+                numberOfLines={2}
+                inputContainerStyle={{
+                  maxHeight: 250,
+                }}
+                inputStyle={{
+                  textAlignVertical: 'top',
+                }}
+                placeholder="Escribe aquí tu comentario"
+                value={value}
+                onChangeText={value => setValue(value)}
+              />
+            </View>
+
+            <View style={{flexDirection: 'row-reverse'}}>
+              <Pressable
+                style={{padding: 14}}
+                onPress={() => props.onSuccess(value)}>
+                <Text style={{color: '#FDAE01'}}>GUARDAR</Text>
+              </Pressable>
+              <Pressable style={{padding: 14}} onPress={() => props.onCancel()}>
+                <Text style={{color: '#808080'}}>CANCELAR</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      );
+    };
+
+    this.props.navigation.navigate(
+      'Modal',
+      <CommentModal
+        value={controlBridge.OutputValue?.comments}
+        onCancel={() => navigation.goBack()}
+        onSuccess={value => {
+          controlBridge.OutputValue = {
+            ...controlBridge.RawOutputValue,
+            comments: value,
           };
           navigation.goBack();
         }}
@@ -458,6 +584,7 @@ export default class RemarksControl extends ControlComponent {
     };
 
     const visible = controlBridge.property('visible') ? 'flex' : 'none';
+
     return (
       <View style={{flex: 1, padding: 5, display: visible}}>
         <View style={{flex: 1, flexDirection: 'row'}}>
@@ -493,7 +620,36 @@ export default class RemarksControl extends ControlComponent {
               )}
             </Pressable>
           )}
+          {controlBridge.OutputValue?.media?.length > 0 ||
+            (controlBridge?.OutputValue?.comment?.length > 0 &&
+              controlBridge.property('multi') && (
+                <Pressable style={{flex: 1}} onPress={() => this.useMulti()}>
+                  {buttonOption(
+                    'add-circle-outline',
+                    controlBridge?.OutputValue?.multi !== undefined &&
+                      controlBridge?.OutputValue?.multi >= 2,
+                  )}
+                </Pressable>
+              ))}
         </View>
+
+        {controlBridge?.OutputValue?.multi >= 0 && (
+          <View style={{flex: 1, flexDirection: 'row'}}>
+            <Pressable style={{flex: 1}} onPress={() => this.useCamera()}>
+              {buttonOption(
+                'photo-camera',
+                controlBridge.OutputValue?.media?.length > 0,
+              )}
+            </Pressable>
+
+            <Pressable style={{flex: 1}} onPress={() => this.multiComment()}>
+              {buttonOption(
+                'chat',
+                controlBridge.OutputValue?.comments?.length > 0,
+              )}
+            </Pressable>
+          </View>
+        )}
       </View>
     );
   }

@@ -23,6 +23,7 @@ import Config from 'react-native-config';
 import { Platform } from 'react-native';
 import { formatRFC3339 } from 'date-fns';
 import { getCredentials } from 'utils';
+import ImageResizer from 'react-native-image-resizer';
 
 
 export const createPendingTask = (documento: IDocumento): void => {
@@ -89,7 +90,12 @@ const startSendingManager = (): void => {
       pendingTask.pendingResourcesUri.forEach(pendingResource => {
         store.dispatch(addSendingResource(pendingTask.documentoId));
 
-        uploadResource(pendingTask.documentoId, pendingResource );
+        ImageResizer.createResizedImage(pendingResource, 600, 500, 'JPEG', 100, 0, undefined, false, {  mode: 'contain', onlyScaleDown: false })
+          .then(resizedImage => {
+            uploadResource(pendingTask.documentoId, resizedImage.uri, pendingResource )
+          }) .catch(err => {
+              console.log(err);
+          });
       });
 
       store.dispatch(deleteSendingResource(pendingTask.documentoId));
@@ -97,7 +103,7 @@ const startSendingManager = (): void => {
   }
 };
 
-const uploadResource = async (documentoId: string, resourceUri: string): Promise<void> => {
+const uploadResource = async (documentoId: string, resizeResourceUri: string, oldResourceUri: string): Promise<void> => {
 
   try {
 
@@ -111,19 +117,20 @@ const uploadResource = async (documentoId: string, resourceUri: string): Promise
       region: 'us-east-2'
     });
 
-    const splittedPath = (resourceUri as string).split('/');
+    const splittedPath = (resizeResourceUri as string).split('/');
     const filename = splittedPath[splittedPath.length -1];
 
     const command = new PutObjectCommand({
       Bucket: 'hse-app',
       Key: `formularios/${documentoId}/${filename}`,
+      ACL: 'public-read'
     });
 
     const signedUrl = await getSignedUrl(s3Client, command, {expiresIn: 1800});
 
     const options: UploadOptions = {
       url: signedUrl,
-      path: fixPath(resourceUri),
+      path: fixPath(resizeResourceUri),
       method: 'PUT',
       type: 'raw',
       headers: {
@@ -146,20 +153,19 @@ const uploadResource = async (documentoId: string, resourceUri: string): Promise
       const documento: IDocumento = store.getState().documentos.documentos
         .filter(documento => documento._id === documentoId)[0];
 
-      const resource = (documento.resources || [])
-        .find(resource => resource.url === resourceUri);
+      const resource = (documento.resources || []).find(resource => resource.url === oldResourceUri);
 
       store.dispatch(saveResource({
         url: newResourceUri,
         type: 'object',
-        localData: resourceUri
+        localData: oldResourceUri
       }));
 
       if (resource) {
         store.dispatch(saveDocumento({
           ...documento,
           resources: [
-            ...(documento.resources?.filter(resource => resource.url !== resourceUri && resource.url !== newResourceUri) || []),
+            ...(documento.resources?.filter(resource => resource.url !== oldResourceUri && resource.url !== newResourceUri) || []),
             {
               name: resource.name,
               url: newResourceUri,
@@ -169,7 +175,7 @@ const uploadResource = async (documentoId: string, resourceUri: string): Promise
         }));
       }
 
-      store.dispatch(deletePendingResource(documentoId, resourceUri));
+      store.dispatch(deletePendingResource(documentoId, oldResourceUri));
       store.dispatch(deleteSendingResource(documentoId));
     });
   } catch (error) {
@@ -191,10 +197,7 @@ const uploadDocumento = async (documentoId: string): Promise<void> => {
     };
     store.dispatch(saveDocumento(documento));
 
-    const response = await axios.post(
-      `${Config.UrlFormularios}/documentos`,
-      documento
-    );
+    const response = await axios.post(`${Config.UrlFormularios}/documentos`, documento);
 
     store.dispatch(deletePendingTask(documentoId));
     store.dispatch(changeStatusDocumento(documentoId, DocumentoStatus.sent));
