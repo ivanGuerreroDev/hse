@@ -76,6 +76,10 @@ class SignIn extends Component<Props> {
     Errorutempresa: '',
     Errorusername: '',
     Errorpassword: '',
+
+    placeholder_emp: '12345678-9',
+    placeholder_user : 'Usuario',
+    placeholder_pass : 'Contraseña'
   };
 
   validationData() {
@@ -222,7 +226,11 @@ class SignIn extends Component<Props> {
             onChangeText={rutempresa =>
               this.setState({rutempresa, Errorutempresa: ''})
             }
-            label={"RUT Empresa (12345678-9)"}
+
+            label={'RUT Empresa'}
+            placeholder={this.state.placeholder_emp}
+            onFocus={() => this.setState({placeholder_emp: ''})}
+            onBlur={() => this.setState({ placeholder_emp: '12345678-9'})}
             value={this.state.rutempresa}
             labelStyle={styles.inputLabel}
             inputContainerStyle={styles.inputContainer}
@@ -238,7 +246,10 @@ class SignIn extends Component<Props> {
             onChangeText={username =>
               this.setState({username, Errorusername: ''})
             }
-            label={"Usuario"}
+            label={'Usuario'}
+            placeholder={this.state.placeholder_user}
+            onFocus={() => this.setState({placeholder_user: ''})}
+            onBlur={() => this.setState({placeholder_user: 'Usuario'})}
             value={this.state.username}
             labelStyle={styles.inputLabel}
             inputContainerStyle={styles.inputContainer}
@@ -256,6 +267,9 @@ class SignIn extends Component<Props> {
             value={this.state.password}
             rightIcon={securePassIcon}
             label={'Contraseña'}
+            placeholder={this.state.placeholder_pass}
+            onFocus={() => this.setState({placeholder_pass: ''})}
+            onBlur={() => this.setState({placeholder_pass: 'Contraseña'})}
             rightIconContainerStyle={{width: '20%'}}
             labelStyle={styles.inputLabel}
             inputContainerStyle={styles.inputContainer}
@@ -352,8 +366,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    paddingVertical: '5%',
-    paddingTop: '10%',
+    // paddingVertical: '5%',
+    // paddingTop: '1%',
     paddingRight: '4%',
   },
   checkbox: {
@@ -392,10 +406,11 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     paddingLeft: 5,
-    fontSize: 10,
+    fontSize: 12,
     color: '#00000099',
     opacity: 1,
     fontFamily: 'Roboto-Regular',
+
   },
   inputContainer: {
     borderWidth: 1,

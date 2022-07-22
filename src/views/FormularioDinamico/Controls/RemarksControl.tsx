@@ -212,6 +212,7 @@ export default class RemarksControl extends ControlComponent {
             <View style={{padding: 13}}>
               <Calendar
                 current={value}
+                minDate={new Date}
                 markedDates={markedDate}
                 onDayPress={(date: any) => setValue(date.dateString)}
               />

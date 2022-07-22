@@ -3,12 +3,13 @@ import ControlComponent, {Props} from '../ControlComponent';
 import {Modal, ScrollView, View} from 'react-native';
 import {Input, Text} from 'react-native-elements';
 import {capitalize} from 'utils';
-
+import {StyleSheet} from 'react-native';
 export default class TextControl extends ControlComponent {
   state = {
     filter: '',
     onEdit: false,
     color: '',
+    cargo: '',
   };
 
   constructor(props: Props) {
@@ -62,7 +63,7 @@ export default class TextControl extends ControlComponent {
             style={{paddingHorizontal: 10, paddingVertical: 8}}
             onPress={() => {
               controlBridge.OutputValue = item;
-              this.setState({modalVisible: false})
+              this.setState({modalVisible: false});
               this.setState({onEdit: false});
             }}>
             <Text>{regexpResult[1]}</Text>
@@ -97,7 +98,10 @@ export default class TextControl extends ControlComponent {
           onBlur={() => {
             this.setState({onEdit: false});
           }}
-          inputContainerStyle={{borderColor: '#0000001F', borderBottomWidth: 1}}
+          inputContainerStyle={{
+            borderColor: '#0000001F',
+            borderBottomWidth: 1,
+          }}
           labelStyle={{
             fontSize: 13,
             color: '#00000099',
@@ -130,22 +134,24 @@ export default class TextControl extends ControlComponent {
         <Input
           label={controlBridge.property('title')}
           placeholder={controlBridge.property('placeholder')}
-          errorMessage={errorMessage}
+          errorMessage={errorMessage ? '- Este campo es requerido' : ''}
           onChangeText={value => {
-            controlBridge.OutputValue = value,
-            this.setState({onEdit: true}),
-            this.setState({modalVisible: true});
+            (controlBridge.OutputValue = value),
+              this.setState({onEdit: true}),
+              this.setState({modalVisible: true});
           }}
           value={newData}
           onBlur={() => {
             this.setState({onEdit: false});
 
-            if (controlBridge
+            if (
+              controlBridge
                 .property('autocomplete')
-                ?.filter((x: string) => x === controlBridge.OutputValue).length == 0) {
-              controlBridge.OutputValue= '';
+                ?.filter((x: string) => x === controlBridge.OutputValue)
+                .length == 0
+            ) {
+              controlBridge.OutputValue = '';
             }
-
           }}
           inputContainerStyle={{borderColor: '#0000001F', borderBottomWidth: 1}}
           labelStyle={{
@@ -175,26 +181,51 @@ export default class TextControl extends ControlComponent {
           }
         />
         {/* Visor del autocomplete */}
-
-          <View>
-
-            <ScrollView
-              keyboardShouldPersistTaps="handled"
-              nestedScrollEnabled={true}
-              style={{
-                position: 'absolute',
-                top: 0,
-                backgroundColor: 'white',
-                zIndex: 999,
-                width: '100%',
-                maxHeight: this.state.onEdit ? 200 : 0,
-              }}>
-              {autoCompleteList}
-            </ScrollView>
-
-          </View>
-
+        <View>
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            nestedScrollEnabled={true}
+            style={{
+              position: 'absolute',
+              top: 0,
+              backgroundColor: 'white',
+              zIndex: 999,
+              width: '100%',
+              maxHeight: this.state.onEdit ? 200 : 0,
+            }}>
+            {autoCompleteList}
+          </ScrollView>
+        </View>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  dropdown: {
+    // margin: 16,
+    marginHorizontal: 13,
+    height: 40,
+    borderBottomColor: 'gray',
+    borderBottomWidth: 0.5,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  placeholderStyle: {
+    fontSize: 13,
+  },
+  selectedTextStyle: {
+    marginLeft: 5,
+    fontSize: 15,
+    fontFamily: 'Roboto-Medium',
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+});

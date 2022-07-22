@@ -101,7 +101,7 @@ export const resourcesReducer = (
       return {
         resources: [
           ...state.resources.filter(item =>
-            item.url !== resource.url || item.type !== resource.type || item.method !== resource.method || item.body !== resource.body
+            item.url !== resource.url || item.type !== resource.type || item.method !== resource.method /*|| item.body !== resource.body*/
           ),
           resource
         ]

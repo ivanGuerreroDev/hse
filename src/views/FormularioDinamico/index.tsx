@@ -138,7 +138,7 @@ class FormularioDinamico extends Component<Props, State> {
             let messages = this.documentoFactory.validateOutputValues();
             if (messages.length > 0) {
               Alert.alert(
-                'Faltan por rellenar los siguientes campos',
+                'Falta completar los siguientes campos...',
                 `${messages.map(x => x)}`,
                 [
                   {

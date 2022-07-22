@@ -28,7 +28,7 @@ class ListControlModal extends React.Component<ListControlModalProps> {
     if (props.selectedData)
       this.state.selectedData = props.multiple ? props.selectedData : [props.selectedData];
   }
-
+  
   render() {
     const { data, onSuccess, displayField, multiple } = this.props;
 

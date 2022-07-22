@@ -54,18 +54,16 @@ export const saveLocalResourceAsync: SaveLocalResourceAsync = (
     return new Promise<ILocalResource>(async (resolve, reject) => {
       try {
         if (resource.type === 'api') {
-          /* const response: AxiosResponse<any> = await axios({
-            method: resource.method,
-            url: resource.url,
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            data: {
-              ...resource.body,
-              Empresa: user.Empresa,
-              Username: user.Username
-            },
-          }); */
+          //   const response: AxiosResponse<any> = await axios({
+          //   method: resource.method,
+          //   url: resource.url,
+          //   headers: {
+          //     'Content-Type': 'application/json',
+          //   },
+          //   data: {
+
+          //   },
+          // });
 
           const response: AxiosResponse<any> = await axios({
             method: 'post',
@@ -80,7 +78,7 @@ export const saveLocalResourceAsync: SaveLocalResourceAsync = (
             url: resource.url,
             type: resource.type,
             method: resource.method,
-            /* data: resource.data, */
+            // data: resource.data,
             localData: response.data,
           };
 

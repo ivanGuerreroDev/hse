@@ -62,7 +62,7 @@ class Profile extends Component<Props> {
         {this.props.perfil[this.props.perfil.length - 1] && (
           <>
             <View style={{alignItems: 'flex-end', paddingEnd: 5}}>
-              <Text style={styles.vtext}>V. 1.1.13</Text>
+              <Text style={styles.vtext}>V. 1.1.14</Text>
             </View>
             <View style={styles.avatar}>
               <Avatar
@@ -141,19 +141,22 @@ class Profile extends Component<Props> {
                     inputStyle={styles.inputStyle}
                     errorStyle={styles.inputError}
                   />
-                  <Input
-                    disabled
-                    autoCapitalize="none"
-                    label={
-                      this.props.perfil[this.props.perfil.length - 1]?.Mascara
-                    }
-                    value={
-                      this.props.perfil[this.props.perfil.length - 1]?.NombreNV2
-                    }
-                    labelStyle={styles.inputLabel}
-                    inputStyle={styles.inputStyle}
-                    errorStyle={styles.inputError}
-                  />
+                  {this.props.perfil[this.props.perfil.length - 1]?.Mascara && (
+                    <Input
+                      disabled
+                      autoCapitalize="none"
+                      label={
+                        this.props.perfil[this.props.perfil.length - 1]?.Mascara
+                      }
+                      value={
+                        this.props.perfil[this.props.perfil.length - 1]
+                          ?.NombreNV2
+                      }
+                      labelStyle={styles.inputLabel}
+                      inputStyle={styles.inputStyle}
+                      errorStyle={styles.inputError}
+                    />
+                  )}
                   <Input
                     disabled
                     autoCapitalize="none"

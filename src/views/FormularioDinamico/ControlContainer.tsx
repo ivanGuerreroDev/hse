@@ -12,6 +12,7 @@ import LabelControl from './Controls/LabelControl';
 import ListControl from './Controls/ListControl';
 import RemarksControl from './Controls/RemarksControl';
 import TextControl from './Controls/TextControl';
+import SelectControl from './Controls/SelectControl';
 
 type MapControlBridgesProps = {
   controlBridges: ControlBridge[];
@@ -87,6 +88,9 @@ const controlComponent: ControlComponentSelectType = (
       break;
     case 'Text':
       controlType = TextControl;
+      break;
+    case 'Select':
+      controlType = SelectControl;
       break;
     default:
       break;

@@ -14,32 +14,32 @@ const {height} = Dimensions.get('window');
 class Layaut extends Component {
   render() {
     return (
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        nestedScrollEnabled={false}
-        showsHorizontalScrollIndicator={false}
-        style={{...styles.container, maxHeight: height}}>
-        <Header
-          containerStyle={{...styles.headerContainer /* paddingTop: '15%' */}}
-          centerComponent={
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          nestedScrollEnabled={false}
+          showsHorizontalScrollIndicator={false}
+          style={{...styles.container, maxHeight: height}}>
+          <Header
+            containerStyle={{...styles.headerContainer /* paddingTop: '15%' */}}
+            centerComponent={
+              <Image
+                source={require('components/Assets/logo_hse.png')}
+                style={styles.headerLogo}
+                resizeMode="stretch"
+              />
+            }
+          />
+          <View style={styles.content}>{this.props.children}</View>
+
+          <View style={styles.footer}>
+            <Text style={styles.text}>Por</Text>
             <Image
-              source={require('components/Assets/logo_hse.png')}
-              style={styles.headerLogo}
+              source={require('components/Assets/Zimexa.png')}
+              style={styles.footerLogo}
               resizeMode="stretch"
             />
-          }
-        />
-        <View style={styles.content}>{this.props.children}</View>
-
-        <View style={styles.footer}>
-          <Text style={styles.text}>Por</Text>
-          <Image
-            source={require('components/Assets/Zimexa.png')}
-            style={styles.footerLogo}
-            resizeMode="stretch"
-          />
-        </View>
-      </ScrollView>
+          </View>
+        </ScrollView>
     );
   }
 }
@@ -49,13 +49,13 @@ export default Layaut;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: height,
-    bottom: 0,
+    height: '100%',
     backgroundColor: '#ffffff',
   },
   headerContainer: {
     flex: 2,
     height: height * 0.2,
+    paddingTop: 15,
     opacity: 1,
     backgroundColor: '#ffffff',
   },
@@ -74,12 +74,14 @@ const styles = StyleSheet.create({
   text: {
     alignSelf: 'center',
     alignItems: 'center',
+    fontSize: 12,
     justifyContent: 'flex-end',
   },
   footer: {
     height: height * 0.1,
     alignItems: 'center',
     backgroundColor: '#ffffff',
+    paddingBottom: 15,
   },
   footerLogo: {
     width: 200,
