@@ -78,8 +78,8 @@ class SignIn extends Component<Props> {
     Errorpassword: '',
 
     placeholder_emp: '12345678-9',
-    placeholder_user : 'Usuario',
-    placeholder_pass : 'Contraseña'
+    placeholder_user: 'Usuario',
+    placeholder_pass: 'Contraseña',
   };
 
   validationData() {
@@ -226,11 +226,10 @@ class SignIn extends Component<Props> {
             onChangeText={rutempresa =>
               this.setState({rutempresa, Errorutempresa: ''})
             }
-
             label={'RUT Empresa'}
             placeholder={this.state.placeholder_emp}
             onFocus={() => this.setState({placeholder_emp: ''})}
-            onBlur={() => this.setState({ placeholder_emp: '12345678-9'})}
+            onBlur={() => this.setState({placeholder_emp: '12345678-9'})}
             value={this.state.rutempresa}
             labelStyle={styles.inputLabel}
             inputContainerStyle={styles.inputContainer}
@@ -367,7 +366,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     // paddingVertical: '5%',
-    // paddingTop: '1%',
+    paddingTop: '8%',
     paddingRight: '4%',
   },
   checkbox: {
@@ -410,7 +409,6 @@ const styles = StyleSheet.create({
     color: '#00000099',
     opacity: 1,
     fontFamily: 'Roboto-Regular',
-
   },
   inputContainer: {
     borderWidth: 1,

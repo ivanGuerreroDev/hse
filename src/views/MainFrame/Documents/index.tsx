@@ -26,7 +26,7 @@ import {
   DeleteDocumento,
 } from 'state/formulariodinamico/types';
 import {DocumentoStatus, IDocumento} from 'types/formulariodinamico';
-import { IUser } from 'state/user/types';
+import {IUser} from 'state/user/types';
 
 type StateProps = {
   documentos: IDocumento[];
@@ -62,7 +62,8 @@ class Documents extends Component<Props> {
             new Date(b.modifiedDate.$date).valueOf() -
             new Date(a.modifiedDate.$date).valueOf(),
         );
-
+    console.log('status', filteredDocumentos(DocumentoStatus.draft));
+    console.log('asdasd');
     switch (this.state.tabIndex) {
       case 0:
         return (
@@ -90,7 +91,13 @@ class Documents extends Component<Props> {
                 // }
                 rightOption={
                   <Button
-                    buttonStyle={{backgroundColor: 'red', height: '100%'}}
+                    buttonStyle={{
+                      backgroundColor: 'red',
+                      borderRadius: 8,
+                      height: '100%',
+                      width: '90%',
+                      marginLeft: '10%',
+                    }}
                     icon={<Icon type="material" name="delete" color="white" />}
                     onPress={() => deleteDocumento(item._id)}
                   />
@@ -109,14 +116,23 @@ class Documents extends Component<Props> {
               <CardDocumento
                 documento={item}
                 onCardPress={() =>
-                  navigation.navigate('FormularioDinamico', {documento: item, readOnly: true})
+                  navigation.navigate('FormularioDinamico', {
+                    documento: item,
+                    readOnly: true,
+                  })
                 }
                 rightOption={
                   <Button
-                    buttonStyle={{backgroundColor: 'red', height: '100%'}}
+                    buttonStyle={{
+                      backgroundColor: 'red',
+                      borderRadius: 8,
+                      height: '100%',
+                      width: '90%',
+                      marginLeft: '10%',
+                    }}
                     icon={<Icon type="material" name="cancel" color="white" />}
-                    onPress={() =>
-                      console.warn('No implementado')
+                    onPress={
+                      () => console.warn('No implementado')
                       // changeStatusDocumento(item._id, DocumentoStatus.draft)
                     }
                   />
@@ -135,11 +151,20 @@ class Documents extends Component<Props> {
               <CardDocumento
                 documento={item}
                 onCardPress={() =>
-                  navigation.navigate('FormularioDinamico', {documento: item, readOnly: true})
+                  navigation.navigate('FormularioDinamico', {
+                    documento: item,
+                    readOnly: true,
+                  })
                 }
                 rightOption={
                   <Button
-                    buttonStyle={{backgroundColor: 'red', height: '100%'}}
+                    buttonStyle={{
+                      backgroundColor: 'red',
+                      borderRadius: 8,
+                      height: '100%',
+                      width: '90%',
+                      marginLeft: '10%',
+                    }}
                     icon={<Icon type="material" name="delete" color="white" />}
                     onPress={() => deleteDocumento(item._id)}
                   />
@@ -187,7 +212,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state: RootState): StateProps => {
   return {
     documentos: state.documentos.documentos,
-    currentUser: state.currentUser.user
+    currentUser: state.currentUser.user,
   };
 };
 

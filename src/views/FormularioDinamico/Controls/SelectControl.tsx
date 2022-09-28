@@ -68,7 +68,7 @@ export default class TextControl extends ControlComponent {
                 fontFamily: 'Roboto-Regular',
                 fontWeight: 'bold',
               }}>
-              {`Seleccione ${controlBridge.property('title')}`}
+              {`${controlBridge.property('title')}`}
             </Text>
             <Dropdown
               style={styles.dropdown}

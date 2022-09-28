@@ -33,7 +33,13 @@ class CardDocumento extends Component<Props> {
               </View>
               <View style={styles.documentoAbrevContainer}>
                 <Text style={styles.documentoAbrev}>
-                  {documento.pages.map(x => x.controls.map(i => i.properties?.filter(a => a.value === 'Nombre') && `${i.outputValue || ''} `))}
+                  {documento.pages.map(x =>
+                    x.controls.map(
+                      (i, z) =>
+                        i.properties?.filter(a => a.value === 'Nombre') &&
+                        `${(z < 2 && i.outputValue) || ''}\n`,
+                    ),
+                  )}
                 </Text>
               </View>
             </Pressable>
