@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Alert, ScrollView, StyleSheet, ToastAndroid, View} from 'react-native';
+import {Alert, ScrollView, StyleSheet, ToastAndroid, View, Platform, PermissionsAndroid, Linking, AppState} from 'react-native';
 import {Button, Header, Icon, Tab, Text} from 'react-native-elements';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {TabItem} from './TabItemComponent';
@@ -34,9 +34,21 @@ import {DocumentoStatus, IDocumento} from 'utils/types/formulariodinamico';
 import {createPendingTask} from 'utils/sendingManager';
 import {isNetworkAllowed} from 'utils/network';
 
+import Geolocation, { GeolocationError, GeolocationOptions, GeolocationResponse } from '@react-native-community/geolocation';
+import { checkLocationPermission } from '../../utils/permissions';
+import { PERMISSIONS, RESULTS, request } from 'react-native-permissions';
+import { store } from 'state/store/store';
+import { updateGeolocation } from 'state/settings/actions';
+import DeviceInfo from 'react-native-device-info';
+import IntentLauncher, { IntentConstant } from 'react-native-intent-launcher'
+import { State } from 'react-native-gesture-handler';
+const packageId = DeviceInfo.getBundleId();
+
 type State = {
   tabIndex: number;
   thisisonlyforforcerender: any;
+  goConf: boolean;
+  appState: any;
 };
 
 type DispatchProps = {
@@ -67,16 +79,70 @@ class FormularioDinamico extends Component<Props, State> {
   state = {
     tabIndex: 0,
     thisisonlyforforcerender: undefined,
+    goConf: false,
+    appState: AppState.currentState
   };
 
   constructor(props: Props) {
     super(props);
-
+    AppState.addEventListener('change', this.handleAppStateChange)
     const {documento, readOnly} = props.route.params;
 
     this.documentoFactory = new DocumentoFactory(documento);
     this.documentoFactory.isReadOnly = readOnly || false;
     this.documentoFactory.onOutputValueChange = this.handleOutputValueChange;
+  }
+
+  handleAppStateChange = () => {
+    if(this.state.goConf){
+      this.isBackFromConfToSendForm();
+    }
+  }
+
+  sendForm(Documento: any, navigation: any){
+    changeStatusDocumento(
+      Documento._id,
+      DocumentoStatus.sending,
+    );
+    createPendingTask(Documento);
+    this.setState({goConf:false})
+    isNetworkAllowed()
+      ? ToastAndroid.show(
+          'El documento se ha enviado con exito',
+          ToastAndroid.SHORT,
+        )
+      : ToastAndroid.show(
+          'El documento se ha guardado con exito',
+          ToastAndroid.SHORT,
+        );
+    navigation.goBack();
+  }
+
+  isBackFromConfToSendForm () {
+    const {Documento} = this.documentoFactory;
+    const {navigation} = this.props;
+    checkLocationPermission()
+      .then(result => {
+        if (result === RESULTS.GRANTED || result === RESULTS.LIMITED) {
+          const positionCallback = (position: GeolocationResponse) => {
+            store.dispatch(updateGeolocation(position));
+          };
+          const errorCallback = (error: GeolocationError) => {
+            console.warn(error.message);
+          };
+          const options: GeolocationOptions = {
+            timeout: 15 * 1000, //ms: seconds * 1000,
+            maximumAge: 3 * 60000, //ms: minutes * 60000
+            enableHighAccuracy: true,
+          };
+          Geolocation.watchPosition(positionCallback, errorCallback, options);
+          this.sendForm(Documento, navigation)
+        }
+      })
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this.handleAppStateChange)
   }
 
   render() {
@@ -162,26 +228,57 @@ class FormularioDinamico extends Component<Props, State> {
                   {
                     text: 'Aceptar',
                     onPress: () => {
-                      changeStatusDocumento(
-                        Documento._id,
-                        DocumentoStatus.sending,
-                      );
-                      createPendingTask(Documento);
-                      navigation.goBack();
-                      isNetworkAllowed()
-                        ? ToastAndroid.show(
-                            'El documento se ha enviado con exito',
-                            ToastAndroid.SHORT,
-                          )
-                        : ToastAndroid.show(
-                            'El documento se ha guardado con exito',
-                            ToastAndroid.SHORT,
-                          );
-                    },
-                  },
-                ],
-                {cancelable: true},
-              );
+                      checkLocationPermission()
+                      .then(result => {
+                        if (result === RESULTS.GRANTED || result === RESULTS.LIMITED) {
+                          const positionCallback = (position: GeolocationResponse) => {
+                            store.dispatch(updateGeolocation(position));
+                          };
+                          const errorCallback = (error: GeolocationError) => {
+                            console.warn(error.message);
+                          };
+                          const options: GeolocationOptions = {
+                            timeout: 15 * 1000, //ms: seconds * 1000,
+                            maximumAge: 3 * 60000, //ms: minutes * 60000
+                            enableHighAccuracy: true,
+                          };
+                          Geolocation.watchPosition(positionCallback, errorCallback, options);
+                          this.sendForm(Documento, navigation)
+                        }else{
+                          if(result === RESULTS.BLOCKED || result === RESULTS.DENIED){
+                            Alert.alert(
+                              'Geolocalicación requerida',
+                              '¿Desea proceder a la activación de la geolocalización?',
+                              [
+                                {
+                                  text: 'Cancelar',
+                                  onPress: () => {},
+                                },
+                                {
+                                  text: 'Aceptar',
+                                  onPress: async () => {
+                                    this.setState({
+                                      goConf: true
+                                    })
+                                    if (Platform.OS === 'ios') {
+                                      Linking.openURL('app-settings:')
+                                    } else {
+                                      IntentLauncher.startActivity({
+                                        action: 'android.settings.APPLICATION_DETAILS_SETTINGS',
+                                        data: 'package:' + packageId
+                                      })
+                                    }
+                                  }
+                                }
+                              ]
+                            )
+                          }
+                        }
+                      })
+                    }
+                  }
+                ]
+              )
             }
           }}
         />,
