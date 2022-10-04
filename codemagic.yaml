@@ -12,10 +12,10 @@ workflows:
         - appstore_credentials
       ios_signing:
         distribution_type: ad_hoc # or: ad_hoc | development | enterprise
-        bundle_identifier: cl.innoapsion.zimexa.hse
+        bundle_identifier: cl.innoapsion.zimexa.hse.ios
       vars:
         APP_ID: 1625302603
-        BUNDLE_ID: "cl.innoapsion.zimexa.hse"
+        BUNDLE_ID: "cl.innoapsion.zimexa.hse.ios"
         XCODE_WORKSPACE: "zimexahse.xcworkspace"
         XCODE_SCHEME: "zimexahse"
     publishing:
