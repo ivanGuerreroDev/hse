@@ -146,8 +146,10 @@ class FormularioDinamico extends Component<Props, State> {
     const {Documento} = this.documentoFactory;
     const {navigation} = this.props;
     store.dispatch(updateGeolocation(position));
+    Documento.geolocation = position;
     this.sendForm(Documento, navigation)
   };
+
   errorCallback = (error: GeolocationError) => {
     console.warn(error.message);
     console.log(error.POSITION_UNAVAILABLE)
