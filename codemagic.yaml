@@ -36,17 +36,6 @@ workflows:
           cd ios && pod install
       - name: Set up keychain to be used for code signing using Codemagic CLI 'keychain' command
         script: keychain initialize
-      - name: print
-        script: |
-          echo "$APP_STORE_CONNECT_PRIVATE_KEY"
-      - name: Fetch signing files
-        script: |
-          app-store-connect fetch-signing-files "$BUNDLE_ID" \
-            --type IOS_APP_STORE \
-            --issuer-id=APP_STORE_CONNECT_ISSUER_ID \
-            --key-id=APP_STORE_CONNECT_KEY_IDENTIFIER \
-            --private-key=APP_STORE_CONNECT_PRIVATE_KEY \
-            --create
       - name: Set up signing certificate
         script: keychain add-certificates
       - name: Set up provisioning profiles settings on Xcode project
