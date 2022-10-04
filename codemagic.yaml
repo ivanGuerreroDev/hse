@@ -30,7 +30,7 @@ workflows:
     scripts:
       - name: Npm install
         script: |
-          npm install
+          npm install --legacy-peer-deps
       - name: Install CocoaPods dependencies
         script: |
           cd ios && pod install
