@@ -40,7 +40,6 @@ import { PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 import { store } from 'state/store/store';
 import { updateGeolocation } from 'state/settings/actions';
 import DeviceInfo from 'react-native-device-info';
-import IntentLauncher, { IntentConstant } from 'react-native-intent-launcher'
 import LocationEnabler from 'react-native-location-enabler';
 const {
   PRIORITIES: { HIGH_ACCURACY },
@@ -144,11 +143,17 @@ class FormularioDinamico extends Component<Props, State> {
 
   positionCallback = (position: GeolocationResponse) => {
     const {Documento} = this.documentoFactory;
-    const {navigation} = this.props;
     store.dispatch(updateGeolocation(position));
     Documento.geolocation = position;
-    this.sendForm(Documento, navigation)
+    this.handleSend();
+
   };
+
+  handleSend () {
+    const {Documento} = this.documentoFactory;
+    const {navigation} = this.props;
+    this.sendForm(Documento, navigation)
+  }
 
   errorCallback = (error: GeolocationError) => {
     console.warn(error.message);
@@ -161,7 +166,9 @@ class FormularioDinamico extends Component<Props, State> {
           [
             {
               text: 'Cancelar',
-              onPress: () => {},
+              onPress: () => {
+                this.handleSend();
+              },
             },
             {
               text: 'Aceptar',
@@ -196,34 +203,7 @@ class FormularioDinamico extends Component<Props, State> {
         if (result === RESULTS.GRANTED || result === RESULTS.LIMITED) {
           Geolocation.getCurrentPosition(this.positionCallback, this.errorCallback, options);
         }else{
-          if(result === RESULTS.BLOCKED || result === RESULTS.DENIED){
-            Alert.alert(
-              'Permisos de geolocalicación requeridos',
-              '¿Desea ir a conceder permisos de geolocalización?',
-              [
-                {
-                  text: 'Cancelar',
-                  onPress: () => {},
-                },
-                {
-                  text: 'Aceptar',
-                  onPress: async () => {
-                    this.setState({
-                      goConf: true
-                    })
-                    if (Platform.OS === 'ios') {
-                      Linking.openURL('App-Prefs:Privacy&path=LOCATION')
-                    } else {
-                      IntentLauncher.startActivity({
-                        action: 'android.settings.APPLICATION_DETAILS_SETTINGS',
-                        data: 'package:' + packageId
-                      })
-                    }
-                  }
-                }
-              ]
-            )
-          }
+          this.handleSend();
         }
       })
   }
