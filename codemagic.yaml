@@ -10,12 +10,12 @@ workflows:
     environment:
       ios_signing:
         distribution_type: development # or: ad_hoc | development | enterprise
-        bundle_identifier: cl.innoapsion.zimexa.hse.ios
+        bundle_identifier: cl.innoapsion.zimexa.hse
       groups:
         - appstore_credentials
       vars:
         APP_ID: 1625302603
-        BUNDLE_ID: "cl.innoapsion.zimexa.hse.ios"
+        BUNDLE_ID: "cl.innoapsion.zimexa.hse"
         XCODE_WORKSPACE: "zimexahse.xcworkspace"
         XCODE_SCHEME: "zimexahse"
     publishing:
@@ -26,7 +26,7 @@ workflows:
         submit_to_testflight: true
         beta_groups:
           - Innoapsion Tester
-        submit_to_app_store: true
+        submit_to_app_store: false
     scripts:
       - name: Npm install
         script: |
