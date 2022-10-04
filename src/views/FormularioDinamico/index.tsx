@@ -41,7 +41,19 @@ import { store } from 'state/store/store';
 import { updateGeolocation } from 'state/settings/actions';
 import DeviceInfo from 'react-native-device-info';
 import IntentLauncher, { IntentConstant } from 'react-native-intent-launcher'
-import { State } from 'react-native-gesture-handler';
+import LocationEnabler from 'react-native-location-enabler';
+const {
+  PRIORITIES: { HIGH_ACCURACY },
+  addListener,
+  checkSettings,
+  requestResolutionSettings
+} = LocationEnabler
+const configLocation = {
+  priority: HIGH_ACCURACY, // default BALANCED_POWER_ACCURACY
+  alwaysShow: true, // default false
+  needBle: false, // default false
+};
+
 const packageId = DeviceInfo.getBundleId();
 
 type State = {
@@ -64,6 +76,11 @@ type NavigationProps = {
 
 type Props = DispatchProps & NavigationProps;
 
+const options: GeolocationOptions = {
+  timeout: 15 * 1000, //ms: seconds * 1000,
+  maximumAge: 3 * 60000, //ms: minutes * 60000
+  enableHighAccuracy: true,
+};
 class FormularioDinamico extends Component<Props, State> {
   private documentoFactory: DocumentoFactory;
   private handleOutputValueChange: OutputValueChangeCallBack = (
@@ -80,7 +97,13 @@ class FormularioDinamico extends Component<Props, State> {
     tabIndex: 0,
     thisisonlyforforcerender: undefined,
     goConf: false,
-    appState: AppState.currentState
+    appState: AppState.currentState,
+    listener: addListener(({ locationEnabled }) =>{
+      console.log(`Location are ${ locationEnabled ? 'enabled' : 'disabled' }`);
+      if(locationEnabled){
+        this.checkLocation();
+      }
+    })
   };
 
   constructor(props: Props) {
@@ -92,6 +115,7 @@ class FormularioDinamico extends Component<Props, State> {
     this.documentoFactory.isReadOnly = readOnly || false;
     this.documentoFactory.onOutputValueChange = this.handleOutputValueChange;
   }
+
 
   handleAppStateChange = () => {
     if(this.state.goConf){
@@ -118,31 +142,94 @@ class FormularioDinamico extends Component<Props, State> {
     navigation.goBack();
   }
 
-  isBackFromConfToSendForm () {
+  positionCallback = (position: GeolocationResponse) => {
     const {Documento} = this.documentoFactory;
     const {navigation} = this.props;
+    store.dispatch(updateGeolocation(position));
+    this.sendForm(Documento, navigation)
+  };
+  errorCallback = (error: GeolocationError) => {
+    console.warn(error.message);
+    console.log(error.POSITION_UNAVAILABLE)
+    if(error.POSITION_UNAVAILABLE === 2){
+      if (Platform.OS === 'ios') {
+        Alert.alert(
+          'Geolocalicación está desactivada',
+          '¿Desea proceder a la activación de la geolocalización?',
+          [
+            {
+              text: 'Cancelar',
+              onPress: () => {},
+            },
+            {
+              text: 'Aceptar',
+              onPress: async () => {
+                this.setState({
+                  goConf: true
+                })
+                Linking.openURL('prefs:root=LOCATION_SERVICES')
+              }
+            }
+          ]
+        )
+      }else{
+        console.log("requestResolutionSettings")
+        requestResolutionSettings(configLocation);
+      }
+    }
+  };
+
+  isBackFromConfToSendForm () {
     checkLocationPermission()
       .then(result => {
         if (result === RESULTS.GRANTED || result === RESULTS.LIMITED) {
-          const positionCallback = (position: GeolocationResponse) => {
-            store.dispatch(updateGeolocation(position));
-          };
-          const errorCallback = (error: GeolocationError) => {
-            console.warn(error.message);
-          };
-          const options: GeolocationOptions = {
-            timeout: 15 * 1000, //ms: seconds * 1000,
-            maximumAge: 3 * 60000, //ms: minutes * 60000
-            enableHighAccuracy: true,
-          };
-          Geolocation.watchPosition(positionCallback, errorCallback, options);
-          this.sendForm(Documento, navigation)
+          Geolocation.getCurrentPosition(this.positionCallback, this.errorCallback, options);
         }
       })
   }
 
+  checkLocation () {
+    checkLocationPermission()
+      .then(result => {
+        if (result === RESULTS.GRANTED || result === RESULTS.LIMITED) {
+          Geolocation.getCurrentPosition(this.positionCallback, this.errorCallback, options);
+        }else{
+          if(result === RESULTS.BLOCKED || result === RESULTS.DENIED){
+            Alert.alert(
+              'Permisos de geolocalicación requeridos',
+              '¿Desea ir a conceder permisos de geolocalización?',
+              [
+                {
+                  text: 'Cancelar',
+                  onPress: () => {},
+                },
+                {
+                  text: 'Aceptar',
+                  onPress: async () => {
+                    this.setState({
+                      goConf: true
+                    })
+                    if (Platform.OS === 'ios') {
+                      Linking.openURL('App-Prefs:Privacy&path=LOCATION')
+                    } else {
+                      IntentLauncher.startActivity({
+                        action: 'android.settings.APPLICATION_DETAILS_SETTINGS',
+                        data: 'package:' + packageId
+                      })
+                    }
+                  }
+                }
+              ]
+            )
+          }
+        }
+      })
+  }
+
+
   componentWillUnmount() {
     AppState.removeEventListener('change', this.handleAppStateChange)
+    this.state.listener.remove()
   }
 
   render() {
@@ -227,55 +314,7 @@ class FormularioDinamico extends Component<Props, State> {
                   },
                   {
                     text: 'Aceptar',
-                    onPress: () => {
-                      checkLocationPermission()
-                      .then(result => {
-                        if (result === RESULTS.GRANTED || result === RESULTS.LIMITED) {
-                          const positionCallback = (position: GeolocationResponse) => {
-                            store.dispatch(updateGeolocation(position));
-                          };
-                          const errorCallback = (error: GeolocationError) => {
-                            console.warn(error.message);
-                          };
-                          const options: GeolocationOptions = {
-                            timeout: 15 * 1000, //ms: seconds * 1000,
-                            maximumAge: 3 * 60000, //ms: minutes * 60000
-                            enableHighAccuracy: true,
-                          };
-                          Geolocation.watchPosition(positionCallback, errorCallback, options);
-                          this.sendForm(Documento, navigation)
-                        }else{
-                          if(result === RESULTS.BLOCKED || result === RESULTS.DENIED){
-                            Alert.alert(
-                              'Geolocalicación requerida',
-                              '¿Desea proceder a la activación de la geolocalización?',
-                              [
-                                {
-                                  text: 'Cancelar',
-                                  onPress: () => {},
-                                },
-                                {
-                                  text: 'Aceptar',
-                                  onPress: async () => {
-                                    this.setState({
-                                      goConf: true
-                                    })
-                                    if (Platform.OS === 'ios') {
-                                      Linking.openURL('app-settings:')
-                                    } else {
-                                      IntentLauncher.startActivity({
-                                        action: 'android.settings.APPLICATION_DETAILS_SETTINGS',
-                                        data: 'package:' + packageId
-                                      })
-                                    }
-                                  }
-                                }
-                              ]
-                            )
-                          }
-                        }
-                      })
-                    }
+                    onPress: () => this.checkLocation()
                   }
                 ]
               )

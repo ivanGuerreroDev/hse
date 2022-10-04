@@ -1,9 +1,48 @@
 workflows:
-    android-workflow-id:
-        name: Android Workflow
-        max_build_duration: 120
-        instance_type: mac_mini_m1
-    ios-workflow-id:
-        name: iOS Workflow
-        max_build_duration: 120
-        instance_type: mac_mini_m1
+  android-workflow-id:
+    name: Android Workflow
+    max_build_duration: 120
+    instance_type: mac_mini_m1
+  ios-workflow-id:
+    name: iOS Workflow
+    max_build_duration: 120
+    instance_type: mac_mini_m1
+    environment:
+      groups:
+        - appstore_credentials
+      vars:
+        APP_ID: 1625302603
+        BUNDLE_ID: "cl.innoapsion.zimexa.hse.ios"
+        XCODE_WORKSPACE: "zimexahse.xcworkspace"
+        XCODE_SCHEME: "zimexahse"
+    publishing:
+    app_store_connect:
+      api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+      key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+      issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+      submit_to_testflight: true
+      beta_groups:
+        - Innoapsion Tester
+      submit_to_app_store: true
+  scripts:
+    - name: Install CocoaPods dependencies
+      script: |
+        cd ios && pod install
+    - name: Set up provisioning profiles settings on Xcode project
+      script: xcode-project use-profiles
+    - name: Increment build number
+      script: |
+        #!/bin/sh
+        cd $CM_BUILD_DIR
+        LATEST_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number "$APP_ID")
+        agvtool new-version -all $(($LATEST_BUILD_NUMBER + 1))
+    - name: Build ipa for distribution
+      script: |
+        xcode-project build-ipa \
+          --workspace "$CM_BUILD_DIR/ios/$XCODE_WORKSPACE" \
+          --scheme "$XCODE_SCHEME"
+  artifacts:
+    - build/ios/ipa/*.ipa
+    - /tmp/xcodebuild_logs/*.log
+    - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
+    - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
