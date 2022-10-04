@@ -28,6 +28,12 @@ workflows:
           - Innoapsion Tester
         submit_to_app_store: true
     scripts:
+      - name: Npm install
+        script: |
+          npm install
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios && pod install
       - name: Set up provisioning profiles settings on Xcode project
         script: xcode-project use-profiles
       - name: Increment build number
