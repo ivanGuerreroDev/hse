@@ -8,13 +8,16 @@ workflows:
     max_build_duration: 120
     instance_type: mac_mini_m1
     environment:
+      ios_signing:
+        distribution_type: app_store # or: ad_hoc | development | enterprise
+        bundle_identifier: cl.innoapsion.zimexa.hse.ios
       groups:
         - appstore_credentials
-    vars:
-      APP_ID: 1625302603
-      BUNDLE_ID: "cl.innoapsion.zimexa.hse.ios"
-      XCODE_WORKSPACE: "zimexahse.xcworkspace"
-      XCODE_SCHEME: "zimexahse"
+      vars:
+        APP_ID: 1625302603
+        BUNDLE_ID: "cl.innoapsion.zimexa.hse.ios"
+        XCODE_WORKSPACE: "zimexahse.xcworkspace"
+        XCODE_SCHEME: "zimexahse"
     publishing:
       app_store_connect:
         api_key: $APP_STORE_CONNECT_PRIVATE_KEY
@@ -27,30 +30,16 @@ workflows:
     scripts:
       - name: Set up provisioning profiles settings on Xcode project
         script: xcode-project use-profiles
-      - name: Set up keychain to be used for code signing using Codemagic CLI 'keychain' command
-        script: keychain initialize
-      - name: Print the APP_STORE_CONNECT_ISSUER_ID
+      - name: Increment build number
         script: |
-            echo "APP_STORE_CONNECT_ISSUER_ID: $APP_STORE_CONNECT_ISSUER_ID"
-      - name: Print the APP_STORE_CONNECT_PRIVATE_KEY
-        script: |
-            echo "APP_STORE_CONNECT_PRIVATE_KEY: $APP_STORE_CONNECT_PRIVATE_KEY"
-      - name: Fetch signing files
-        script: |
-          app-store-connect fetch-signing-files "$BUNDLE_ID" \
-            --type IOS_APP_STORE \
-            --issuer-id=APP_STORE_CONNECT_ISSUER_ID \
-            --key-id=APP_STORE_CONNECT_KEY_IDENTIFIER \
-            --private-key=APP_STORE_CONNECT_PRIVATE_KEY \
-            --create
-      - name: Set up signing certificate
-        script: keychain add-certificates
-      - name: Set up code signing settings on Xcode project
-        script: xcode-project use-profiles
+          cd $CM_BUILD_DIR/ios
+          LATEST_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number "$APP_ID")
+          agvtool new-version -all $(($LATEST_BUILD_NUMBER + 1))
       - name: Build ipa for distribution
-        script: xcode-project build-ipa \
-                    --workspace "${XCODE_WORKSPACE?}" \
-                    --scheme "${XCODE_SCHEME?}"
+        script: |
+          xcode-project build-ipa \
+            --workspace "$CM_BUILD_DIR/ios/$XCODE_WORKSPACE" \
+            --scheme "$XCODE_SCHEME"
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
