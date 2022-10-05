@@ -9,7 +9,7 @@ workflows:
     instance_type: mac_mini_m1
     environment:
       ios_signing:
-        distribution_type: development # or: ad_hoc | development | enterprise
+        distribution_type: IOS_APP_STORE # or: ad_hoc | development | enterprise
         bundle_identifier: cl.innoapsion.zimexa.hse.ios
       groups:
         - appstore_credentials
