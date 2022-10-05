@@ -9,10 +9,8 @@ workflows:
     instance_type: mac_mini_m1
     environment:
       ios_signing:
-        provisioning_profiles:
-          - provisoning_profile_hse
-        certificates:
-          - certificate
+        distribution_type: development # or: ad_hoc | development | enterprise
+        bundle_identifier: cl.innoapsion.zimexa.hse.ios
       groups:
         - appstore_credentials
       vars:
@@ -30,12 +28,18 @@ workflows:
           - Innoapsion Tester
         submit_to_app_store: false
     scripts:
-      #- name: Npm install
-      #  script: |
+      - name: install node dependencies
+        script: |
+          yarn install
       #    npm install --legacy-peer-deps
-      #- name: Install CocoaPods dependencies
-      #  script: |
-      #    cd ios && pod install
+      - name: Set Info.plist values
+        script: |
+          PLIST=$CM_BUILD_DIR/$XCODE_SCHEME/Info.plist
+          PLIST_BUDDY=/usr/libexec/PlistBuddy
+          $PLIST_BUDDY -c "Add :ITSAppUsesNonExemptEncryption bool false" $PLIST
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios && pod install
       - name: Set up keychain to be used for code signing using Codemagic CLI 'keychain' command
         script: keychain initialize
       - name: Set up signing certificate
