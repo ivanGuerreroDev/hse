@@ -101,6 +101,8 @@ class FormularioDinamico extends Component<Props, State> {
       console.log(`Location are ${ locationEnabled ? 'enabled' : 'disabled' }`);
       if(locationEnabled){
         this.checkLocation();
+      }else{
+        this.handleSend();
       }
     })
   };
