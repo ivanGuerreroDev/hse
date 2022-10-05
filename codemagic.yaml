@@ -9,13 +9,15 @@ workflows:
     instance_type: mac_mini_m1
     environment:
       ios_signing:
-        distribution_type: development # or: ad_hoc | development | enterprise
-        bundle_identifier: cl.innoapsion.zimexa.hse
+        provisioning_profiles:
+          - provisoning_profile_hse
+        certificates:
+          - certificate
       groups:
         - appstore_credentials
       vars:
         APP_ID: 1625302603
-        BUNDLE_ID: "cl.innoapsion.zimexa.hse"
+        BUNDLE_ID: "cl.innoapsion.zimexa.hse.ios"
         XCODE_WORKSPACE: "zimexahse.xcworkspace"
         XCODE_SCHEME: "zimexahse"
     publishing:
@@ -28,12 +30,12 @@ workflows:
           - Innoapsion Tester
         submit_to_app_store: false
     scripts:
-      - name: Npm install
-        script: |
-          npm install --legacy-peer-deps
-      - name: Install CocoaPods dependencies
-        script: |
-          cd ios && pod install
+      #- name: Npm install
+      #  script: |
+      #    npm install --legacy-peer-deps
+      #- name: Install CocoaPods dependencies
+      #  script: |
+      #    cd ios && pod install
       - name: Set up keychain to be used for code signing using Codemagic CLI 'keychain' command
         script: keychain initialize
       - name: Set up signing certificate
