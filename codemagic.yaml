@@ -11,7 +11,7 @@ workflows:
       node: 14.17.6
       npm: latest
       ios_signing:
-        distribution_type: development # or: ad_hoc | development | enterprise
+        distribution_type: app_store # or: ad_hoc | development | enterprise
         bundle_identifier: cl.innoapsion.zimexa.hse.ios
       groups:
         - appstore_credentials
