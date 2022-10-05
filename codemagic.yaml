@@ -18,15 +18,6 @@ workflows:
         BUNDLE_ID: "cl.innoapsion.zimexa.hse.ios"
         XCODE_WORKSPACE: "zimexahse.xcworkspace"
         XCODE_SCHEME: "zimexahse"
-    publishing:
-      app_store_connect:
-        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
-        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
-        submit_to_testflight: true
-        beta_groups:
-          - Innoapsion Tester
-        submit_to_app_store: false
     scripts:
       - name: install node dependencies
         script: |
@@ -57,3 +48,12 @@ workflows:
       - /tmp/xcodebuild_logs/*.log
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        submit_to_testflight: true
+        beta_groups:
+          - Innoapsion Tester
+        submit_to_app_store: false
