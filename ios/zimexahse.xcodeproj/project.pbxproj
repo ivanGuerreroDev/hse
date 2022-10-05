@@ -556,7 +556,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = cl.innoapsion.zimexa.hse;
+				PRODUCT_BUNDLE_IDENTIFIER = cl.innoapsion.zimexa.hse.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/zimexahse.app/zimexahse";
 			};
@@ -581,7 +581,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = cl.innoapsion.zimexa.hse;
+				PRODUCT_BUNDLE_IDENTIFIER = cl.innoapsion.zimexa.hse.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/zimexahse.app/zimexahse";
 			};
@@ -606,7 +606,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = cl.innoapsion.zimexa.hse;
+				PRODUCT_BUNDLE_IDENTIFIER = cl.innoapsion.zimexa.hse.ios;
 				PRODUCT_NAME = zimexahse;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -632,7 +632,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = cl.innoapsion.zimexa.hse;
+				PRODUCT_BUNDLE_IDENTIFIER = cl.innoapsion.zimexa.hse.ios;
 				PRODUCT_NAME = zimexahse;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
