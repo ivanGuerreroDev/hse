@@ -46,28 +46,17 @@ workflows:
             --workspace "$CM_BUILD_DIR/ios/$XCODE_WORKSPACE" \
             --scheme "$XCODE_SCHEME" \
             --archive-flags="-destination 'generic/platform=iOS'"
-      - name: print var
-        script: |
-          echo APP_STORE_CONNECT_ISSUER_ID
-      - name: Publish testflight
-        script: |
-          app-store-connect publish
-            --log-stream\
-            --path /Users/builder/clone/build/ios/ipa/zimexahse.ipa \
-            --key-id '$APP_STORE_CONNECT_KEY_IDENTIFIER' \
-            --issuer-id '$APP_STORE_CONNECT_ISSUER_ID' \
-            --private-key '$APP_STORE_CONNECT_PRIVATE_KEY'
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
-    #publishing:
-    #  app_store_connect:
-    #    api_key: $APP_STORE_CONNECT_PRIVATE_KEY
-    #    key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-    #    issuer_id: $APP_STORE_CONNECT_ISSUER_ID
-    #    submit_to_testflight: true
-    #    beta_groups:
-    #      - Innoapsion Tester
-    #    submit_to_app_store: false
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        submit_to_testflight: true
+        beta_groups:
+          - Innoapsion Tester
+        submit_to_app_store: false
