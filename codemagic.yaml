@@ -16,7 +16,7 @@ workflows:
         BUNDLE_ID: "cl.innoapsion.zimexa.hse.ios"
         XCODE_WORKSPACE: "zimexahse.xcworkspace"
         XCODE_SCHEME: "zimexahse"
-        LATEST_BUILD_NUMBER: 4
+        LATEST_BUILD_NUMBER: 5
     scripts:
       - name: install node dependencies
         script: |
