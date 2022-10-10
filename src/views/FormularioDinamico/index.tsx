@@ -40,18 +40,24 @@ import { PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 import { store } from 'state/store/store';
 import { updateGeolocation } from 'state/settings/actions';
 import DeviceInfo from 'react-native-device-info';
-import LocationEnabler from 'react-native-location-enabler';
-const {
-  PRIORITIES: { HIGH_ACCURACY },
-  addListener,
-  checkSettings,
-  requestResolutionSettings
-} = LocationEnabler
-const configLocation = {
-  priority: HIGH_ACCURACY, // default BALANCED_POWER_ACCURACY
-  alwaysShow: true, // default false
-  needBle: false, // default false
-};
+var LocationEnabler = (Platform.OS === 'android') ? require('react-native-location-enabler') : null
+
+let addListener, checkSettings, requestResolutionSettings, configLocation;
+if(Platform.OS === 'android'){
+  const {
+  PRIORITIES: { HIGH_ACCURACY }
+  } = LocationEnabler
+  addListener = LocationEnabler.addListener
+  checkSettings = LocationEnabler.checkSettings
+  requestResolutionSettings = LocationEnabler.requestResolutionSettings
+
+  configLocation = {
+    priority: HIGH_ACCURACY, // default BALANCED_POWER_ACCURACY
+    alwaysShow: true, // default false
+    needBle: false, // default false
+  };
+}
+
 
 const packageId = DeviceInfo.getBundleId();
 
@@ -97,18 +103,19 @@ class FormularioDinamico extends Component<Props, State> {
     thisisonlyforforcerender: undefined,
     goConf: false,
     appState: AppState.currentState,
-    listener: addListener(({ locationEnabled }) =>{
+    listener: Platform.OS === 'android' ? addListener(({ locationEnabled }) =>{
       console.log(`Location are ${ locationEnabled ? 'enabled' : 'disabled' }`);
       if(locationEnabled){
         this.checkLocation();
       }else{
         this.handleSend();
       }
-    })
+    }) : null
   };
 
   constructor(props: Props) {
     super(props);
+    console.log('@@ AppState ', AppState)
     AppState.addEventListener('change', this.handleAppStateChange)
     const {documento, readOnly} = props.route.params;
 
@@ -178,7 +185,7 @@ class FormularioDinamico extends Component<Props, State> {
                 this.setState({
                   goConf: true
                 })
-                Linking.openURL('prefs:root=LOCATION_SERVICES')
+                Linking.openURL('App-Prefs:Privacy&path=LOCATION')
               }
             }
           ]
@@ -213,7 +220,7 @@ class FormularioDinamico extends Component<Props, State> {
 
   componentWillUnmount() {
     AppState.removeEventListener('change', this.handleAppStateChange)
-    this.state.listener.remove()
+    if(Platform.OS === 'android') this.state?.listener?.remove()
   }
 
   render() {
