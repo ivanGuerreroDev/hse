@@ -82,9 +82,9 @@ type NavigationProps = {
 type Props = DispatchProps & NavigationProps;
 
 const options: GeolocationOptions = {
-  timeout: 15 * 1000, //ms: seconds * 1000,
+  timeout: 25 * 1000, //ms: seconds * 1000,
   maximumAge: 3 * 60000, //ms: minutes * 60000
-  enableHighAccuracy: true,
+  enableHighAccuracy: false,
 };
 class FormularioDinamico extends Component<Props, State> {
   private documentoFactory: DocumentoFactory;
@@ -161,6 +161,8 @@ class FormularioDinamico extends Component<Props, State> {
   handleSend () {
     const {Documento} = this.documentoFactory;
     const {navigation} = this.props;
+    console.log("Location: ")
+    console.log(Documento.geolocation)
     this.sendForm(Documento, navigation)
   }
 
@@ -168,29 +170,7 @@ class FormularioDinamico extends Component<Props, State> {
     console.warn(error.message);
     console.log(error.POSITION_UNAVAILABLE)
     if(error.POSITION_UNAVAILABLE === 2){
-      if (Platform.OS === 'ios') {
-        Alert.alert(
-          'Geolocalicación está desactivada',
-          '¿Desea proceder a la activación de la geolocalización?',
-          [
-            {
-              text: 'Cancelar',
-              onPress: () => {
-                this.handleSend();
-              },
-            },
-            {
-              text: 'Aceptar',
-              onPress: async () => {
-                this.setState({
-                  goConf: true
-                })
-                Linking.openURL('App-Prefs:Privacy&path=LOCATION')
-              }
-            }
-          ]
-        )
-      }else{
+      if (Platform.OS !== 'ios') {
         console.log("requestResolutionSettings")
         requestResolutionSettings(configLocation);
       }
@@ -212,7 +192,31 @@ class FormularioDinamico extends Component<Props, State> {
         if (result === RESULTS.GRANTED || result === RESULTS.LIMITED) {
           Geolocation.getCurrentPosition(this.positionCallback, this.errorCallback, options);
         }else{
-          this.handleSend();
+          if (Platform.OS === 'ios') {
+            Alert.alert(
+              'Geolocalicación está desactivada',
+              '¿Desea proceder a la activación de la geolocalización?',
+              [
+                {
+                  text: 'Cancelar',
+                  onPress: () => {
+                    this.handleSend();
+                  },
+                },
+                {
+                  text: 'Aceptar',
+                  onPress: async () => {
+                    this.setState({
+                      goConf: true
+                    })
+                    Linking.openURL('App-Prefs:Privacy&path=LOCATION')
+                  }
+                }
+              ]
+            )
+          }else{
+            this.handleSend();
+          }
         }
       })
   }
