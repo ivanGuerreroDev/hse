@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {FlatList} from 'react-native';
 import ControlComponent from './ControlComponent';
 
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -26,28 +26,33 @@ type NavigationProps = {
 type Props = MapControlBridgesProps & NavigationProps;
 
 export default class ControlContainer extends Component<Props> {
+
+  renderItem = ({item}) => {
+    const {navigation} = this.props;
+    let Control = controlComponent(item.controlBridge);
+    return (
+      <Control
+        key={item.index}
+        controlBridge={item.controlBridge}
+        navigation={navigation}
+        children={
+          <ControlContainer {...this.props} path={item.controlBridge.Path} />
+        }
+      />
+    );
+  };
+
   render() {
-    const {controlBridges, navigation, path} = this.props;
-
-    const ControlComponents: JSX.Element[] = mapControlBridges(
-      controlBridges,
-      path,
-    ).map((controlBridge, index) => {
-      let Control = controlComponent(controlBridge);
-
-      return (
-        <Control
-          key={index}
-          controlBridge={controlBridge}
-          navigation={navigation}
-          children={
-            <ControlContainer {...this.props} path={controlBridge.Path} />
-          }
-        />
-      );
-    });
-
-    return <View>{ControlComponents}</View>;
+    const {controlBridges, path} = this.props;
+    return (
+      <FlatList
+        data={mapControlBridges(
+          controlBridges,
+          path,
+        ).map((controlBridge, index)=>({controlBridge, index}))}
+        renderItem={this.renderItem}
+      />
+    )
   }
 }
 

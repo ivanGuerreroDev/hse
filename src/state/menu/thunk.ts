@@ -21,7 +21,6 @@ export const saveMenusAsyncThunk: SaveMenuAsync = (
             Empresa: userData.Empresa,
           },
         });
-
         dispatch(saveMenu(response.data));
       } catch (error) {
         reject(error);

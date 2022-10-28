@@ -2,6 +2,7 @@ import React from 'react';
 import ControlComponent, {Props} from '../ControlComponent';
 import {View} from 'react-native';
 import {Button, Icon, Text} from 'react-native-elements';
+import _ from 'lodash';
 
 export default class CheckControl extends ControlComponent {
   constructor(props: Props) {
@@ -10,49 +11,48 @@ export default class CheckControl extends ControlComponent {
     props.controlBridge.requiredProperties.push('label', 'options');
   }
 
+  memoizedOptions = _.memoize(controlMap => controlMap.map((option: any, index) => {
+    const {controlBridge} = this.props;
+    const selectionStyle = {
+      opacity: option.code === controlBridge.OutputValue?.code ? 1 : 0.3,
+    };
+    return (
+      <View key={index} style={{flex: 1, paddingHorizontal: 15, paddingTop: 5}}>
+        <Button
+          onPress={() => {
+            controlBridge.OutputValue = {
+              code: option.code,
+              value: option.value,
+            };
+          }}
+          title={option.label ?? ''}
+          icon={
+            option.icon ? (
+              <Icon type="material" name={option.icon} color="white" />
+            ) : undefined
+          }
+          buttonStyle={{
+            backgroundColor: option.color ?? '#FDAE01',
+          }}
+          disabledStyle={{
+            backgroundColor: option.color ?? '#FDAE01',
+          }}
+          titleStyle={{
+            color: 'white',
+          }}
+          disabledTitleStyle={{
+            color: 'white',
+          }}
+          containerStyle={selectionStyle}
+          disabled={controlBridge.ReadOnly}
+        />
+      </View>
+    );
+  }))
+
   render() {
     const {children, controlBridge} = this.props;
-
-    const options = (controlBridge.property('options') as []).map(
-      (option: any, index) => {
-        const selectionStyle = {
-          opacity: option.code === controlBridge.OutputValue?.code ? 1 : 0.3,
-        };
-
-        return (
-          <View key={index} style={{flex: 1, paddingHorizontal: 15, paddingTop: 5}}>
-            <Button
-              onPress={() => {
-                controlBridge.OutputValue = {
-                  code: option.code,
-                  value: option.value,
-                };
-              }}
-              title={option.label ?? ''}
-              icon={
-                option.icon ? (
-                  <Icon type="material" name={option.icon} color="white" />
-                ) : undefined
-              }
-              buttonStyle={{
-                backgroundColor: option.color ?? '#FDAE01',
-              }}
-              disabledStyle={{
-                backgroundColor: option.color ?? '#FDAE01',
-              }}
-              titleStyle={{
-                color: 'white',
-              }}
-              disabledTitleStyle={{
-                color: 'white',
-              }}
-              containerStyle={selectionStyle}
-              disabled={controlBridge.ReadOnly}
-            />
-          </View>
-        );
-      },
-    );
+    const options = this.memoizedOptions(controlBridge.property('options') as []);
 
     return (
       <View style={{flex: 1, paddingTop: 5, paddingBottom: 12}}>

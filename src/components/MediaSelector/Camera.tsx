@@ -1,5 +1,5 @@
 import React, { Component, LegacyRef } from 'react';
-import { Linking, Pressable, StyleSheet, View } from 'react-native';
+import { Linking, Pressable, StyleSheet, View, Animated } from 'react-native';
 import { Text } from 'react-native-elements';
 import { CaptureButton, GalleryButton, RecordTimer } from './CameraAnimations';
 import { RNCamera } from 'react-native-camera';
@@ -8,7 +8,6 @@ import {
   checkCameraPermission,
   checkMicrophonePermission
 } from 'utils/permissions';
-
 type Props = {
   canRecord?: boolean;
   onCaptureMedia?: (mediaUri: string) => void;
@@ -22,6 +21,8 @@ type State = {
   cameraPermission: PermissionStatus;
   microphonePermission: PermissionStatus;
   isRecording: boolean;
+  fadeAnimation: Animated.Value;
+  lastCaptured: any;
 };
 
 export default class Camera extends Component<Props, State> {
@@ -32,7 +33,9 @@ export default class Camera extends Component<Props, State> {
   state: State = {
     cameraPermission: RESULTS.UNAVAILABLE,
     microphonePermission: RESULTS.UNAVAILABLE,
-    isRecording: false
+    isRecording: false,
+    fadeAnimation: new Animated.Value(0),
+    lastCaptured: null
   }
 
   private _onStartRecording() {
@@ -56,11 +59,32 @@ export default class Camera extends Component<Props, State> {
     }
     else {
       this.rnCameraRef?.takePictureAsync()
-        .then(response => { console.debug(`Photo captured: ${response.uri}`);
+        .then(async response => { console.debug(`Photo captured: ${response.uri}`);
           this.props.onCaptureMedia?.(response.uri);
+          this.setState({
+            lastCaptured: response.base64
+          })
+          this.fadeOut();
         });
     }
   }
+
+  fadeOut = () => {
+    Animated.sequence(
+      [
+        Animated.timing(this.state.fadeAnimation, {
+          toValue: 0.7,
+          duration: 100,
+          useNativeDriver: false
+        }),
+        Animated.timing(this.state.fadeAnimation, {
+          toValue: 0,
+          duration: 100,
+          useNativeDriver: false
+        })
+      ]
+    ).start();
+  };
 
   constructor(props: Props) { console.debug('Construct Camera');
     super(props);
@@ -127,14 +151,31 @@ export default class Camera extends Component<Props, State> {
       case RESULTS.GRANTED:
       case RESULTS.LIMITED:
         return (
-          <View style={styles.CameraLayout}>
-            <View style={{backgroundColor: 'green', flex: 1}}>
-              <RNCamera
-                style={{flex: 1}}
-                ref={ref => this.rnCameraRef = ref}
-                captureAudio={this.state.microphonePermission === RESULTS.GRANTED}
-              />
+          <View
+            style={styles.CameraLayout}
+          >
+            <View
+              style={{backgroundColor: 'green', flex: 1}}
 
+            >
+              <View
+                style={{flex: 1}}
+              >
+                <RNCamera
+                  style={{flex: 1}}
+                  ref={ref => this.rnCameraRef = ref}
+                  captureAudio={this.state.microphonePermission === RESULTS.GRANTED}
+                  playSoundOnCapture={true}
+                  playSoundOnRecord={true}
+                />
+                <Animated.View
+                  style={[
+                    styles.fadingContainer,
+                    {opacity: this.state.fadeAnimation}
+                  ]}
+                >
+              </Animated.View>
+              </View>
               <View style={{position: 'absolute', width: '100%', alignItems: 'center'}}>
                 <RecordTimer ref={ref => this.recordTimerRef = ref}/>
               </View>
@@ -155,9 +196,11 @@ export default class Camera extends Component<Props, State> {
                   onLongPress={() => this._onStartRecording()}
                   onPressOut={() => this._onCapture()}/>
               </View>
-
               <View style={{flex: 1}}></View>
             </View>
+
+
+
           </View>
         );
     }
@@ -180,5 +223,13 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     backgroundColor: 'black'
+  },
+  fadingContainer: {
+    position: 'absolute',
+    left: -10,
+    width: 1000,
+    height: 1000,
+    zIndex: 999,
+    backgroundColor:'#fff'
   }
 });
