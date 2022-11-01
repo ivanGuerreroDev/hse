@@ -4,7 +4,7 @@ import ControlComponent from './ControlComponent';
 
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootMainStackParamList} from 'types/navigations';
-
+import _ from 'lodash';
 import {ControlBridge} from 'utils/formulariodinamico/ControlBridge';
 
 import CheckControl from './Controls/CheckControl';
@@ -26,31 +26,20 @@ type NavigationProps = {
 type Props = MapControlBridgesProps & NavigationProps;
 
 export default class ControlContainer extends Component<Props> {
-
-  renderItem = ({item}) => {
-    const {navigation} = this.props;
-    let Control = controlComponent(item.controlBridge);
-    return (
-      <Control
-        key={item.index}
-        controlBridge={item.controlBridge}
-        navigation={navigation}
-        children={
-          <ControlContainer {...this.props} path={item.controlBridge.Path} />
-        }
-      />
-    );
-  };
-
+  memoizedOptions = _.memoize(controlMap => controlMap.map( (controlBridge: any, index: any) => ({controlBridge, index}) ))
   render() {
-    const {controlBridges, path} = this.props;
+    const {controlBridges, path, navigation} = this.props;
     return (
       <FlatList
-        data={mapControlBridges(
-          controlBridges,
-          path,
-        ).map((controlBridge, index)=>({controlBridge, index}))}
-        renderItem={this.renderItem}
+        data={
+          this.memoizedOptions(mapControlBridges(
+            controlBridges,
+            path,
+          ))
+      }
+        renderItem={({item}) => {
+          return <MemoItemControlBridge dataControlBridge={item} navigation={navigation} parentProps={this.props} />
+        }}
       />
     )
   }
@@ -60,15 +49,16 @@ type MapControlBridgesType = (
   controlBridges: ControlBridge[],
   path: string,
 ) => ControlBridge[];
+
 const mapControlBridges: MapControlBridgesType = (
   controlBridges: ControlBridge[],
   path: string,
 ) => {
   return controlBridges
-    .filter(controlBridge =>
+    ?.filter(controlBridge =>
       new RegExp(`^${path}.[0-9]+$`).test(controlBridge.Path),
     )
-    .sort((a, b) => a.Control.order - b.Control.order);
+    ?.sort((a, b) => a.Control.order - b.Control.order);
 };
 
 type ControlComponentSelectType = (
@@ -103,3 +93,23 @@ const controlComponent: ControlComponentSelectType = (
 
   return controlType;
 };
+
+
+
+import { memo } from "react";
+const ItemControlBridge = (props: any) => {
+    const { navigation, dataControlBridge, parentProps} = props;
+    let Control = controlComponent(dataControlBridge.controlBridge);
+    return (
+      <Control
+        key={dataControlBridge.index}
+        controlBridge={dataControlBridge.controlBridge}
+        navigation={navigation}
+        children={
+          <ControlContainer {...parentProps} path={dataControlBridge.controlBridge.Path} />
+        }
+      />
+    );
+};
+
+const MemoItemControlBridge = memo(ItemControlBridge);

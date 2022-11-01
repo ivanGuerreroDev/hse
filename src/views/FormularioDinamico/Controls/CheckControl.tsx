@@ -11,13 +11,48 @@ export default class CheckControl extends ControlComponent {
     props.controlBridge.requiredProperties.push('label', 'options');
   }
 
-  memoizedOptions = _.memoize(controlMap => controlMap.map((option: any, index) => {
+  memoizedOptions = _.memoize(controlMap => controlMap.map((option: any, index: any) => {
     const {controlBridge} = this.props;
     const selectionStyle = {
       opacity: option.code === controlBridge.OutputValue?.code ? 1 : 0.3,
     };
     return (
-      <View key={index} style={{flex: 1, paddingHorizontal: 15, paddingTop: 5}}>
+      <MemoOptionComponent key={index} controlBridge={controlBridge} option={option} selectionStyle={selectionStyle} />
+    );
+  }))
+
+  render() {
+    const {children, controlBridge} = this.props;
+    const options = this.memoizedOptions(controlBridge.property('options') as []);
+    const childrenComponent = _.memoize(() => children)
+    const label = controlBridge.property('label')
+
+    return (
+      <View style={{flex: 1, paddingTop: 5, paddingBottom: 12}}>
+        <Text
+          style={{flex: 1, fontSize: 15, color: '#00000099', fontWeight: 'bold' ,fontFamily: 'Roboto-Medium',paddingBottom: 5}}>
+          {label}
+        </Text>
+        <View
+          style={{
+            flexGrow: 0,
+            flexBasis: 1,
+            flexDirection: 'row',
+            marginHorizontal: -20,
+          }}>
+          {options}
+        </View>
+        {childrenComponent()}
+      </View>
+    );
+  }
+}
+
+import { memo } from "react";
+const OptionComponent = (props: any) => {
+    const { controlBridge, option, selectionStyle, key} = props;
+    return (
+      <View key={key} style={{flex: 1, paddingHorizontal: 15, paddingTop: 5}}>
         <Button
           onPress={() => {
             controlBridge.OutputValue = {
@@ -48,29 +83,6 @@ export default class CheckControl extends ControlComponent {
         />
       </View>
     );
-  }))
+};
 
-  render() {
-    const {children, controlBridge} = this.props;
-    const options = this.memoizedOptions(controlBridge.property('options') as []);
-
-    return (
-      <View style={{flex: 1, paddingTop: 5, paddingBottom: 12}}>
-        <Text
-          style={{flex: 1, fontSize: 15, color: '#00000099', fontWeight: 'bold' ,fontFamily: 'Roboto-Medium',paddingBottom: 5}}>
-          {controlBridge.property('label')}
-        </Text>
-        <View
-          style={{
-            flexGrow: 0,
-            flexBasis: 1,
-            flexDirection: 'row',
-            marginHorizontal: -20,
-          }}>
-          {options}
-        </View>
-        {children}
-      </View>
-    );
-  }
-}
+const MemoOptionComponent = memo(OptionComponent);

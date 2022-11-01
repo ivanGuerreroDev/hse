@@ -4,6 +4,8 @@ import {Modal, ScrollView, View} from 'react-native';
 import {Input, Text} from 'react-native-elements';
 import {capitalize} from 'utils';
 import {StyleSheet} from 'react-native';
+import _ from 'lodash';
+
 export default class TextControl extends ControlComponent {
   state = {
     filter: '',
@@ -35,21 +37,18 @@ export default class TextControl extends ControlComponent {
     return true;
   }
 
-  render() {
-    const {controlBridge} = this.props;
-
-    let autoCompleteList: JSX.Element[] = ((controlBridge.property(
-      'autocomplete',
-    ) || []) as Array<string>)
-      .filter(item =>
-        item
-          .toLowerCase()
-          .includes(
-            ((controlBridge.OutputValue as string) || '').toLowerCase(),
-          ),
-      )
-      .map((item, index) => {
-        const regexpResult =
+  memoizedOptions = _.memoize(controlMap => controlMap
+    .filter((item: any) =>{
+        const {controlBridge} = this.props;
+        return item
+        .toLowerCase()
+        .includes(
+          ((controlBridge.OutputValue as string) || '').toLowerCase(),
+        )
+    })
+    .map((item: any, index: any) => {
+      const {controlBridge} = this.props;
+      const regexpResult =
           RegExp(
             `^(.*)(${((controlBridge.OutputValue as string) || '').replace(
               /[.*+?^${}()|[\]\\]/g,
@@ -71,7 +70,11 @@ export default class TextControl extends ControlComponent {
             <Text>{regexpResult[3]}</Text>
           </Text>
         );
-      });
+  }))
+
+  render() {
+    const {controlBridge} = this.props;
+    let autoCompleteList = this.memoizedOptions((controlBridge.property('options') || []) as Array<string>);
 
     let errorMessage: string =
       controlBridge.property('validate') &&
