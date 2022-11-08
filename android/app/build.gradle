@@ -138,6 +138,7 @@ android {
         versionCode 21 // 20
         versionName "1.1.14" //1.1.13
         missingDimensionStrategy 'react-native-camera', 'general'
+        multiDexEnabled true
     }
     splits {
         abi {
