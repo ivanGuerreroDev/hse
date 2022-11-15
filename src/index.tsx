@@ -44,6 +44,8 @@ import Capacitaciones from 'views/Capacitaciones';
 import Relator from 'views/Capacitaciones/Relator';
 import List from 'views/Capacitaciones/List';
 
+import 'react-native-gesture-handler';
+
 const AuthStack = createStackNavigator<RootAuthStackParamList>();
 const MainStack = createStackNavigator<RootMainStackParamList>();
 

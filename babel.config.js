@@ -10,6 +10,7 @@ module.exports = {
           'types': './src/utils/types'
         }
       }
-    ]
+    ],
+    'react-native-reanimated/plugin'
   ]
 };
