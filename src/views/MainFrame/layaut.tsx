@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#FDAE01',
-    height: 80,
+    height: 110,
     opacity: 1,
     borderBottomWidth: 0,
   },

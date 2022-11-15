@@ -1,5 +1,15 @@
 import React, {Component} from 'react';
-import {Alert, ScrollView, StyleSheet, ToastAndroid, View, Platform, PermissionsAndroid, Linking, AppState} from 'react-native';
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  ToastAndroid,
+  View,
+  Platform,
+  PermissionsAndroid,
+  Linking,
+  AppState,
+} from 'react-native';
 import {Button, Header, Icon, Tab, Text} from 'react-native-elements';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {TabItem} from './TabItemComponent';
@@ -34,22 +44,27 @@ import {DocumentoStatus, IDocumento} from 'utils/types/formulariodinamico';
 import {createPendingTask} from 'utils/sendingManager';
 import {isNetworkAllowed} from 'utils/network';
 
-import Geolocation, { GeolocationError, GeolocationOptions, GeolocationResponse } from '@react-native-community/geolocation';
-import { checkLocationPermission } from '../../utils/permissions';
-import { PERMISSIONS, RESULTS, request } from 'react-native-permissions';
-import { store } from 'state/store/store';
-import { updateGeolocation } from 'state/settings/actions';
+import Geolocation, {
+  GeolocationError,
+  GeolocationOptions,
+  GeolocationResponse,
+} from '@react-native-community/geolocation';
+import {checkLocationPermission} from '../../utils/permissions';
+import {PERMISSIONS, RESULTS, request} from 'react-native-permissions';
+import {store} from 'state/store/store';
+import {updateGeolocation} from 'state/settings/actions';
 import DeviceInfo from 'react-native-device-info';
-var LocationEnabler = (Platform.OS === 'android') ? require('react-native-location-enabler') : null
+var LocationEnabler =
+  Platform.OS === 'android' ? require('react-native-location-enabler') : null;
 
 let addListener, checkSettings, requestResolutionSettings, configLocation;
-if(Platform.OS === 'android'){
+if (Platform.OS === 'android') {
   const {
-  PRIORITIES: { HIGH_ACCURACY }
-  } = LocationEnabler
-  addListener = LocationEnabler.addListener
-  checkSettings = LocationEnabler.checkSettings
-  requestResolutionSettings = LocationEnabler.requestResolutionSettings
+    PRIORITIES: {HIGH_ACCURACY},
+  } = LocationEnabler;
+  addListener = LocationEnabler.addListener;
+  checkSettings = LocationEnabler.checkSettings;
+  requestResolutionSettings = LocationEnabler.requestResolutionSettings;
 
   configLocation = {
     priority: HIGH_ACCURACY, // default BALANCED_POWER_ACCURACY
@@ -57,7 +72,6 @@ if(Platform.OS === 'android'){
     needBle: false, // default false
   };
 }
-
 
 const packageId = DeviceInfo.getBundleId();
 
@@ -103,20 +117,25 @@ class FormularioDinamico extends Component<Props, State> {
     thisisonlyforforcerender: undefined,
     goConf: false,
     appState: AppState.currentState,
-    listener: Platform.OS === 'android' ? addListener(({ locationEnabled }) =>{
-      console.log(`Location are ${ locationEnabled ? 'enabled' : 'disabled' }`);
-      if(locationEnabled){
-        this.checkLocation();
-      }else{
-        this.handleSend();
-      }
-    }) : null
+    listener:
+      Platform.OS === 'android'
+        ? addListener(({locationEnabled}) => {
+            console.log(
+              `Location are ${locationEnabled ? 'enabled' : 'disabled'}`,
+            );
+            if (locationEnabled) {
+              this.checkLocation();
+            } else {
+              this.handleSend();
+            }
+          })
+        : null,
   };
 
   constructor(props: Props) {
     super(props);
-    console.log('@@ AppState ', AppState)
-    AppState.addEventListener('change', this.handleAppStateChange)
+    console.log('@@ AppState ', AppState);
+    AppState.addEventListener('change', this.handleAppStateChange);
     const {documento, readOnly} = props.route.params;
 
     this.documentoFactory = new DocumentoFactory(documento);
@@ -124,20 +143,16 @@ class FormularioDinamico extends Component<Props, State> {
     this.documentoFactory.onOutputValueChange = this.handleOutputValueChange;
   }
 
-
   handleAppStateChange = () => {
-    if(this.state.goConf){
+    if (this.state.goConf) {
       this.isBackFromConfToSendForm();
     }
-  }
+  };
 
-  sendForm(Documento: any, navigation: any){
-    changeStatusDocumento(
-      Documento._id,
-      DocumentoStatus.sending,
-    );
+  sendForm(Documento: any, navigation: any) {
+    changeStatusDocumento(Documento._id, DocumentoStatus.sending);
     createPendingTask(Documento);
-    this.setState({goConf:false})
+    this.setState({goConf: false});
     isNetworkAllowed()
       ? ToastAndroid.show(
           'El documento se ha enviado con exito',
@@ -155,76 +170,80 @@ class FormularioDinamico extends Component<Props, State> {
     store.dispatch(updateGeolocation(position));
     Documento.geolocation = position;
     this.handleSend();
-
   };
 
-  handleSend () {
+  handleSend() {
     const {Documento} = this.documentoFactory;
     const {navigation} = this.props;
-    console.log("Location: ")
-    console.log(Documento.geolocation)
-    this.sendForm(Documento, navigation)
+    console.log('Location: ');
+    console.log(Documento.geolocation);
+    this.sendForm(Documento, navigation);
   }
 
   errorCallback = (error: GeolocationError) => {
     console.warn(error.message);
-    console.log(error.POSITION_UNAVAILABLE)
-    if(error.POSITION_UNAVAILABLE === 2){
+    console.log(error.POSITION_UNAVAILABLE);
+    if (error.POSITION_UNAVAILABLE === 2) {
       if (Platform.OS !== 'ios') {
-        console.log("requestResolutionSettings")
+        console.log('requestResolutionSettings');
         requestResolutionSettings(configLocation);
       }
     }
   };
 
-  isBackFromConfToSendForm () {
-    checkLocationPermission()
-      .then(result => {
-        if (result === RESULTS.GRANTED || result === RESULTS.LIMITED) {
-          Geolocation.getCurrentPosition(this.positionCallback, this.errorCallback, options);
-        }
-      })
+  isBackFromConfToSendForm() {
+    checkLocationPermission().then(result => {
+      if (result === RESULTS.GRANTED || result === RESULTS.LIMITED) {
+        Geolocation.getCurrentPosition(
+          this.positionCallback,
+          this.errorCallback,
+          options,
+        );
+      }
+    });
   }
 
-  checkLocation () {
-    checkLocationPermission()
-      .then(result => {
-        if (result === RESULTS.GRANTED || result === RESULTS.LIMITED) {
-          Geolocation.getCurrentPosition(this.positionCallback, this.errorCallback, options);
-        }else{
-          if (Platform.OS === 'ios') {
-            Alert.alert(
-              'Geolocalicación está desactivada',
-              '¿Desea proceder a la activación de la geolocalización?',
-              [
-                {
-                  text: 'Cancelar',
-                  onPress: () => {
-                    this.handleSend();
-                  },
+  checkLocation() {
+    checkLocationPermission().then(result => {
+      if (result === RESULTS.GRANTED || result === RESULTS.LIMITED) {
+        Geolocation.getCurrentPosition(
+          this.positionCallback,
+          this.errorCallback,
+          options,
+        );
+      } else {
+        if (Platform.OS === 'ios') {
+          Alert.alert(
+            'Geolocalicación está desactivada',
+            '¿Desea proceder a la activación de la geolocalización?',
+            [
+              {
+                text: 'Cancelar',
+                onPress: () => {
+                  this.handleSend();
                 },
-                {
-                  text: 'Aceptar',
-                  onPress: async () => {
-                    this.setState({
-                      goConf: true
-                    })
-                    Linking.openURL('App-Prefs:Privacy&path=LOCATION')
-                  }
-                }
-              ]
-            )
-          }else{
-            this.handleSend();
-          }
+              },
+              {
+                text: 'Aceptar',
+                onPress: async () => {
+                  this.setState({
+                    goConf: true,
+                  });
+                  Linking.openURL('App-Prefs:Privacy&path=LOCATION');
+                },
+              },
+            ],
+          );
+        } else {
+          this.handleSend();
         }
-      })
+      }
+    });
   }
-
 
   componentWillUnmount() {
-    AppState.removeEventListener('change', this.handleAppStateChange)
-    if(Platform.OS === 'android') this.state?.listener?.remove()
+    AppState.removeEventListener('change', this.handleAppStateChange);
+    if (Platform.OS === 'android') this.state?.listener?.remove();
   }
 
   render() {
@@ -309,10 +328,10 @@ class FormularioDinamico extends Component<Props, State> {
                   },
                   {
                     text: 'Aceptar',
-                    onPress: () => this.checkLocation()
-                  }
-                ]
-              )
+                    onPress: () => this.checkLocation(),
+                  },
+                ],
+              );
             }
           }}
         />,
@@ -321,17 +340,13 @@ class FormularioDinamico extends Component<Props, State> {
     return (
       <SafeAreaView style={styles.safeContainer}>
         <Header
-          backgroundColor="#FDAE01"
-          statusBarProps={{backgroundColor: '#FDAE01'}}
-          centerContainerStyle={{flex: 10}}
-          containerStyle={{
-            borderBottomWidth: 0,
-          }}
+          containerStyle={styles.header}
           centerComponent={
             <View style={styles.containerHeader}>
               <Text style={styles.centerTitle}>{Documento.title}</Text>
             </View>
           }
+          statusBarProps={{barStyle: 'light-content'}}
         />
 
         <View style={{overflow: 'hidden', paddingBottom: '4%'}}>
@@ -388,6 +403,15 @@ export default connect<{}, DispatchProps, {}, RootState>(
 )(FormularioDinamico);
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  header: {
+    backgroundColor: '#FDAE01',
+    height: 110,
+    opacity: 1,
+  },
   centerTitle: {
     color: 'white',
     fontSize: 18,
@@ -421,5 +445,7 @@ const styles = StyleSheet.create({
   footerButtonContainer: {
     flex: 1,
     alignItems: 'center',
+    marginBottom: 15,
+    backgroundColor: '#FDAE01',
   },
 });

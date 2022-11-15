@@ -627,7 +627,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 7;
-				DEVELOPMENT_TEAM = SF4JVD545W;
+				DEVELOPMENT_TEAM = 3W7K9ARDXB;
 				INFOPLIST_FILE = zimexahse/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
