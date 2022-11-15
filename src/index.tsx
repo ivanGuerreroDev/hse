@@ -137,11 +137,12 @@ class Index extends Component<Props> {
     const AppNavigator = (
       <MainStack.Navigator
         headerMode="none"
-        mode="modal"
+        mode="card"
         screenOptions={{
           headerShown: false,
           cardStyle: {backgroundColor: 'transparent'},
-          cardOverlayEnabled: true,
+          cardOverlayEnabled: false,
+          animationEnabled: false,
           cardStyleInterpolator: ({current: {progress}}) => ({
             cardStyle: {
               opacity: progress.interpolate({
