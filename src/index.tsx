@@ -139,7 +139,8 @@ class Index extends Component<Props> {
         screenOptions={{
           headerShown: false,
           cardStyle: {backgroundColor: 'transparent'},
-          cardOverlayEnabled: true,
+          cardOverlayEnabled: false,
+          animationEnabled: false,
           cardStyleInterpolator: ({current: {progress}}) => ({
             cardStyle: {
               opacity: progress.interpolate({
