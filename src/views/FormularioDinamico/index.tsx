@@ -53,18 +53,16 @@ import {checkLocationPermission} from '../../utils/permissions';
 import {PERMISSIONS, RESULTS, request} from 'react-native-permissions';
 import {store} from 'state/store/store';
 import {updateGeolocation} from 'state/settings/actions';
-import DeviceInfo from 'react-native-device-info';
-var LocationEnabler =
-  Platform.OS === 'android' ? require('react-native-location-enabler') : null;
 
-let addListener, checkSettings, requestResolutionSettings, configLocation;
+var addListener: any, checkSettings, requestResolutionSettings: any, configLocation: any;
 if (Platform.OS === 'android') {
+  const LocationEnabler =  require('react-native-location-enabler');
   const {
-    PRIORITIES: {HIGH_ACCURACY},
-  } = LocationEnabler;
-  addListener = LocationEnabler.addListener;
-  checkSettings = LocationEnabler.checkSettings;
-  requestResolutionSettings = LocationEnabler.requestResolutionSettings;
+    PRIORITIES: {HIGH_ACCURACY}
+  } = LocationEnabler?.default;
+  addListener = LocationEnabler?.default?.addListener;
+  checkSettings = LocationEnabler?.default?.checkSettings;
+  requestResolutionSettings = LocationEnabler?.default?.requestResolutionSettings;
 
   configLocation = {
     priority: HIGH_ACCURACY, // default BALANCED_POWER_ACCURACY
@@ -72,8 +70,6 @@ if (Platform.OS === 'android') {
     needBle: false, // default false
   };
 }
-
-const packageId = DeviceInfo.getBundleId();
 
 type State = {
   tabIndex: number;

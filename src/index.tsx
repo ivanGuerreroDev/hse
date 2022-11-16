@@ -143,7 +143,7 @@ class Index extends Component<Props> {
           cardStyle: {backgroundColor: 'transparent'},
           cardOverlayEnabled: false,
           animationEnabled: false,
-          cardStyleInterpolator: ({current: {progress}}) => ({
+          /*cardStyleInterpolator: ({current: {progress}}) => ({
             cardStyle: {
               opacity: progress.interpolate({
                 inputRange: [0, 0.5, 0.9, 1],
@@ -157,7 +157,7 @@ class Index extends Component<Props> {
                 extrapolate: 'clamp',
               }),
             },
-          }),
+          }),*/
         }}>
         <MainStack.Screen name="MainFrame" component={MainFrame} />
         <MainStack.Screen name="FormularioDinamico" component={FormularioDinamico} />
