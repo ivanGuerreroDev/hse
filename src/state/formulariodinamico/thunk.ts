@@ -28,57 +28,6 @@ export const saveFormulariosAsync: SaveFormularioAsync = (
             Usuario: userData.Username
           },
         });
-        // test init
-        const formularioPruebaIdex = response.data.findIndex(item => item.name === 'nuevo_formulario_prueba')
-        response.data?.[formularioPruebaIdex]?.pages?.[1]?.controls?.[0]?.controls?.push({
-          "type": "Firma",
-          "order": 1,
-          "properties": [
-            {
-              "name": "title",
-              "value": "Firma trabajador"
-            },
-            {
-              "name": "validate",
-              "value": false
-            },
-            {
-              "name": "editable",
-              "value": true
-            },
-            {
-              "name": "placeholder",
-              "value": ""
-            },
-            {
-              "name": "data",
-              "value": {
-                "!code": "resource('trabajadores').filter(i => i.NombreCompleto === control('2.1')).map( e => e.NombreCompleto)[0]"
-              }
-            }
-          ],
-          "keywords": [
-            {
-              "name": "traductor",
-              "value": "firma_trabajador"
-            }
-          ],
-          "outputMetadata": {
-            "schema": {
-              "type": "string",
-              "pattern": ""
-            }
-          },
-          /*"outputValue": {
-            "media": [
-              {
-                "!code": "resource('whfphjhbvylo')"
-              }
-            ],
-            "trabajador": "Jairo cadiz"
-          }*/
-        })
-        // end
         response.data.forEach((formulario: IFormulario) => {
           dispatch(saveFormulario(formulario));
           formulario.resources?.forEach((resource: ILocalResource) =>{
