@@ -14,6 +14,7 @@ import RemarksControl from './Controls/RemarksControl';
 import TextControl from './Controls/TextControl';
 import SelectControl from './Controls/SelectControl';
 import SignControl from './Controls/SignControl';
+import SelectMultipleControl from './Controls/SelectMultiple-Control';
 
 type MapControlBridgesProps = {
   controlBridges: ControlBridge[];
@@ -95,6 +96,8 @@ const controlComponent: ControlComponentSelectType = (
       break;
     case 'Firma':
       controlType = SignControl;
+    case 'SelectMultiple':
+      controlType = SelectMultipleControl;
       break;
     default:
       break;

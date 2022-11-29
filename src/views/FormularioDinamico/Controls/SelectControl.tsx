@@ -50,9 +50,7 @@ export default class TextControl extends ControlComponent {
 
     const errorHeight: number = errorMessage && !this.state.onEdit ? 15 : 0;
 
-    let multi_cargo =
-      controlBridge.property('title').includes('Cargo') &&
-      controlBridge.property('data')?.split(', ');
+    let multi_cargo = controlBridge.property('data')?.split(', ');
 
     return (
       <View style={{paddingBottom: 25 - errorHeight}}>
