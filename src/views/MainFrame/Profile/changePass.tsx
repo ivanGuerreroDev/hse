@@ -64,6 +64,7 @@ class ChangePass extends Component<Props> {
           }
         })
         .catch(err => {
+          console.error(err)
           props.forgiveUser();
         });
     }
@@ -125,7 +126,7 @@ class ChangePass extends Component<Props> {
         this.props.navigation.goBack();
       })
       .catch(err => {
-        console.log(err);
+        console.error(err);
 
         switch (err.name) {
           case 'NotAuthorizedException':

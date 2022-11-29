@@ -82,7 +82,7 @@ class forceChangePass extends Component<Props> {
         this.props.navigation.navigate('SignIn');
       })
       .catch(err => {
-        // console.warn(err);
+        console.error(err);
         switch (err.name) {
           case 'InvalidParameterException':
             this.setState({

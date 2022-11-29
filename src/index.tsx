@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import axios from 'axios';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {
@@ -96,6 +97,7 @@ class Index extends Component<Props> {
                   IdToken: result.AuthenticationResult?.IdToken,
                 },
               };
+              axios.defaults.headers.common['Authorization'] = `Bearer ${user.UserTokens.AccessToken}`;
               props.saveUser(user, true);
               props.savePerfilesAsync(props.rememberUser);
               props.saveMenusAsyncThunk(props.rememberUser);
@@ -108,6 +110,7 @@ class Index extends Component<Props> {
             }
           })
           .catch(err => {
+            console.error(err);
             props.forgiveUser();
           })
           .finally(() => {

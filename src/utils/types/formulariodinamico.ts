@@ -69,7 +69,7 @@ export interface IFormulario extends ITaggeable {
   creationDate: IDate;
   modifiedDate: IDate;
   pages: IPage[];
-  resources?: IResource[];
+  resources?: ILocalResource[];
   hooks: [];
 }
 
@@ -92,6 +92,7 @@ export interface IResource {
 }
 
 export interface ILocalResource {
+  name: string;
   url: string;
   type: 'object' | 'api';
   method?: Method;

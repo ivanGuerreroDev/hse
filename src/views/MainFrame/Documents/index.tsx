@@ -62,8 +62,6 @@ class Documents extends Component<Props> {
             new Date(b.modifiedDate.$date).valueOf() -
             new Date(a.modifiedDate.$date).valueOf(),
         );
-    console.log('status', filteredDocumentos(DocumentoStatus.draft));
-    console.log('asdasd');
     switch (this.state.tabIndex) {
       case 0:
         return (

@@ -94,7 +94,7 @@ const startSendingManager = (): void => {
           .then(resizedImage => {
             uploadResource(pendingTask.documentoId, resizedImage.uri, pendingResource )
           }) .catch(err => {
-              console.log(err);
+              console.error(err);
           });
       });
 
@@ -108,7 +108,6 @@ const uploadResource = async (documentoId: string, resizeResourceUri: string, ol
   try {
 
     const data = await getCredentials()
-
     const s3Client = new S3Client({
       credentials: {
         accessKeyId: data.s3?.S3_AWS_ACCESS_KEY_ID,
@@ -144,7 +143,7 @@ const uploadResource = async (documentoId: string, resizeResourceUri: string, ol
     const uploadId: string = await Upload.startUpload(options);
 
     Upload.addListener('error', uploadId, (data) => {
-      console.warn(data.error);
+      console.error(data.error);
       store.dispatch(deleteSendingResource(documentoId));
     });
 
@@ -179,7 +178,7 @@ const uploadResource = async (documentoId: string, resizeResourceUri: string, ol
       store.dispatch(deleteSendingResource(documentoId));
     });
   } catch (error) {
-    console.warn(error);
+    console.error(error);
     store.dispatch(deleteSendingResource(documentoId));
   }
 };
@@ -203,7 +202,7 @@ const uploadDocumento = async (documentoId: string): Promise<void> => {
     store.dispatch(changeStatusDocumento(documentoId, DocumentoStatus.sent));
     console.debug(response.data);
   } catch (error) {
-    console.warn(error);
+    console.error(error);
   } finally {
     store.dispatch(deleteSendingTask(documentoId));
   }

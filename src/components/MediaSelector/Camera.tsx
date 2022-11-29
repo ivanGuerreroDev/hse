@@ -46,7 +46,8 @@ export default class Camera extends Component<Props, State> {
       this.rnCameraRef?.recordAsync()
         .then(response => { console.debug(`Video Captured: ${response.uri}`)
           this.props.onCaptureMedia?.(response.uri);
-        });
+        })
+        .catch(error=>console.error(error));
     }
   }
 
@@ -65,7 +66,8 @@ export default class Camera extends Component<Props, State> {
             lastCaptured: response.base64
           })
           this.fadeOut();
-        });
+        })
+        .catch(error=>console.error(error));;
     }
   }
 
@@ -98,7 +100,8 @@ export default class Camera extends Component<Props, State> {
                 cameraPermission: resultCamera,
                 microphonePermission: resultMicrophone
               });
-            });
+            })
+            .catch(error=>console.error(error));
         else
             this.setState({cameraPermission: resultCamera});
       });

@@ -29,7 +29,7 @@ export default class FloatingGallery extends Component<Props, State> {
         if (result === RESULTS.GRANTED || result === RESULTS.LIMITED)
           getGalleryMedia()
             .then(response => this.setState({mediaUris: response}))
-            .catch(error => console.warn(error));
+            .catch(error => console.error(error));
       });
   }
 

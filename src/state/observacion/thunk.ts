@@ -28,6 +28,7 @@ export const saveObservacionAsyncThunk: SaveObservacionAsync = (
         });
         dispatch(saveObservacion(response.data));
       } catch (error) {
+        console.error(error)
         reject(error);
       } finally {
         resolve();

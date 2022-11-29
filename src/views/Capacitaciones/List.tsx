@@ -111,10 +111,7 @@ class List extends Component<Props> {
                 // keyExtractor={item => item}
                 data={this.state.Capacitacion.map((x: any) => x)}
                 renderItem={({item}) => {
-                  console.log('ajam',item)
                   return (
-
-
                     item.Participantes.map((x: any) =>
                     <CheckBox
                       checkedColor="#116CB5"
@@ -132,11 +129,7 @@ class List extends Component<Props> {
           <View style={styles.goContainer}>
             <TouchableOpacity
               style={{...styles.goButton, backgroundColor: '#00000033'}}
-              onPress={() =>
-                /* this.props.navigation.navigate('List') */
-                console.log('hi')
-
-              }>
+            >
               <Text style={styles.goText}>Guardars</Text>
             </TouchableOpacity>
           </View>

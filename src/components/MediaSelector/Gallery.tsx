@@ -44,7 +44,7 @@ export default class Gallery extends Component<Props, State> {
                 selectedItemsCounter: props.selectedItemsUri?.length || 0
               });
             })
-            .catch(error => console.warn(error));
+            .catch(error => console.error(error));
         }
         else
           this.setState({

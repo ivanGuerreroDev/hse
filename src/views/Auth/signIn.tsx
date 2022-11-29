@@ -169,7 +169,7 @@ class SignIn extends Component<Props> {
         this.props.saveUser(result, this.state.remember);
       })
       .catch(err => {
-        // console.log(err);
+        console.error(err);
         this.setState({percentage: this.state.percentage + 10});
         this.setState({autenticate: false});
         switch (err.name) {

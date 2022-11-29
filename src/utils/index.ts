@@ -22,6 +22,7 @@ export const getCredentials = async () => {
     let {data} = await axios.get(Config.Credentials);
     return data;
   } catch (err) {
+    console.error(err)
     return null;
   }
 };

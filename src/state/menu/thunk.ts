@@ -23,6 +23,7 @@ export const saveMenusAsyncThunk: SaveMenuAsync = (
         });
         dispatch(saveMenu(response.data));
       } catch (error) {
+        console.error(error)
         reject(error);
       } finally {
         resolve();

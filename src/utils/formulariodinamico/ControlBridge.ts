@@ -63,8 +63,6 @@ export class ControlBridge {
   }
 
   createResource(uri: string) {
-
-    console.log(uri)
     const resourceName: string = generateRandomString(12);
     let resource: IResource = {
       name: resourceName,
@@ -82,7 +80,7 @@ export class ControlBridge {
 
     if (!this.factory.Documento.resources)
       this.factory.Documento.resources = [];
-    this.factory.Documento.resources.push(resource);
+    this.factory.Documento.resources.push(localResource);
 
     return {
       '!code': `resource('${resourceName}')`,

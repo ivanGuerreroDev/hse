@@ -94,7 +94,7 @@ type Props = DispatchProps & NavigationProps;
 const options: GeolocationOptions = {
   timeout: 25 * 1000, //ms: seconds * 1000,
   maximumAge: 3 * 60000, //ms: minutes * 60000
-  enableHighAccuracy: false,
+  enableHighAccuracy: Platform.OS === 'android',
 };
 class FormularioDinamico extends Component<Props, State> {
   private documentoFactory: DocumentoFactory;
@@ -116,9 +116,7 @@ class FormularioDinamico extends Component<Props, State> {
     listener:
       Platform.OS === 'android'
         ? addListener(({locationEnabled}) => {
-            console.log(
-              `Location are ${locationEnabled ? 'enabled' : 'disabled'}`,
-            );
+          console.log("@@ locationEnabled", locationEnabled)
             if (locationEnabled) {
               this.checkLocation();
             } else {
@@ -130,7 +128,6 @@ class FormularioDinamico extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    console.log('@@ AppState ', AppState);
     AppState.addEventListener('change', this.handleAppStateChange);
     const {documento, readOnly} = props.route.params;
 
@@ -171,17 +168,14 @@ class FormularioDinamico extends Component<Props, State> {
   handleSend() {
     const {Documento} = this.documentoFactory;
     const {navigation} = this.props;
-    console.log('Location: ');
-    console.log(Documento.geolocation);
     this.sendForm(Documento, navigation);
   }
 
   errorCallback = (error: GeolocationError) => {
-    console.warn(error.message);
-    console.log(error.POSITION_UNAVAILABLE);
+    console.error("@@ error callback");
+    console.error(error.message);
     if (error.POSITION_UNAVAILABLE === 2) {
       if (Platform.OS !== 'ios') {
-        console.log('requestResolutionSettings');
         requestResolutionSettings(configLocation);
       }
     }
@@ -196,7 +190,8 @@ class FormularioDinamico extends Component<Props, State> {
           options,
         );
       }
-    });
+    })
+    .catch(error=>console.error(error));
   }
 
   checkLocation() {
@@ -234,7 +229,8 @@ class FormularioDinamico extends Component<Props, State> {
           this.handleSend();
         }
       }
-    });
+    })
+    .catch(error=>console.error(error));
   }
 
   componentWillUnmount() {
@@ -284,7 +280,7 @@ class FormularioDinamico extends Component<Props, State> {
           icon={<Icon type="material" name="cancel" color="white" />}
           onPress={() => {
             // changeStatusDocumento(Documento._id, DocumentoStatus.draft);
-            console.warn('Función no implementada');
+            console.error('Función no implementada');
             navigation.goBack();
           }}
         />,

@@ -1,8 +1,8 @@
-import axios, {AxiosResponse} from 'axios';
-import {ThunkDispatch} from 'redux-thunk';
+import axios, { AxiosResponse } from 'axios';
+import { ThunkDispatch } from 'redux-thunk';
 import Config from 'react-native-config';
-import {saveFormulario, saveResource} from './actions';
-import {IFormulario, ILocalResource, IResource} from 'types/formulariodinamico';
+import { saveFormulario, saveResource } from './actions';
+import { IFormulario, ILocalResource, IResource } from 'types/formulariodinamico';
 import {
   SaveFormularioAction,
   SaveFormularioAsync,
@@ -11,7 +11,7 @@ import {
   SaveLocalResourceAsyncThunk,
   SaveResourceAction,
 } from './types';
-import {IUser} from 'state/user/types';
+import { IUser } from 'state/user/types';
 
 export const saveFormulariosAsync: SaveFormularioAsync = (
   userData: IUser,
@@ -22,18 +22,68 @@ export const saveFormulariosAsync: SaveFormularioAsync = (
     return new Promise<void>(async (resolve, reject) => {
       try {
         const response: AxiosResponse<IFormulario[]> = await axios.post(
-          `${Config.UrlFormularios}/formularios`,{
+          `${Config.UrlFormularios}/formularios`, {
           data: {
             Empresa: userData.Empresa,
             Usuario: userData.Username
           },
         });
-
+        // test init
+        const formularioPruebaIdex = response.data.findIndex(item => item.name === 'nuevo_formulario_prueba')
+        response.data?.[formularioPruebaIdex]?.pages?.[1]?.controls?.[0]?.controls?.push({
+          "type": "Firma",
+          "order": 1,
+          "properties": [
+            {
+              "name": "title",
+              "value": "Firma trabajador"
+            },
+            {
+              "name": "validate",
+              "value": false
+            },
+            {
+              "name": "editable",
+              "value": true
+            },
+            {
+              "name": "placeholder",
+              "value": ""
+            },
+            {
+              "name": "data",
+              "value": {
+                "!code": "resource('trabajadores').filter(i => i.NombreCompleto === control('2.1')).map( e => e.NombreCompleto)[0]"
+              }
+            }
+          ],
+          "keywords": [
+            {
+              "name": "traductor",
+              "value": "firma_trabajador"
+            }
+          ],
+          "outputMetadata": {
+            "schema": {
+              "type": "string",
+              "pattern": ""
+            }
+          },
+          /*"outputValue": {
+            "media": [
+              {
+                "!code": "resource('whfphjhbvylo')"
+              }
+            ],
+            "trabajador": "Jairo cadiz"
+          }*/
+        })
+        // end
         response.data.forEach((formulario: IFormulario) => {
           dispatch(saveFormulario(formulario));
-          formulario.resources?.forEach((resource: IResource) =>
-            dispatch(saveLocalResourceAsync(resource, userData,)),
-          );
+          formulario.resources?.forEach((resource: ILocalResource) =>{
+            dispatch(saveLocalResourceAsync(resource, userData,))
+          });
         });
       } catch (error) {
         reject(error);
@@ -45,7 +95,7 @@ export const saveFormulariosAsync: SaveFormularioAsync = (
 };
 
 export const saveLocalResourceAsync: SaveLocalResourceAsync = (
-  resource: IResource,
+  resource: ILocalResource,
   userData: IUser,
 ): SaveLocalResourceAsyncThunk => {
   return async (
@@ -64,7 +114,6 @@ export const saveLocalResourceAsync: SaveLocalResourceAsync = (
 
           //   },
           // });
-
           const response: AxiosResponse<any> = await axios({
             method: 'post',
             url: resource.url,
@@ -73,8 +122,8 @@ export const saveLocalResourceAsync: SaveLocalResourceAsync = (
               Empresa: userData.Empresa,
             },
           });
-
           const localResource: ILocalResource = {
+            name: resource.name,
             url: resource.url,
             type: resource.type,
             method: resource.method,
@@ -86,6 +135,7 @@ export const saveLocalResourceAsync: SaveLocalResourceAsync = (
           resolve(localResource);
         }
       } catch (error) {
+        console.error(error)
         reject(error);
       }
     });
