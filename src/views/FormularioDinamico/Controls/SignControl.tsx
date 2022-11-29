@@ -49,9 +49,10 @@ const SignControlComp = (props: Props) => {
       <SignComponent
         onCancel={() => navigation.goBack()}
         onSuccess={item=>{
+          const media = controlBridge.createResource(item);
           controlBridge.OutputValue = {
             ...controlBridge.RawOutputValue,
-            media: controlBridge.createResource(item),
+            media: media,
           };
           navigation.goBack();
         }}
@@ -65,6 +66,7 @@ const SignControlComp = (props: Props) => {
       <Button
         buttonStyle={{backgroundColor: '#FDAE01'}}
         onPress={handleGoToSign}
+        disabled={controlBridge?.OutputValue?.media}
         icon={
           <Icon
               name="edit"
@@ -79,4 +81,4 @@ const SignControlComp = (props: Props) => {
   )
 
 }
-const MemoSignControlComp = memo(SignControlComp);
+const MemoSignControlComp = SignControlComp;

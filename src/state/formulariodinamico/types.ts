@@ -94,7 +94,7 @@ export type SaveLocalResourceAsyncThunk = ThunkAction<Promise<ILocalResource>, {
 
 export type SaveFormularioAsync = (user: IUser) => SaveFormularioAsyncThunk;
 
-export type SaveLocalResourceAsync = (resource: ILocalResource, user:IUser) => SaveLocalResourceAsyncThunk;
+export type SaveLocalResourceAsync = (resource: IResource, user:IUser) => SaveLocalResourceAsyncThunk;
 
 //#endregion
 

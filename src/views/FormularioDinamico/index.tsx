@@ -162,7 +162,8 @@ class FormularioDinamico extends Component<Props, State> {
     const {Documento} = this.documentoFactory;
     store.dispatch(updateGeolocation(position));
     Documento.geolocation = position;
-    this.handleSend();
+    //console.log("@@ documento ", Documento.pages[1])
+    //this.handleSend();
   };
 
   handleSend() {

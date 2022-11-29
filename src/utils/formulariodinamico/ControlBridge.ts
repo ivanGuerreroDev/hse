@@ -75,12 +75,11 @@ export class ControlBridge {
       type: 'object',
       localData: uri,
     };
-
     store.dispatch(saveResource(localResource));
 
     if (!this.factory.Documento.resources)
       this.factory.Documento.resources = [];
-    this.factory.Documento.resources.push(localResource);
+    this.factory.Documento.resources.push(resource);
 
     return {
       '!code': `resource('${resourceName}')`,
