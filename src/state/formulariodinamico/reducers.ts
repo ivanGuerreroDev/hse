@@ -97,7 +97,6 @@ export const resourcesReducer = (
   switch (action.type) {
     case RESOURCES_ACTIONS.SAVE_RESOURCE:
       const { resource } = action.payload;
-
       return {
         resources: [
           ...state.resources.filter(item =>

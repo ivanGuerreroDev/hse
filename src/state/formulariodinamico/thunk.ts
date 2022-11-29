@@ -30,7 +30,7 @@ export const saveFormulariosAsync: SaveFormularioAsync = (
         });
         response.data.forEach((formulario: IFormulario) => {
           dispatch(saveFormulario(formulario));
-          formulario.resources?.forEach((resource: ILocalResource) =>{
+          formulario.resources?.forEach((resource: IResource) =>{
             dispatch(saveLocalResourceAsync(resource, userData,))
           });
         });

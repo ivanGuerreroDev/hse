@@ -1,6 +1,7 @@
+import { isElement } from 'lodash';
 import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, View, Button, Text } from "react-native";
-import { Header, Icon } from 'react-native-elements';
+import { StyleSheet, View, Text } from "react-native";
+import { Header, Icon, Button } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SignatureScreen from "react-native-signature-canvas";
 import {connect} from 'react-redux';
@@ -10,7 +11,6 @@ interface Props {
   controlBridge: any;
   onCancel: any;
   onSuccess: any;
-  resources: any;
 }
 
 const SignComponent = (props: Props) => {
@@ -18,17 +18,15 @@ const SignComponent = (props: Props) => {
     controlBridge,
     onCancel,
     onSuccess,
-    resources
   } = props;
 
   const ref = useRef();
+  const [puntaje, setPuntaje] = useState([])
 
   const handleOK = (signature: any) => {
-    console.log(signature);
     onSuccess(signature);
   };
   const handleConfirm = () => {
-    console.log("end");
     ref?.current?.readSignature();
   };
 
@@ -39,10 +37,13 @@ const SignComponent = (props: Props) => {
   const style = `.m-signature-pad--footer {display: none; margin: 0px;}`;
 
   useEffect(()=>{
-    console.log("@@ element ", controlBridge.factory.Documento)
-    controlBridge.factory.Documento.resources.forEach(element => {
-      console.log("@@ element ", element)
-    });
+    controlBridge?.factory?.documento?.pages?.forEach(page=>{
+      page?.controls?.forEach(control=>{
+        if(control?.outputValue?.includes('Nota:')){
+          setPuntaje(control.outputValue.split('\n'))
+        }
+      })
+    })
   },[])
 
   return (
@@ -53,22 +54,38 @@ const SignComponent = (props: Props) => {
           flexDirection: 'row',
           alignItems: 'center',
         }}
+        leftComponent={
+          <Icon type='material' name='close' color='white'
+            onPress={() => onCancel()}/>
+        }
         centerComponent={{ text: controlBridge.OutputValue?.trabajador, style: { color: '#fff', fontSize: 22 } }}
       />
       <View style={styles.container}>
         <View style={styles.row}>
           <View>
-            <Text>Nota: <Text style={styles.bold}>5,0</Text></Text>
+            <Text style={styles.puntajeLabel}>Nota: <Text style={[styles.bold, styles.puntajeText]}>{parseFloat(puntaje?.[0]?.split(':')?.[1])?.toFixed(1)?.replace('.',',')||''}</Text></Text>
           </View>
           <View>
-            <Text>Procentaje: <Text style={styles.bold}>100%</Text></Text>
+            <Text style={styles.puntajeLabel}>Procentaje: <Text style={[styles.bold, styles.puntajeText]}>{puntaje?.[1]?.split(':')?.[1]||''}</Text></Text>
           </View>
         </View>
         <Text>Estoy de acuerdo con la evaluación y firmo conforme:</Text>
         <SignatureScreen ref={ref} onOK={handleOK} webStyle={style}/>
-        <View>
-          <Button title="BORRAR TODO" onPress={handleClear} />
-          <Button title="GUARDAR" onPress={handleConfirm} />
+        <View style={styles.buttons}>
+          <Button title="BORRAR TODO" onPress={handleClear} buttonStyle={styles.buttonDelete} titleStyle={{color:'#FDAE01'}}/>
+          <Button
+            title="GUARDAR"
+            onPress={handleConfirm}
+            buttonStyle={styles.buttonSave}
+            titleStyle={{color:'#fff'}}
+            icon={
+              <Icon
+                name="save"
+                size={20}
+                color="white"
+              />
+            }
+          />
         </View>
     </View>
 
@@ -78,11 +95,10 @@ const SignComponent = (props: Props) => {
 const mapStateToProps = (state: RootState) => {
   return {
     resources: state.resources.resources,
+    documentos: state.documentos.documentos,
   };
 };
-
-const mapDispatchToProps = {};
-export default connect(mapStateToProps, mapDispatchToProps)(SignComponent);
+export default SignComponent;
 
 const styles = StyleSheet.create({
   container: {
@@ -98,8 +114,28 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     alignItems: "center",
+    paddingHorizontal: 15
   },
   bold:{
     fontWeight: "bold"
+  },
+  puntajeLabel: {
+    fontSize: 22
+  },
+  puntajeText:{
+    fontSize: 26
+  },
+  buttons:{
+    width: '100%'
+  },
+  buttonDelete:{
+    width: '100%',
+    backgroundColor: 'transparent',
+    marginBottom: 20
+  },
+  buttonSave:{
+    width: '100%',
+    flexDirection:'column',
+    backgroundColor: '#FDAE01'
   }
 });
