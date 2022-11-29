@@ -54,7 +54,6 @@ export default class TextControl extends ControlComponent {
       controlBridge.property('title').includes('Cargo') &&
       controlBridge.property('data')?.split(', ');
 
-    console.log(controlBridge.OutputValue);
     return (
       <View style={{paddingBottom: 25 - errorHeight}}>
         {multi_cargo?.length > 1 ? (

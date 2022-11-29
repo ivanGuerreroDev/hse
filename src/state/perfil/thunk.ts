@@ -24,6 +24,7 @@ export const savePerfilesAsync: SavePerfilAsync = (
         });
         dispatch(savePerfil(response.data));
       } catch (error) {
+        console.error(error)
         reject(error);
       } finally {
         resolve();

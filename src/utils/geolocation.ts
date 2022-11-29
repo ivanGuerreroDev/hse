@@ -12,7 +12,7 @@ checkLocationPermission()
       };
 
       const errorCallback = (error: GeolocationError) => {
-        console.warn(error.message);
+        console.error(error.message);
       };
 
       const options: GeolocationOptions = {
@@ -23,5 +23,6 @@ checkLocationPermission()
 
       Geolocation.watchPosition(positionCallback, errorCallback, options);
     }
-  });
+  })
+  .catch(error=>console.error(error));
 

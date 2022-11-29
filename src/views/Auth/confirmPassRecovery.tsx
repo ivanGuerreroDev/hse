@@ -84,7 +84,7 @@ class ConfirmPassRecovery extends Component<Props> {
         this.props.navigation.navigate('EndPassRecovery');
       })
       .catch(err => {
-        console.warn(err);
+        console.error(err);
         switch (err.name) {
           case 'InvalidParameterException':
             this.setState({

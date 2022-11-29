@@ -28,6 +28,7 @@ export const saveCapacitacionAsyncThunk: SaveCapacitacionAsync = (
 
         dispatch(saveCapacitacion(response.data));
       } catch (error) {
+        console.error(error)
         reject(error);
       } finally {
         resolve();

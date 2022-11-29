@@ -75,7 +75,7 @@ class ForgotPassword extends Component<Props> {
         }
       })
       .catch(err => {
-        console.warn(err);
+        console.error(err);
         switch (err.name) {
           case 'NotAuthorizedException':
             this.setState({
@@ -113,7 +113,7 @@ class ForgotPassword extends Component<Props> {
           {<Divider color="transparent" width={20} />}
           <Text style={styles.title}>{'Restablece tu contraseña'}</Text>
           <Text style={styles.text}>
-            {`Introduce el rut de la empresa y tu direccion de correo  
+            {`Introduce el rut de la empresa y tu direccion de correo
               donde recibirás el código de verificación`}
           </Text>
           {<Divider color="transparent" width={30} />}

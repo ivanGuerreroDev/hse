@@ -29,6 +29,7 @@ export const saveInspeccionAsyncThunk: SaveInspeccionAsync = (
 
         dispatch(saveInspeccion(response.data));
       } catch (error) {
+        console.error(error)
         reject(error);
       } finally {
         resolve();
