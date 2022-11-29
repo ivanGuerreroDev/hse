@@ -39,10 +39,16 @@ const SignComponent = (props: Props) => {
   const style = `.m-signature-pad--footer {display: none; margin: 0px;}`;
 
   useEffect(()=>{
-    console.log("@@ element ", controlBridge.factory.Documento)
-    controlBridge.factory.Documento.resources.forEach(element => {
+    console.log('data trabajadores')
+    console.log(controlBridge.property('data'))
+    resources.forEach(element=>{
+      if(element.name === 'trabajadores'){
+        console.log(element)
+      }
+    })
+    /*controlBridge.factory.Documento.resources.forEach(element => {
       console.log("@@ element ", element)
-    });
+    });*/
   },[])
 
   return (
