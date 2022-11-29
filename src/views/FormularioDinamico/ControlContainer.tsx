@@ -13,6 +13,7 @@ import ListControl from './Controls/ListControl';
 import RemarksControl from './Controls/RemarksControl';
 import TextControl from './Controls/TextControl';
 import SelectControl from './Controls/SelectControl';
+import SelectMultipleControl from './Controls/SelectMultiple-Control';
 
 type MapControlBridgesProps = {
   controlBridges: ControlBridge[];
@@ -91,6 +92,9 @@ const controlComponent: ControlComponentSelectType = (
       break;
     case 'Select':
       controlType = SelectControl;
+      break;
+    case 'SelectMultiple':
+      controlType = SelectMultipleControl;
       break;
     default:
       break;
