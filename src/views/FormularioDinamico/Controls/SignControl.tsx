@@ -1,5 +1,5 @@
 import React, {useEffect, useState, memo} from 'react';
-import {View} from 'react-native';
+import {View,Alert} from 'react-native';
 import ControlComponent, {Props} from '../ControlComponent';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Button } from 'react-native-elements';
@@ -44,27 +44,33 @@ const SignControlComp = (props: Props) => {
   },[controlBridge])*/
 
   const handleGoToSign = () => {
-    navigation.navigate(
-      'Modal',
-      <SignComponent
-        onCancel={() => navigation.goBack()}
-        onSuccess={item=>{
-          const media = controlBridge.createResource(item);
-          controlBridge.OutputValue = {
-            ...controlBridge.RawOutputValue,
-            media: media,
-          };
-          navigation.goBack();
-        }}
-        controlBridge={controlBridge}
-      />,
-    );
+    if(!!controlBridge?.getDataValueCode()){
+      navigation.navigate(
+        'Modal',
+        <SignComponent
+          onCancel={() => navigation.goBack()}
+          onSuccess={item=>{
+            const media = controlBridge.createResource(item);
+            controlBridge.OutputValue = {
+              ...controlBridge.RawOutputValue,
+              media: media,
+            };
+            navigation.goBack();
+          }}
+          controlBridge={controlBridge}
+        />,
+      );
+    }else{
+      Alert.alert(
+        'Se requiere seleccionar '+controlBridge?.property('title')?.split(' ')?.[1]
+      );
+    }
   }
 
   return (
     <View style={{justifyContent:'center', flexDirection:'row'}}>
       <Button
-        buttonStyle={{backgroundColor: '#FDAE01'}}
+        buttonStyle={{backgroundColor: '#FDAE01', marginBottom: 20, marginTop: 20}}
         onPress={handleGoToSign}
         disabled={controlBridge?.OutputValue?.media}
         icon={

@@ -58,7 +58,7 @@ const SignComponent = (props: Props) => {
           <Icon type='material' name='close' color='white'
             onPress={() => onCancel()}/>
         }
-        centerComponent={{ text: controlBridge.OutputValue?.trabajador, style: { color: '#fff', fontSize: 22 } }}
+        centerComponent={{ text: controlBridge?.getDataValueCode(), style: { color: '#fff', fontSize: 22 } }}
       />
       <View style={styles.container}>
         <View style={styles.row}>

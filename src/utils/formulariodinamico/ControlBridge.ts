@@ -17,6 +17,7 @@ export class ControlBridge {
     private factory: DocumentoFactory,
     private control: IControl,
     private path: string,
+    private dataCode: string
   ) {}
 
   get Control(): IControl {
@@ -36,7 +37,6 @@ export class ControlBridge {
       _.cloneDeep(this.control.outputValue)
     );
   }
-
   set OutputValue(value: any) {
     const oldValue = _.cloneDeep(this.control.outputValue);
     this.control.outputValue = value;
@@ -46,6 +46,16 @@ export class ControlBridge {
       oldValue: oldValue,
     });
   }
+
+  get DataCode(): any {
+    return this.dataCode;
+  }
+
+  set DataCode(value: any) {
+    this.dataCode = value;
+  }
+
+
 
   get ReadOnly(): boolean {
     return this.factory.isReadOnly;
@@ -100,8 +110,20 @@ export class ControlBridge {
       this.control.properties || [],
       `[?name=='${propertyName}']|[0].value`,
     );
-
     return this.catchValue(propertyValue);
+  }
+
+  getDataValueCode(): any {
+    if(this.dataCode){
+      return this.excecuteValueCode(this.dataCode);
+    }else{
+      return null
+    }
+
+  }
+
+  properties(): any {
+    return this.catchValue(this.control.properties);
   }
 
   validateOutputValue(): string | undefined {
@@ -132,6 +154,7 @@ export class ControlBridge {
     }
     if (typeof param === 'object' && param !== null) {
       if ('!code' in param) {
+        if(param['!code']) this.dataCode = param['!code'];
         return this.excecuteValueCode(param['!code']);
       }
 
@@ -180,7 +203,6 @@ export class ControlBridge {
         this.factory.ControlBridgeList.filter(controlBridge => {
           return controlBridge.Path === path;
         })?.[0];
-
       return formatControlReturn(controlBridge, properties, output);
     };
 
@@ -235,7 +257,6 @@ export class ControlBridge {
           item.data === documentoResource.data &&
           item.headers === documentoResource.headers
       )[0];
-
       return localResource.localData;
     };
 
