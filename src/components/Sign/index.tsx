@@ -39,8 +39,11 @@ const SignComponent = (props: Props) => {
   useEffect(()=>{
     controlBridge?.factory?.documento?.pages?.forEach(page=>{
       page?.controls?.forEach(control=>{
-        if(control?.outputValue?.includes('Nota:')){
-          setPuntaje(control.outputValue.split('\n'))
+        if(control?.outputValue && typeof control?.outputValue === 'string'){
+          const hasNota = control?.outputValue?.includes('Nota:')
+          if(hasNota){
+            setPuntaje(control.outputValue.split('\n'))
+          }
         }
       })
     })
@@ -70,7 +73,7 @@ const SignComponent = (props: Props) => {
           </View>
         </View>
         <Text>Estoy de acuerdo con la evaluación y firmo conforme:</Text>
-        <SignatureScreen ref={ref} onOK={handleOK} webStyle={style}/>
+        <SignatureScreen ref={ref} onOK={handleOK} webStyle={style} backgroundColor='rgba(255,255,255,1)'/>
         <View style={styles.buttons}>
           <Button title="BORRAR TODO" onPress={handleClear} buttonStyle={styles.buttonDelete} titleStyle={{color:'#FDAE01'}}/>
           <Button
