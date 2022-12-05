@@ -69,7 +69,7 @@ const SignComponent = (props: Props) => {
             <Text style={styles.puntajeLabel}>Nota: <Text style={[styles.bold, styles.puntajeText]}>{parseFloat(puntaje?.[0]?.split(':')?.[1])?.toFixed(1)?.replace('.',',')||''}</Text></Text>
           </View>
           <View>
-            <Text style={styles.puntajeLabel}>Procentaje: <Text style={[styles.bold, styles.puntajeText]}>{puntaje?.[1]?.split(':')?.[1]||''}</Text></Text>
+            <Text style={styles.puntajeLabel}>Porcentaje: <Text style={[styles.bold, styles.puntajeText]}>{puntaje?.[1]?.split(':')?.[1]||''}</Text></Text>
           </View>
         </View>
         <Text>Estoy de acuerdo con la evaluación y firmo conforme:</Text>
