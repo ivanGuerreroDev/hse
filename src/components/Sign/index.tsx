@@ -72,7 +72,7 @@ const SignComponent = (props: Props) => {
             <Text style={styles.puntajeLabel}>Porcentaje: <Text style={[styles.bold, styles.puntajeText]}>{puntaje?.[1]?.split(':')?.[1]||''}</Text></Text>
           </View>
         </View>
-        <Text>Estoy de acuerdo con la evaluación y firmo conforme:</Text>
+        <Text style={{marginBottom: 15}}>Estoy de acuerdo con la evaluación y firmo conforme:</Text>
         <SignatureScreen ref={ref} onOK={handleOK} webStyle={style} backgroundColor='rgba(255,255,255,1)'/>
         <View style={styles.buttons}>
           <Button title="BORRAR TODO" onPress={handleClear} buttonStyle={styles.buttonDelete} titleStyle={{color:'#FDAE01'}}/>
@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 250,
     padding: 10,
+    backgroundColor: '#fff'
   },
   row: {
     display: "flex",
