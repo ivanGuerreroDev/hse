@@ -96,6 +96,7 @@ const controlComponent: ControlComponentSelectType = (
       break;
     case 'Firma':
       controlType = SignControl;
+      break;
     case 'SelectMultiple':
       controlType = SelectMultipleControl;
       break;

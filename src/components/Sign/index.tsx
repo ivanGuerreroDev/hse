@@ -39,8 +39,11 @@ const SignComponent = (props: Props) => {
   useEffect(()=>{
     controlBridge?.factory?.documento?.pages?.forEach(page=>{
       page?.controls?.forEach(control=>{
-        if(control?.outputValue?.includes('Nota:')){
-          setPuntaje(control.outputValue.split('\n'))
+        if(control?.outputValue && typeof control?.outputValue === 'string'){
+          const hasNota = control?.outputValue?.includes('Nota:')
+          if(hasNota){
+            setPuntaje(control.outputValue.split('\n'))
+          }
         }
       })
     })
@@ -58,7 +61,7 @@ const SignComponent = (props: Props) => {
           <Icon type='material' name='close' color='white'
             onPress={() => onCancel()}/>
         }
-        centerComponent={{ text: controlBridge.OutputValue?.trabajador, style: { color: '#fff', fontSize: 22 } }}
+        centerComponent={{ text: controlBridge?.getDataValueCode(), style: { color: '#fff', fontSize: 22 } }}
       />
       <View style={styles.container}>
         <View style={styles.row}>
@@ -66,11 +69,11 @@ const SignComponent = (props: Props) => {
             <Text style={styles.puntajeLabel}>Nota: <Text style={[styles.bold, styles.puntajeText]}>{parseFloat(puntaje?.[0]?.split(':')?.[1])?.toFixed(1)?.replace('.',',')||''}</Text></Text>
           </View>
           <View>
-            <Text style={styles.puntajeLabel}>Procentaje: <Text style={[styles.bold, styles.puntajeText]}>{puntaje?.[1]?.split(':')?.[1]||''}</Text></Text>
+            <Text style={styles.puntajeLabel}>Porcentaje: <Text style={[styles.bold, styles.puntajeText]}>{puntaje?.[1]?.split(':')?.[1]||''}</Text></Text>
           </View>
         </View>
-        <Text>Estoy de acuerdo con la evaluación y firmo conforme:</Text>
-        <SignatureScreen ref={ref} onOK={handleOK} webStyle={style}/>
+        <Text style={{marginBottom: 15}}>Estoy de acuerdo con la evaluación y firmo conforme:</Text>
+        <SignatureScreen ref={ref} onOK={handleOK} webStyle={style} backgroundColor='rgba(255,255,255,1)'/>
         <View style={styles.buttons}>
           <Button title="BORRAR TODO" onPress={handleClear} buttonStyle={styles.buttonDelete} titleStyle={{color:'#FDAE01'}}/>
           <Button
@@ -107,6 +110,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 250,
     padding: 10,
+    backgroundColor: '#fff'
   },
   row: {
     display: "flex",
