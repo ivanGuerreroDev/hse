@@ -34,7 +34,8 @@ const SignComponent = (props: Props) => {
     ref?.current?.clearSignature();
   };
 
-  const style = `.m-signature-pad--footer {display: none; margin: 0px;}`;
+  const style = `.m-signature-pad--footer {display: none; margin: 0px;} body,html {
+    width: ${100}%; height: ${400}px;}`;
 
   useEffect(()=>{
     controlBridge?.factory?.documento?.pages?.forEach(page=>{
