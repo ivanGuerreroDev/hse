@@ -39,8 +39,8 @@ export default class Modal extends Component<Props> {
 
   componentWillUnmount() {
     if (Platform.OS === 'ios') {
-      this.keyboardWillShow && Keyboard.removeSubscription(this.keyboardWillShow);
-      this.keyboardWillHide && Keyboard.removeSubscription(this.keyboardWillHide);
+      this.keyboardWillShow?.remove();
+      this.keyboardWillHide?.remove()
     }
   }
 
