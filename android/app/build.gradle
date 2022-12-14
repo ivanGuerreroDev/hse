@@ -135,8 +135,8 @@ android {
         applicationId "cl.innoapsion.zimexa.hse"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 25 // 20
-        versionName "1.1.15" //1.1.13
+        versionCode 27 // 20
+        versionName "2.0" //1.1.13
         missingDimensionStrategy 'react-native-camera', 'general'
         multiDexEnabled true
     }
