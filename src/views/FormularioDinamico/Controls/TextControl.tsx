@@ -36,7 +36,7 @@ export default class TextControl extends ControlComponent {
   }
 
   render() {
-    const {controlBridge, key} = this.props;
+    const {controlBridge, scrollRef} = this.props;
     let autoCompleteList: JSX.Element[] = ((controlBridge.property(
       'autocomplete',
     ) || []) as Array<string>)
@@ -141,6 +141,7 @@ export default class TextControl extends ControlComponent {
             (controlBridge.OutputValue = value),
               this.setState({onEdit: true}),
               this.setState({modalVisible: true});
+              if(scrollRef !== null) { scrollRef.scrollToEnd({animated: true}) }
           }}
           value={newData}
           onBlur={() => {
@@ -185,8 +186,8 @@ export default class TextControl extends ControlComponent {
         {/* Visor del autocomplete */}
         <View style={{
           backgroundColor: '#ffffff',
-          position: 'absolute',
-          top: 60,     
+          position: scrollRef===null ? 'absolute' : 'relative',
+          top: scrollRef===null ? 60 : 0,
           width: '100%',
           zIndex: 99,
           elevation: 99

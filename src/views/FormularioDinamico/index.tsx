@@ -333,52 +333,54 @@ class FormularioDinamico extends Component<Props, State> {
 
     return (
       <SafeAreaView style={styles.safeContainer}>
-      <KeyboardAvoidingView behavior={Platform.OS==="ios"?"padding":""} style={{flex:1}} enabled>
-        <Header
-          containerStyle={styles.header}
-          centerComponent={
-            <View style={styles.containerHeader}>
-              <Text style={styles.centerTitle}>{Documento.title}</Text>
-            </View>
-          }
-          statusBarProps={{barStyle: 'light-content'}}
-        />
+        <KeyboardAvoidingView behavior={Platform.OS==="ios"?"padding":""} style={{flex:1}} enabled>
+          <Header
+            containerStyle={styles.header}
+            centerComponent={
+              <View style={styles.containerHeader}>
+                <Text style={styles.centerTitle}>{Documento.title}</Text>
+              </View>
+            }
+            statusBarProps={{barStyle: 'light-content'}}
+          />
 
-        <View style={{overflow: 'hidden', paddingBottom: '4%'}}>
-          <View style={styles.tabsBar}>
-            <Tab
-              value={this.state.tabIndex}
-              onChange={tabIndex => this.setState({tabIndex})}
-              indicatorStyle={{
-                borderBottomColor: 'white',
-                borderBottomWidth: 2,
-              }}>
-              {TabItems}
-            </Tab>
+          <View style={{overflow: 'hidden', paddingBottom: '4%'}}>
+            <View style={styles.tabsBar}>
+              <Tab
+                value={this.state.tabIndex}
+                onChange={tabIndex => this.setState({tabIndex})}
+                indicatorStyle={{
+                  borderBottomColor: 'white',
+                  borderBottomWidth: 2,
+                }}>
+                {TabItems}
+              </Tab>
+            </View>
           </View>
-        </View>
 
-        <ScrollView
-          keyboardShouldPersistTaps="handled"
-          style={styles.controlsContent}
-          contentContainerStyle={{flexGrow:1}}
-        >
-          
-            <ControlContainer
-              controlBridges={ControlBridgeList}
-              path={getPagesBridge()[this.state.tabIndex].Path}
-              navigation={this.props.navigation}
-            />
-          
-        </ScrollView>
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            style={styles.controlsContent}
+            contentContainerStyle={{flexGrow:1}}
+            ref={ref => this.formScroll = ref}
+          >
 
-        <View style={styles.footerBar}>
-          {FooterButtons.map((button, index) => (
-            <View key={index} style={styles.footerButtonContainer}>
-              {button}
-            </View>
-          ))}
-        </View>
+              <ControlContainer
+                controlBridges={ControlBridgeList}
+                path={getPagesBridge()[this.state.tabIndex].Path}
+                navigation={this.props.navigation}
+                scrollRef={this.formScroll}
+              />
+
+          </ScrollView>
+
+          <View style={styles.footerBar}>
+            {FooterButtons.map((button, index) => (
+              <View key={index} style={styles.footerButtonContainer}>
+                {button}
+              </View>
+            ))}
+          </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
     );

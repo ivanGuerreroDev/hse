@@ -29,7 +29,7 @@ type Props = MapControlBridgesProps & NavigationProps;
 
 export default class ControlContainer extends Component<Props> {
   render() {
-    const {controlBridges, navigation, path} = this.props;
+    const {controlBridges, navigation, path, scrollRef} = this.props;
 
     const componentsArr: JSX.Element[] = mapControlBridges(
       controlBridges,
@@ -37,13 +37,13 @@ export default class ControlContainer extends Component<Props> {
     )
     const ControlComponents = componentsArr?.map((controlBridge, index) => {
       let Control = controlComponent(controlBridge);
-
       return (
         <View style={{zIndex: componentsArr.length - index}}>
           <Control
             key={index}
             controlBridge={controlBridge}
             navigation={navigation}
+            scrollRef={(componentsArr.length - 1) === index ? scrollRef : null}
             children={
               <ControlContainer {...this.props} path={controlBridge.Path} />
             }
