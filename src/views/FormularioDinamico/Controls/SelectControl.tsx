@@ -69,6 +69,7 @@ export default class TextControl extends ControlComponent {
             </Text>
             <Dropdown
               style={styles.dropdown}
+              itemContainerStyle={styles.dropwdownlist}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
@@ -139,6 +140,9 @@ const styles = StyleSheet.create({
     height: 40,
     borderBottomColor: 'gray',
     borderBottomWidth: 0.5,
+  },
+  dropwdownlist:{
+    backgroundColor: "#fff"
   },
   icon: {
     marginRight: 5,

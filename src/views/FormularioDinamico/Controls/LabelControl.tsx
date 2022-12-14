@@ -20,6 +20,7 @@ export default class TextControl extends ControlComponent {
           paddingTop: controlBridge.property('ptop'),
           paddingBottom: controlBridge.property('pbot'),
           alignItems: controlBridge.property('aling'),
+          zIndex: 3
         }}>
         <Text
           style={{

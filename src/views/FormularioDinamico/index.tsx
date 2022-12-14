@@ -9,6 +9,7 @@ import {
   PermissionsAndroid,
   Linking,
   AppState,
+  KeyboardAvoidingView
 } from 'react-native';
 import {Button, Header, Icon, Tab, Text} from 'react-native-elements';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -332,6 +333,7 @@ class FormularioDinamico extends Component<Props, State> {
 
     return (
       <SafeAreaView style={styles.safeContainer}>
+      <KeyboardAvoidingView behavior={Platform.OS==="ios"?"padding":""} style={{flex:1}} enabled>
         <Header
           containerStyle={styles.header}
           centerComponent={
@@ -358,12 +360,16 @@ class FormularioDinamico extends Component<Props, State> {
 
         <ScrollView
           keyboardShouldPersistTaps="handled"
-          style={styles.controlsContent}>
-          <ControlContainer
-            controlBridges={ControlBridgeList}
-            path={getPagesBridge()[this.state.tabIndex].Path}
-            navigation={this.props.navigation}
-          />
+          style={styles.controlsContent}
+          contentContainerStyle={{flexGrow:1}}
+        >
+          
+            <ControlContainer
+              controlBridges={ControlBridgeList}
+              path={getPagesBridge()[this.state.tabIndex].Path}
+              navigation={this.props.navigation}
+            />
+          
         </ScrollView>
 
         <View style={styles.footerBar}>
@@ -373,6 +379,7 @@ class FormularioDinamico extends Component<Props, State> {
             </View>
           ))}
         </View>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     );
   }

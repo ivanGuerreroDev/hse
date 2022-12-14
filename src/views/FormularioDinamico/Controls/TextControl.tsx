@@ -36,8 +36,7 @@ export default class TextControl extends ControlComponent {
   }
 
   render() {
-    const {controlBridge} = this.props;
-
+    const {controlBridge, key} = this.props;
     let autoCompleteList: JSX.Element[] = ((controlBridge.property(
       'autocomplete',
     ) || []) as Array<string>)
@@ -58,18 +57,20 @@ export default class TextControl extends ControlComponent {
             'i',
           ).exec(capitalize(item, 3)) || [];
         return (
-          <Text
-            key={index}
-            style={{paddingHorizontal: 10, paddingVertical: 8}}
-            onPress={() => {
-              controlBridge.OutputValue = item;
-              this.setState({modalVisible: false});
-              this.setState({onEdit: false});
-            }}>
-            <Text>{regexpResult[1]}</Text>
-            <Text style={{fontWeight: 'bold'}}>{regexpResult[2]}</Text>
-            <Text>{regexpResult[3]}</Text>
-          </Text>
+          <View style={{backgroundColor:"#fff"}}>
+            <Text
+              key={index}
+              style={{paddingHorizontal: 10, paddingVertical: 8}}
+              onPress={() => {
+                controlBridge.OutputValue = item;
+                this.setState({modalVisible: false});
+                this.setState({onEdit: false});
+              }}>
+              <Text>{regexpResult[1]}</Text>
+              <Text style={{fontWeight: 'bold'}}>{regexpResult[2]}</Text>
+              <Text>{regexpResult[3]}</Text>
+            </Text>
+          </View>
         );
       });
 
@@ -106,7 +107,8 @@ export default class TextControl extends ControlComponent {
             fontSize: 13,
             color: '#00000099',
             opacity: 1,
-            fontFamily: 'Roboto-Regular',
+            fontFamily: 'Roboto-Regular'
+
           }}
           inputStyle={{
             paddingVertical: 5,
@@ -130,7 +132,7 @@ export default class TextControl extends ControlComponent {
         />
       </View>
     ) : (
-      <View style={{paddingBottom: 25 - errorHeight}}>
+      <View>
         <Input
           label={controlBridge.property('title')}
           placeholder={controlBridge.property('placeholder')}
@@ -181,15 +183,18 @@ export default class TextControl extends ControlComponent {
           }
         />
         {/* Visor del autocomplete */}
-        <View>
+        <View style={{
+          backgroundColor: '#ffffff',
+          position: 'absolute',
+          top: 60,     
+          width: '100%',
+          zIndex: 99,
+          elevation: 99
+        }}>
           <ScrollView
             keyboardShouldPersistTaps="handled"
             nestedScrollEnabled={true}
             style={{
-              position: 'absolute',
-              top: 0,
-              backgroundColor: 'white',
-              zIndex: 999,
               width: '100%',
               maxHeight: this.state.onEdit ? 200 : 0,
             }}>

@@ -31,21 +31,24 @@ export default class ControlContainer extends Component<Props> {
   render() {
     const {controlBridges, navigation, path} = this.props;
 
-    const ControlComponents: JSX.Element[] = mapControlBridges(
+    const componentsArr: JSX.Element[] = mapControlBridges(
       controlBridges,
       path,
-    ).map((controlBridge, index) => {
+    )
+    const ControlComponents = componentsArr?.map((controlBridge, index) => {
       let Control = controlComponent(controlBridge);
 
       return (
-        <Control
-          key={index}
-          controlBridge={controlBridge}
-          navigation={navigation}
-          children={
-            <ControlContainer {...this.props} path={controlBridge.Path} />
-          }
-        />
+        <View style={{zIndex: componentsArr.length - index}}>
+          <Control
+            key={index}
+            controlBridge={controlBridge}
+            navigation={navigation}
+            children={
+              <ControlContainer {...this.props} path={controlBridge.Path} />
+            }
+          />
+        </View>
       );
     });
 
