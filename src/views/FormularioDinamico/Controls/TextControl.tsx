@@ -57,7 +57,7 @@ export default class TextControl extends ControlComponent {
             'i',
           ).exec(capitalize(item, 3)) || [];
         return (
-          <View style={{backgroundColor:"#fff"}}>
+          <View key={index} style={{backgroundColor:"#fff"}}>
             <Text
               key={index}
               style={{paddingHorizontal: 10, paddingVertical: 8}}

@@ -38,18 +38,19 @@ export default class ControlContainer extends Component<Props> {
     const ControlComponents = componentsArr?.map((controlBridge, index) => {
       let Control = controlComponent(controlBridge);
       return (
-        <View style={{zIndex: componentsArr.length - index}}>
+        <View key={'controlview-'+index} style={{zIndex: componentsArr.length - index}}>
           <Control
-            key={index}
+            key={'control-'+index}
             controlBridge={controlBridge}
             navigation={navigation}
             scrollRef={(componentsArr.length - 1) === index ? scrollRef : null}
             children={
-              <ControlContainer {...this.props} path={controlBridge.Path} />
+              <ControlContainer key={'controlContainer-'+index} {...this.props} key={index} path={controlBridge.Path} />
             }
           />
         </View>
       );
+
     });
 
     return <View>{ControlComponents}</View>;
@@ -75,7 +76,7 @@ type ControlComponentSelectType = (
   controlBridge: ControlBridge,
 ) => typeof ControlComponent;
 const controlComponent: ControlComponentSelectType = (
-  controlBridge: ControlBridge,
+  controlBridge: ControlBridge
 ) => {
   let controlType = ControlComponent;
   switch (controlBridge.Control.type) {
