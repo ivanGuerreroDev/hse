@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   ToastAndroid,
+  AlertIOS,
   View,
   Platform,
   PermissionsAndroid,
@@ -81,7 +82,7 @@ type State = {
 
 type DispatchProps = {
   changeStatusDocumento: ChangeStatusDocumento;
-  deleteDocumento: DeleteDocumento;
+  deleteDocumento: DeleteDocumento; 
   saveDocumento: SaveDocumento;
 };
 
@@ -95,8 +96,14 @@ type Props = DispatchProps & NavigationProps;
 const options: GeolocationOptions = {
   timeout: 25 * 1000, //ms: seconds * 1000,
   maximumAge: 3 * 60000, //ms: minutes * 60000
-  enableHighAccuracy: Platform.OS === 'android',
+  enableHighAccuracy: true,
 };
+Geolocation.setRNConfiguration(
+  {
+    skipPermissionRequest: false,
+    authorizationLevel: 'whenInUse'
+  }
+)
 class FormularioDinamico extends Component<Props, State> {
   private documentoFactory: DocumentoFactory;
   private handleOutputValueChange: OutputValueChangeCallBack = (
@@ -148,15 +155,32 @@ class FormularioDinamico extends Component<Props, State> {
     createPendingTask(Documento);
     this.setState({goConf: false});
     isNetworkAllowed()
-      ? ToastAndroid.show(
-          'El documento se ha enviado con exito',
-          ToastAndroid.SHORT,
-        )
-      : ToastAndroid.show(
+      ? this.successAlert(false)
+      : this.successAlert(true)
+    navigation.goBack();
+  }
+
+  successAlert (save) {
+    if(save){
+      if(Platform.OS === 'ios'){
+        Alert.alert('El documento se ha guardado con exito')
+      }else{
+        ToastAndroid.show(
           'El documento se ha guardado con exito',
           ToastAndroid.SHORT,
         );
-    navigation.goBack();
+      }
+    }else{
+      if(Platform.OS === 'ios'){
+        Alert.alert('El documento se ha enviado con exito')
+      }else{
+        ToastAndroid.show(
+          'El documento se ha enviado con exito',
+          ToastAndroid.SHORT,
+        )
+      }
+    }
+    
   }
 
   positionCallback = (position: GeolocationResponse) => {
@@ -176,6 +200,8 @@ class FormularioDinamico extends Component<Props, State> {
   errorCallback = (error: GeolocationError) => {
     console.error("@@ error callback");
     console.error(error.message);
+    console.error(error.PERMISSION_DENIED);
+    console.error(error.POSITION_UNAVAILABLE);
     if (error.POSITION_UNAVAILABLE === 2) {
       if (Platform.OS !== 'ios') {
         requestResolutionSettings(configLocation);

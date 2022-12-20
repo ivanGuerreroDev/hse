@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import 'utils/geolocation';
+//import 'utils/geolocation';
 
 import menu from './menu';
 import submenu from './menuSub';

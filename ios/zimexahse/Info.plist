@@ -39,11 +39,14 @@
 	<string>We need to use the camera to take picture of evidence</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+		<string>fetch</string>
+	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Zimexa Hse usa est informacion para registrar tu ubicacion en la ejecucion de las actividades.</string>
   <key>NSLocationAlwaysUsageDescription</key>
-	<string>Zimexa Hse usa est informacion para registrar tu ubicacion en la ejecucion de las actividades.</string>
-	<key>NSLocationAlwaysAndWhenUsageDescription</key>
 	<string>Zimexa Hse usa est informacion para registrar tu ubicacion en la ejecucion de las actividades.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>We need the microphone for use whit camera</string>
