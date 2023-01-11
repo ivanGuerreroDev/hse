@@ -19,7 +19,10 @@ export const getUserPool = async (Rut: string) => {
 
 export const getCredentials = async () => {
   try {
-    let {data} = await axios.get(Config.Credentials);
+    let {data} = await axios.get(Config.Credentials).catch(error=>{
+      console.log(error)
+      throw error;
+    });
     return data;
   } catch (err) {
     console.error(err)

@@ -27,8 +27,11 @@ export const saveFormulariosAsync: SaveFormularioAsync = (
             Empresa: userData.Empresa,
             Usuario: userData.Username
           },
+        }).catch(error=>{
+          console.log(error)
+          throw error;
         });
-        response.data.forEach((formulario: IFormulario) => {
+        if(response?.data?.length > 0) response.data.forEach((formulario: IFormulario) => {
           dispatch(saveFormulario(formulario));
           formulario.resources?.forEach((resource: IResource) =>{
             dispatch(saveLocalResourceAsync(resource, userData,))

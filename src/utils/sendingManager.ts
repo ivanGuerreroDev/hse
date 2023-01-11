@@ -196,7 +196,11 @@ const uploadDocumento = async (documentoId: string): Promise<void> => {
     };
     store.dispatch(saveDocumento(documento));
 
-    const response = await axios.post(`${Config.UrlFormularios}/documentos`, documento);
+    const response = await axios.post(`${Config.UrlFormularios}/documentos`, documento)
+    .catch(error=>{
+      console.log(error)
+      throw error;
+    });
 
     store.dispatch(deletePendingTask(documentoId));
     store.dispatch(changeStatusDocumento(documentoId, DocumentoStatus.sent));
