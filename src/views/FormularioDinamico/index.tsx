@@ -4,7 +4,6 @@ import {
   ScrollView,
   StyleSheet,
   ToastAndroid,
-  AlertIOS,
   View,
   Platform,
   PermissionsAndroid,
@@ -57,7 +56,7 @@ import {store} from 'state/store/store';
 import {updateGeolocation} from 'state/settings/actions';
 
 var addListener: any, checkSettings, requestResolutionSettings: any, configLocation: any;
-if (Platform.OS === 'android') {
+if (Platform?.OS === 'android') {
   const LocationEnabler =  require('react-native-location-enabler');
   const {
     PRIORITIES: {HIGH_ACCURACY}
@@ -115,6 +114,7 @@ class FormularioDinamico extends Component<Props, State> {
     this.props.saveDocumento(this.documentoFactory.Documento);
     this.setState({thisisonlyforforcerender: undefined});
   };
+  private changeEventListener: any;
 
   state = {
     tabIndex: 0,
@@ -136,7 +136,7 @@ class FormularioDinamico extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    AppState.addEventListener('change', this.handleAppStateChange);
+    this.changeEventListener = null;
     const {documento, readOnly} = props.route.params;
 
     this.documentoFactory = new DocumentoFactory(documento);
@@ -261,8 +261,11 @@ class FormularioDinamico extends Component<Props, State> {
     .catch(error=>console.error(error));
   }
 
+  componentDidMount(): void {
+    this.changeEventListener = AppState.addEventListener('change', this.handleAppStateChange);
+  }
   componentWillUnmount() {
-    AppState.removeEventListener('change', this.handleAppStateChange);
+    this.changeEventListener.remove()
     if (Platform.OS === 'android') this.state?.listener?.remove();
   }
 
