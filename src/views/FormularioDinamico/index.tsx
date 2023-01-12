@@ -10,7 +10,8 @@ import {
   PermissionsAndroid,
   Linking,
   AppState,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  TouchableOpacity
 } from 'react-native';
 import {Button, Header, Icon, Tab, Text} from 'react-native-elements';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -360,16 +361,21 @@ class FormularioDinamico extends Component<Props, State> {
     return (
       <SafeAreaView style={styles.safeContainer}>
         <KeyboardAvoidingView behavior={Platform.OS==="ios"?"padding":""} style={{flex:1}} enabled>
-          <Header
-            containerStyle={styles.header}
-            centerComponent={
-              <View style={styles.containerHeader}>
-                <Text style={styles.centerTitle}>{Documento.title}</Text>
-              </View>
-            }
-            statusBarProps={{barStyle: 'light-content'}}
-          />
+			<Header
+				containerStyle={styles.header}
+				leftComponent={
+					<View style={styles.containerHeader}>
+					<TouchableOpacity
+						style={styles.headergoBack}
+						onPress={() => this.props.navigation.goBack()}>
+						<Icon name="arrow-left" type="fontisto" color="#FFFFFF" />
+					</TouchableOpacity>
 
+					<Text style={styles.titulo}>{Documento.title}</Text>
+					</View>
+				}
+				statusBarProps={{barStyle: 'light-content'}}
+			/>
           <View style={{overflow: 'hidden', paddingBottom: '4%'}}>
             <View style={styles.tabsBar}>
               <Tab
@@ -447,7 +453,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   containerHeader: {
-    justifyContent: 'center',
+    // justifyContent: 'center',
+
+	flexDirection: 'row',
+    alignItems: 'center',
+    width: '400%',
+
   },
   safeContainer: {
     flex: 1,
@@ -476,4 +487,17 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: '#FDAE01',
   },
+  headergoBack: {
+    marginLeft: '5%',
+    marginRight: '10%',
+  },
+  titulo: {
+    color: '#FFFFFF',
+    fontSize: 20,
+    fontFamily: 'Roboto-Medium',
+    fontWeight: 'bold',
+    letterSpacing: 0.5,
+  },
+
+
 });
