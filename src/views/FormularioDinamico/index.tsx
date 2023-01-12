@@ -9,7 +9,8 @@ import {
   PermissionsAndroid,
   Linking,
   AppState,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  TouchableOpacity
 } from 'react-native';
 import {Button, Header, Icon, Tab, Text} from 'react-native-elements';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -54,7 +55,8 @@ import {checkLocationPermission} from '../../utils/permissions';
 import {PERMISSIONS, RESULTS, request} from 'react-native-permissions';
 import {store} from 'state/store/store';
 import {updateGeolocation} from 'state/settings/actions';
-
+import {getStatusBarHeight} from 'components/getStatusBarHeight';
+const statusBarHeight = getStatusBarHeight();
 var addListener: any, checkSettings, requestResolutionSettings: any, configLocation: any;
 if (Platform?.OS === 'android') {
   const LocationEnabler =  require('react-native-location-enabler');
@@ -365,6 +367,15 @@ class FormularioDinamico extends Component<Props, State> {
         <KeyboardAvoidingView behavior={Platform.OS==="ios"?"padding":""} style={{flex:1}} enabled>
           <Header
             containerStyle={styles.header}
+            leftComponent={
+              <TouchableOpacity
+                onPress={()=>{
+                  deleteDocumento(Documento._id);
+                  navigation.goBack();
+                }}>
+                <Icon name="arrow-left" type="fontisto" color="#FFFFFF" />
+              </TouchableOpacity>
+            }
             centerComponent={
               <View style={styles.containerHeader}>
                 <Text style={styles.centerTitle}>{Documento.title}</Text>
@@ -440,7 +451,7 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#FDAE01',
-    height: 110,
+    paddingTop: statusBarHeight,
     opacity: 1,
   },
   centerTitle: {

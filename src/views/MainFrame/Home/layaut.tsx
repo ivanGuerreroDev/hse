@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {TouchableOpacity, StyleSheet, View} from 'react-native';
 import {Header, Text, Icon} from 'react-native-elements';
+import {getStatusBarHeight} from 'components/getStatusBarHeight';
+const statusBarHeight = getStatusBarHeight();
 
 type Props = {
   Titulo: String;
@@ -43,7 +45,7 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#FDAE01',
-    height: 110,
+    paddingTop: statusBarHeight,
     opacity: 1,
   },
   containerHeader: {

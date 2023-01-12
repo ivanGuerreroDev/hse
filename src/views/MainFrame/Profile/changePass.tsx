@@ -18,6 +18,8 @@ import {ForgiveUser, IUser, SaveUser} from 'state/user/types';
 //Navigate
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MainFrameStackParamList} from 'utils/types/navigations';
+import {getStatusBarHeight} from 'components/getStatusBarHeight';
+const statusBarHeight = getStatusBarHeight();
 
 type Props = {
   currentUser: IUser | undefined;
@@ -330,7 +332,7 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#FDAE01',
-    height: 80,
+    paddingTop: statusBarHeight,
     opacity: 1,
   },
   buttonInput: {justifyContent: 'flex-end', color: '#FDAE01', fontSize: 12},

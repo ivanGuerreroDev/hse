@@ -7,6 +7,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {Header, Image, Icon} from 'react-native-elements';
+import {getStatusBarHeight} from 'components/getStatusBarHeight';
+const statusBarHeight = getStatusBarHeight();
 
 class Layout extends Component {
   state = {
@@ -49,7 +51,7 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#FDAE01',
-    height: 110,
+    paddingTop: statusBarHeight,
     opacity: 1,
     borderBottomWidth: 0,
   },

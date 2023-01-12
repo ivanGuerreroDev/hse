@@ -21,6 +21,8 @@ import {connect} from 'react-redux';
 import {RootState} from 'state/store/store';
 import {ICapacitacion, IObservaciones, IInspecciones} from 'utils/types/menu';
 import {IFormulario} from 'utils/types/formulariodinamico';
+import {getStatusBarHeight} from 'components/getStatusBarHeight';
+const statusBarHeight = getStatusBarHeight();
 
 type StateProps = {
   submenuList: IObservaciones[] | any[];
@@ -119,7 +121,7 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#FDAE01',
-    height: 80,
+    paddingTop: statusBarHeight,
     opacity: 1,
   },
   buttonInput: {justifyContent: 'flex-end', color: '#FDAE01', fontSize: 12},
