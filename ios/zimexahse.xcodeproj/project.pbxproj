@@ -498,8 +498,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = cl.innoapsion.zimexa.hse.ios;
+				PRODUCT_BUNDLE_IDENTIFIER = cl.innoapsion.zimexa.hse.ios;
+				PRODUCT_NAME = zimexahse;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -524,8 +524,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = cl.innoapsion.zimexa.hse.ios;
+				PRODUCT_BUNDLE_IDENTIFIER = cl.innoapsion.zimexa.hse.ios;
+				PRODUCT_NAME = zimexahse;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
