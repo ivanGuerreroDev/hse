@@ -55,8 +55,6 @@ import {checkLocationPermission} from '../../utils/permissions';
 import {PERMISSIONS, RESULTS, request} from 'react-native-permissions';
 import {store} from 'state/store/store';
 import {updateGeolocation} from 'state/settings/actions';
-import {getStatusBarHeight} from 'components/getStatusBarHeight';
-const statusBarHeight = getStatusBarHeight();
 var addListener: any, checkSettings, requestResolutionSettings: any, configLocation: any;
 if (Platform?.OS === 'android') {
   const LocationEnabler =  require('react-native-location-enabler');
@@ -126,7 +124,6 @@ class FormularioDinamico extends Component<Props, State> {
     listener:
       Platform.OS === 'android'
         ? addListener(({locationEnabled}) => {
-          console.log("@@ locationEnabled", locationEnabled)
             if (locationEnabled) {
               this.checkLocation();
             } else {
@@ -363,9 +360,8 @@ class FormularioDinamico extends Component<Props, State> {
       );
 
     return (
-      <SafeAreaView style={styles.safeContainer}>
-        <KeyboardAvoidingView behavior={Platform.OS==="ios"?"padding":""} style={{flex:1}} enabled>
-          <Header
+      <>
+        <Header
             containerStyle={styles.header}
             leftComponent={
               <TouchableOpacity
@@ -376,13 +372,12 @@ class FormularioDinamico extends Component<Props, State> {
                 <Icon name="arrow-left" type="fontisto" color="#FFFFFF" />
               </TouchableOpacity>
             }
-            centerComponent={
-              <View style={styles.containerHeader}>
-                <Text style={styles.centerTitle}>{Documento.title}</Text>
-              </View>
-            }
+            centerComponent={{ text: Documento.title, style: styles.centerTitle }}
+            rightComponent={{}}
             statusBarProps={{barStyle: 'light-content'}}
           />
+        <KeyboardAvoidingView behavior={Platform.OS==="ios"?"padding":""} style={{flex:1, paddingTop: 0}} enabled>
+          
 
           <View style={{overflow: 'hidden', paddingBottom: '4%'}}>
             <View style={styles.tabsBar}>
@@ -422,7 +417,7 @@ class FormularioDinamico extends Component<Props, State> {
             ))}
           </View>
         </KeyboardAvoidingView>
-      </SafeAreaView>
+      </>
     );
   }
 }
@@ -450,7 +445,7 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#FDAE01',
-    paddingTop: statusBarHeight,
+    justifyContent: 'space-around',
     opacity: 1,
   },
   centerTitle: {
@@ -465,7 +460,7 @@ const styles = StyleSheet.create({
   },
   safeContainer: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'transparent'
   },
   tabsBar: {
     flex: 0,

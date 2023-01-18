@@ -76,12 +76,13 @@ const SignComponent = (props: Props) => {
         <Text style={{marginBottom: 15}}>Estoy de acuerdo con la evaluación y firmo conforme:</Text>
         <SignatureScreen ref={ref} onOK={handleOK} webStyle={style} backgroundColor='rgba(255,255,255,1)'/>
         <View style={styles.buttons}>
-          <Button title="BORRAR TODO" onPress={handleClear} buttonStyle={styles.buttonDelete} titleStyle={{color:'#FDAE01'}}/>
+          <Button disabled={false} title="BORRAR TODO" onPress={handleClear} buttonStyle={styles.buttonDelete} titleStyle={{color:'#FDAE01'}}/>
           <Button
             title="GUARDAR"
             onPress={handleConfirm}
             buttonStyle={styles.buttonSave}
             titleStyle={{color:'#fff'}}
+            disabled={false}
             icon={
               <Icon
                 name="save"

@@ -23,10 +23,6 @@ export const getCredentials = async () => {
       console.log(error)
       throw error;
     });
-    console.log("@@ response data credentials: ")
-    let responseStr = JSON.stringify(response.data)
-    console.log(response.status)
-    console.log(typeof response , ' ', responseStr?.slice(responseStr.length - 100, responseStr.length))
     return data;
   } catch (err) {
     console.error(err)

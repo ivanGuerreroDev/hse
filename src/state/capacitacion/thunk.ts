@@ -25,10 +25,6 @@ export const saveCapacitacionAsyncThunk: SaveCapacitacionAsync = (
             Empresa: userData.Empresa,
           },
         });
-        console.log("@@ response ICapacitacion: ")
-        let responseStr = JSON.stringify(response.data)
-        console.log(response.status)
-        console.log(typeof response , ' ', responseStr?.slice(responseStr.length - 100, responseStr.length))
         dispatch(saveCapacitacion(response.data));
       } catch (error) {
         console.error(error)

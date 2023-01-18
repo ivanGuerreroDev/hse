@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {TouchableOpacity, StyleSheet, View} from 'react-native';
 import {Header, Text, Icon} from 'react-native-elements';
-import {getStatusBarHeight} from 'components/getStatusBarHeight';
-const statusBarHeight = getStatusBarHeight();
 
 type Props = {
   Titulo: String;
@@ -24,10 +22,10 @@ class Layaut extends Component<Props> {
                 onPress={this.props.navigation}>
                 <Icon name="arrow-left" type="fontisto" color="#FFFFFF" />
               </TouchableOpacity>
-
-              <Text style={styles.titulo}>{this.props.Titulo}</Text>
             </View>
           }
+          centerComponent={{ text: this.props.Titulo, style: styles.titulo}}
+          rightComponent={{}}
           statusBarProps={{barStyle: 'light-content'}}
         />
 
@@ -45,7 +43,6 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#FDAE01',
-    paddingTop: statusBarHeight,
     opacity: 1,
   },
   containerHeader: {

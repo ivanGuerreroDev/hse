@@ -72,7 +72,7 @@ const SignControlComp = (props: Props) => {
       <Button
         buttonStyle={{backgroundColor: '#FDAE01', marginBottom: 20, marginTop: 20}}
         onPress={handleGoToSign}
-        disabled={controlBridge?.OutputValue?.media}
+        disabled={!!controlBridge?.OutputValue?.media}
         icon={
           <Icon
               name="edit"

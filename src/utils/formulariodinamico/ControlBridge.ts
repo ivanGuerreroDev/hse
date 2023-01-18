@@ -90,7 +90,6 @@ export class ControlBridge {
     if (!this.factory.Documento.resources)
       this.factory.Documento.resources = [];
     this.factory.Documento.resources.push(resource);
-
     return {
       '!code': `resource('${resourceName}')`,
     };

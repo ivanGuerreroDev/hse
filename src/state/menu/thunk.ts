@@ -21,10 +21,6 @@ export const saveMenusAsyncThunk: SaveMenuAsync = (
             Empresa: userData.Empresa,
           },
         });
-        console.log("@@ response IMenu: ")
-        let responseStr = JSON.stringify(response.data)
-        console.log(response.status)
-        console.log(typeof response , ' ', responseStr?.slice(responseStr.length - 100, responseStr.length))
         dispatch(saveMenu(response.data));
       } catch (error) {
         console.error(error)

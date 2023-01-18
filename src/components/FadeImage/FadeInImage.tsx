@@ -31,12 +31,11 @@ export const FadeInImage = ({uri, image = {}}: Props) => {
 
   return (
     <View
-    /* style={{
+      style={{
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        height: 80,
-      }} */
+      }}
     >
       {/* {isLoading && (
         <ActivityIndicator

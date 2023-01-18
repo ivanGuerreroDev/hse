@@ -1,14 +1,12 @@
-import {FadeInImage} from 'components/FadeImage/FadeInImage';
-import React, {Component} from 'react';
+import { FadeInImage } from 'components/FadeImage/FadeInImage';
+import React, { Component } from 'react';
 import {
   TouchableOpacity,
   StyleSheet,
   View,
   ActivityIndicator,
 } from 'react-native';
-import {Header, Image, Icon} from 'react-native-elements';
-import {getStatusBarHeight} from 'components/getStatusBarHeight';
-const statusBarHeight = getStatusBarHeight();
+import { Header, Image, Icon } from 'react-native-elements';
 
 class Layout extends Component {
   state = {
@@ -19,19 +17,14 @@ class Layout extends Component {
       <View style={styles.container}>
         <Header
           containerStyle={styles.header}
+          leftComponent={{}}
           centerComponent={
             <View style={styles.containerHeader}>
-              <TouchableOpacity
-                style={styles.headergoBack}
-                // onPress={() => this.props.navigation.goBack()}
-              >
-                <Icon name="arrow-left" type="fontisto" color="transparent" />
-              </TouchableOpacity>
-
               <FadeInImage uri={this.state.logo} image={styles.headerLogo} />
             </View>
           }
-          statusBarProps={{barStyle: 'light-content'}}
+          rightComponent={{}}
+          statusBarProps={{ barStyle: 'light-content' }}
         />
         <View style={styles.children}>{this.props.children}</View>
       </View>
@@ -47,11 +40,12 @@ const styles = StyleSheet.create({
   },
   containerHeader: {
     flexDirection: 'row',
+    justifyContent:'center',
     alignItems: 'center',
   },
   header: {
     backgroundColor: '#FDAE01',
-    paddingTop: statusBarHeight,
+    paddingTop: 0,
     opacity: 1,
     borderBottomWidth: 0,
   },
@@ -62,7 +56,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginRight: '63%',
     width: 70,
     height: 70,
   },

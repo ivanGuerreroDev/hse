@@ -126,7 +126,6 @@ const uploadResource = async (documentoId: string, resizeResourceUri: string, ol
     });
 
     const signedUrl = await getSignedUrl(s3Client, command, {expiresIn: 1800});
-
     const options: UploadOptions = {
       url: signedUrl,
       path: fixPath(resizeResourceUri),
@@ -201,10 +200,6 @@ const uploadDocumento = async (documentoId: string): Promise<void> => {
       console.log(error)
       throw error;
     });
-    console.log("@@ response UrlFormularios: ")
-    let responseStr = JSON.stringify(response.data)
-    console.log(response.status)
-    console.log(typeof response , ' ', responseStr?.slice(responseStr.length - 100, responseStr.length))
     store.dispatch(deletePendingTask(documentoId));
     store.dispatch(changeStatusDocumento(documentoId, DocumentoStatus.sent));
     console.debug(response.data);
