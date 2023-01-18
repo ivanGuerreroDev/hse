@@ -86,8 +86,7 @@ export default Layaut;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#ffffff',
+    flex: 1
   },
   header: {
     paddingTop: statusBarHeight,

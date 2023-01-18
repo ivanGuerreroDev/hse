@@ -202,7 +202,8 @@ const uploadDocumento = async (documentoId: string): Promise<void> => {
       throw error;
     });
     console.log("@@ response UrlFormularios: ")
-    let responseStr = JSON.stringify(response)
+    let responseStr = JSON.stringify(response.data)
+    console.log(response.status)
     console.log(typeof response , ' ', responseStr?.slice(responseStr.length - 100, responseStr.length))
     store.dispatch(deletePendingTask(documentoId));
     store.dispatch(changeStatusDocumento(documentoId, DocumentoStatus.sent));

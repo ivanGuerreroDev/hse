@@ -27,7 +27,8 @@ export const saveInspeccionAsyncThunk: SaveInspeccionAsync = (
           },
         });
         console.log("@@ response IInspecciones: ")
-        let responseStr = JSON.stringify(response)
+        let responseStr = JSON.stringify(response.data)
+          console.log(response.status)
         console.log(typeof response , ' ', responseStr?.slice(responseStr.length - 100, responseStr.length))
         dispatch(saveInspeccion(response.data));
       } catch (error) {

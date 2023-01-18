@@ -46,7 +46,7 @@ if (Platform.OS === 'ios' && !Platform.isPad && !Platform.isTVOS) {
 
 export function getStatusBarHeight() {
   return Platform.select({
-    ios: statusBarHeight,
+    ios: 0,
     android: StatusBar.currentHeight,
     default: 0,
   });

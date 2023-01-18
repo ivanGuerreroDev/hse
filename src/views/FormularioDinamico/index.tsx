@@ -446,8 +446,7 @@ export default connect<{}, DispatchProps, {}, RootState>(
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: 'white',
+    flex: 1
   },
   header: {
     backgroundColor: '#FDAE01',
@@ -461,7 +460,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   containerHeader: {
-    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   safeContainer: {
     flex: 1,
