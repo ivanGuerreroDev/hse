@@ -1,5 +1,5 @@
 {
-  "name": "Zimexa HSE",
+  "name": "zimexahse",
   "displayName": "Zimexa HSE",
   "ios": {
     "bundleIdentifier": "cl.innoapsion.zimexa.hse.ios"

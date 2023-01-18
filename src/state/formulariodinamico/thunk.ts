@@ -28,9 +28,12 @@ export const saveFormulariosAsync: SaveFormularioAsync = (
             Usuario: userData.Username
           },
         }).catch(error=>{
-          console.log(error)
+          console.log("@@ error formularios: ")
+          console.log(typeof error , ' ', error?.slice(0, 20))
           throw error;
         });
+        console.log("@@ response formularios: ")
+        console.log(typeof response , ' ', JSON.stringify(response)?.slice())
         if(response?.data?.length > 0) response.data.forEach((formulario: IFormulario) => {
           dispatch(saveFormulario(formulario));
           formulario.resources?.forEach((resource: IResource) =>{
