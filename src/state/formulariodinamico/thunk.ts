@@ -33,7 +33,8 @@ export const saveFormulariosAsync: SaveFormularioAsync = (
           throw error;
         });
         console.log("@@ response formularios: ")
-        console.log(typeof response , ' ', JSON.stringify(response)?.slice())
+        let responseStr = JSON.stringify(response)
+        console.log(typeof response , ' ', responseStr?.slice(responseStr.length - 100, responseStr.length))
         if(response?.data?.length > 0) response.data.forEach((formulario: IFormulario) => {
           dispatch(saveFormulario(formulario));
           formulario.resources?.forEach((resource: IResource) =>{
@@ -77,6 +78,9 @@ export const saveLocalResourceAsync: SaveLocalResourceAsync = (
               Empresa: userData.Empresa,
             },
           });
+          console.log("@@ response ILocalResource: ")
+          let responseStr = JSON.stringify(response)
+          console.log(typeof response , ' ', responseStr?.slice(responseStr.length - 100, responseStr.length))
           const localResource: ILocalResource = {
             name: resource.name,
             url: resource.url,

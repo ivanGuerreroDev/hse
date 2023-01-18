@@ -26,6 +26,9 @@ export const saveObservacionAsyncThunk: SaveObservacionAsync = (
             Empresa: userData.Empresa,
           },
         });
+        console.log("@@ response IMenu: ")
+        let responseStr = JSON.stringify(response)
+        console.log(typeof response , ' ', responseStr?.slice(responseStr.length - 100, responseStr.length))
         dispatch(saveObservacion(response.data));
       } catch (error) {
         console.error(error)
