@@ -33,8 +33,7 @@ target 'zimexahse' do
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
   pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone"
   pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
-  pod 'lottie-ios'
-  
+
   target 'zimexahseTests' do
     inherit! :complete
     # Pods for testing
