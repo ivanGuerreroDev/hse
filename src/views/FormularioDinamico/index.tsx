@@ -372,7 +372,9 @@ class FormularioDinamico extends Component<Props, State> {
                 <Icon name="arrow-left" type="fontisto" color="#FFFFFF" />
               </TouchableOpacity>
             }
-            centerComponent={{ text: Documento.title, style: styles.centerTitle }}
+            centerComponent={
+              <View style={styles.containerTitle}><Text style={styles.centerTitle}>{Documento.title}</Text></View>
+            }
             rightComponent={{}}
             statusBarProps={{barStyle: 'light-content'}}
           />
@@ -448,11 +450,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     opacity: 1,
   },
+  containerTitle:{
+    flexDirection: 'row'
+  },
   centerTitle: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
+    flexShrink: 1,
+    flex:1
   },
   containerHeader: {
     flexDirection: 'row',
