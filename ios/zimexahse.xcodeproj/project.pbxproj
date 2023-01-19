@@ -38,7 +38,7 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = zimexahse;
+			remoteInfo = "Zimexa HSE";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -125,7 +125,7 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
-			name = zimexahse;
+			name = "Zimexa HSE";
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
@@ -237,8 +237,8 @@
 			);
 			dependencies = (
 			);
-			name = zimexahse;
-			productName = zimexahse;
+			name = "Zimexa HSE;
+			productName = "Zimexa HSE";
 			productReference = 13B07F961A680F5B00A75B9A /* zimexahse.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -565,7 +565,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = cl.innoapsion.zimexa.hse.ios;
-				PRODUCT_NAME = zimexahse;
+				PRODUCT_NAME = "Zimexa HSE";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -594,7 +594,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = cl.innoapsion.zimexa.hse.ios;
-				PRODUCT_NAME = zimexahse;
+				PRODUCT_NAME = "Zimexa HSE";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
