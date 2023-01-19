@@ -1,64 +1,66 @@
-import {CurrentUserState, USER_ACTIONS, UserAction, UserState} from './types';
+import { CurrentUserState, USER_ACTIONS, UserAction, UserState } from './types';
 
 const initialState: UserState = {
-  userList: [],
-  rememberUser: undefined,
+    userList: [],
+    rememberUser: undefined
 };
 
 export const userReducer = (
-  state: UserState = initialState,
-  action: UserAction,
+    state: UserState = initialState,
+    action: UserAction
 ): UserState => {
-  switch (action.type) {
-    case USER_ACTIONS.FORGIVE_USER: {
-      return {
-        ...state,
-        rememberUser: undefined,
-      };
+    switch (action.type) {
+        case USER_ACTIONS.FORGIVE_USER: {
+            return {
+                ...state,
+                rememberUser: undefined
+            };
+        }
+
+        case USER_ACTIONS.SAVE_USER: {
+            const { user, remember } = action.payload;
+
+            return {
+                ...state,
+                userList: [
+                    ...state.userList.filter(
+                        (suser) => suser.Username !== user.Username
+                    ),
+                    user
+                ],
+                rememberUser: remember ? user : undefined
+            };
+        }
+
+        default:
+            return state;
     }
-
-    case USER_ACTIONS.SAVE_USER: {
-      const {user, remember} = action.payload;
-
-      return {
-        ...state,
-        userList: [
-          ...state.userList.filter(suser => suser.Username !== user.Username),
-          user,
-        ],
-        rememberUser: remember ? user : undefined,
-      };
-    }
-
-    default:
-      return state;
-  }
 };
 
 const initialCurrentUserState: CurrentUserState = {
-  user: undefined,
+    user: undefined
 };
 
 export const currentUserReducer = (
-  state: CurrentUserState = initialCurrentUserState,
-  action: UserAction,
+    state: CurrentUserState = initialCurrentUserState,
+    action: UserAction
 ): CurrentUserState => {
-  switch (action.type) {
-    case USER_ACTIONS.FORGIVE_USER: {
-      return {
-        user: undefined,
-      };
+    switch (action.type) {
+        case USER_ACTIONS.FORGIVE_USER: {
+            return {
+                user: undefined
+            };
+        }
+
+        case USER_ACTIONS.SAVE_USER: {
+            const { user } = action.payload;
+
+            return {
+                user: user
+            };
+        }
+
+        default:
+            return state;
     }
-
-    case USER_ACTIONS.SAVE_USER: {
-      const {user} = action.payload;
-
-      return {
-        user: user,
-      };
-    }
-
-    default:
-      return state;
-  }
 };

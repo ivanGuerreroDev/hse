@@ -1,17 +1,21 @@
-import {AnyAction} from 'redux';
-import { NetInfoCellularGeneration, NetInfoStateType, NetInfoState} from '@react-native-community/netinfo';
+import { AnyAction } from 'redux';
+import {
+    NetInfoCellularGeneration,
+    NetInfoStateType,
+    NetInfoState
+} from '@react-native-community/netinfo';
 import { GeolocationResponse } from '@react-native-community/geolocation';
 
 //#region State interface
 
 export interface NetworkSettings {
-  allowedNetInfoStateTypes: NetInfoStateType[];
-  allowedMinWifiStrength?: number;
-  allowedMinCellularGeneration?: NetInfoCellularGeneration;
-};
+    allowedNetInfoStateTypes: NetInfoStateType[];
+    allowedMinWifiStrength?: number;
+    allowedMinCellularGeneration?: NetInfoCellularGeneration;
+}
 
 export interface SettingsState {
-  networkSettings: NetworkSettings
+    networkSettings: NetworkSettings;
 }
 
 //#endregion
@@ -19,11 +23,11 @@ export interface SettingsState {
 //#region Actions interfaces
 
 export interface UpdateNetInfoStateAction extends AnyAction {
-  payload: NetInfoState;
+    payload: NetInfoState;
 }
 
 export interface UpdateGeolocationAction extends AnyAction {
-  payload: GeolocationResponse;
+    payload: GeolocationResponse;
 }
 
 //#endregion
@@ -37,19 +41,23 @@ export type GeolocationAction = UpdateGeolocationAction;
 
 //#region Actions func types
 
-export type UpdateNetInfoState = (netInfoState: NetInfoState) => UpdateNetInfoStateAction;
-export type UpdateGeolocation = (geolocation: GeolocationResponse) => UpdateGeolocationAction;
+export type UpdateNetInfoState = (
+    netInfoState: NetInfoState
+) => UpdateNetInfoStateAction;
+export type UpdateGeolocation = (
+    geolocation: GeolocationResponse
+) => UpdateGeolocationAction;
 
 //#endregion
 
 //#region Action type enum
 
 export enum NETINFOSTATE_ACTIONS {
-  UPDATE_NETINFOSTATE='UPDATE_NETINFOSTATE'
+    UPDATE_NETINFOSTATE = 'UPDATE_NETINFOSTATE'
 }
 
 export enum GEOLOCATION_ACTIONS {
-  UPDATE_GEOLOCATION='UPDATE_GEOLOCATION'
+    UPDATE_GEOLOCATION = 'UPDATE_GEOLOCATION'
 }
 
 //#endregion

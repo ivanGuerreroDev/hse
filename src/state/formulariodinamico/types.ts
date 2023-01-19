@@ -1,21 +1,27 @@
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { IUser } from 'state/user/types';
-import { DocumentoStatus, IDocumento, IFormulario, ILocalResource, IResource } from 'types/formulariodinamico';
+import {
+    DocumentoStatus,
+    IDocumento,
+    IFormulario,
+    ILocalResource,
+    IResource
+} from 'types/formulariodinamico';
 import { IPerfil } from 'utils/types/perfil';
 
 //#region State Interface
 
 export interface DocumentosState {
-  documentos: IDocumento[]
+    documentos: IDocumento[];
 }
 
 export interface FormulariosState {
-  formularios: IFormulario[]
+    formularios: IFormulario[];
 }
 
 export interface ResourcesState {
-  resources: ILocalResource[]
+    resources: ILocalResource[];
 }
 
 //#endregion
@@ -23,34 +29,34 @@ export interface ResourcesState {
 //#region Actions interfaces
 
 export interface ChangeStatusDocumentoAction extends AnyAction {
-  payload: {
-    id: string,
-    status: DocumentoStatus
-  }
+    payload: {
+        id: string;
+        status: DocumentoStatus;
+    };
 }
 
 export interface DeleteDocumentoAction extends AnyAction {
-  payload: {
-    id: string
-  }
+    payload: {
+        id: string;
+    };
 }
 
 export interface SaveDocumentoAction extends AnyAction {
-  payload: {
-    documento: IDocumento
-  }
+    payload: {
+        documento: IDocumento;
+    };
 }
 
 export interface SaveFormularioAction extends AnyAction {
-  payload: {
-    formulario: IFormulario
-  }
+    payload: {
+        formulario: IFormulario;
+    };
 }
 
 export interface SaveResourceAction extends AnyAction {
-  payload: {
-    resource: ILocalResource
-  }
+    payload: {
+        resource: ILocalResource;
+    };
 }
 
 //#endregion
@@ -58,9 +64,9 @@ export interface SaveResourceAction extends AnyAction {
 //#region Combined actions interfaces type
 
 export type DocumentosAction =
-  ChangeStatusDocumentoAction |
-  DeleteDocumentoAction |
-  SaveDocumentoAction;
+    | ChangeStatusDocumentoAction
+    | DeleteDocumentoAction
+    | SaveDocumentoAction;
 
 export type FormulariosAction = SaveFormularioAction;
 
@@ -70,7 +76,10 @@ export type ResourcesAction = SaveResourceAction;
 
 //#region Actions func types
 
-export type ChangeStatusDocumento = (id: string, status: DocumentoStatus) => ChangeStatusDocumentoAction;
+export type ChangeStatusDocumento = (
+    id: string,
+    status: DocumentoStatus
+) => ChangeStatusDocumentoAction;
 
 export type DeleteDocumento = (id: string) => DeleteDocumentoAction;
 
@@ -84,9 +93,19 @@ export type SaveResource = (resource: ILocalResource) => SaveResourceAction;
 
 //#region Thunk interfaces
 
-export type SaveFormularioAsyncThunk = ThunkAction<Promise<void>, {}, {}, SaveFormularioAction>;
+export type SaveFormularioAsyncThunk = ThunkAction<
+    Promise<void>,
+    {},
+    {},
+    SaveFormularioAction
+>;
 
-export type SaveLocalResourceAsyncThunk = ThunkAction<Promise<ILocalResource>, {}, {}, SaveResourceAction>;
+export type SaveLocalResourceAsyncThunk = ThunkAction<
+    Promise<ILocalResource>,
+    {},
+    {},
+    SaveResourceAction
+>;
 
 //#endregion
 
@@ -94,24 +113,27 @@ export type SaveLocalResourceAsyncThunk = ThunkAction<Promise<ILocalResource>, {
 
 export type SaveFormularioAsync = (user: IUser) => SaveFormularioAsyncThunk;
 
-export type SaveLocalResourceAsync = (resource: IResource, user:IUser) => SaveLocalResourceAsyncThunk;
+export type SaveLocalResourceAsync = (
+    resource: IResource,
+    user: IUser
+) => SaveLocalResourceAsyncThunk;
 
 //#endregion
 
 //#region Action type enum
 
 export enum DOCUMENTOS_ACTIONS {
-  CHANGESTATUS_DOCUMENTO='CHANGESTATUS_DOCUMENTO',
-  DELETE_DOCUMENTO='DELETE_DOCUMENTO',
-  SAVE_DOCUMENTO='SAVE_DOCUMENTO',
+    CHANGESTATUS_DOCUMENTO = 'CHANGESTATUS_DOCUMENTO',
+    DELETE_DOCUMENTO = 'DELETE_DOCUMENTO',
+    SAVE_DOCUMENTO = 'SAVE_DOCUMENTO'
 }
 
 export enum FORMULARIOS_ACTIONS {
-  SAVE_FORMULARIO='SAVE_FORMULARIO'
+    SAVE_FORMULARIO = 'SAVE_FORMULARIO'
 }
 
 export enum RESOURCES_ACTIONS {
-  SAVE_RESOURCE='SAVE_RESOURCE'
+    SAVE_RESOURCE = 'SAVE_RESOURCE'
 }
 
 //#endregion

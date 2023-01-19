@@ -1,56 +1,56 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
-  ActivityIndicator,
-  Animated,
-  ImageErrorEventData,
-  ImageStyle,
-  NativeSyntheticEvent,
-  StyleProp,
-  View,
+    ActivityIndicator,
+    Animated,
+    ImageErrorEventData,
+    ImageStyle,
+    NativeSyntheticEvent,
+    StyleProp,
+    View
 } from 'react-native';
-import {useAnimation} from './useAnimation';
+import { useAnimation } from './useAnimation';
 
 interface Props {
-  uri: string;
-  image: any;
-  style?: StyleProp<ImageStyle>;
+    uri: string;
+    image: any;
+    style?: StyleProp<ImageStyle>;
 }
 
-export const FadeInImage = ({uri, image = {}}: Props) => {
-  const {opacity, fadeIn} = useAnimation();
-  const [isLoading, setIsLoading] = useState(true);
+export const FadeInImage = ({ uri, image = {} }: Props) => {
+    const { opacity, fadeIn } = useAnimation();
+    const [isLoading, setIsLoading] = useState(true);
 
-  const finishLoading = () => {
-    setIsLoading(false);
-    fadeIn();
-  };
+    const finishLoading = () => {
+        setIsLoading(false);
+        fadeIn();
+    };
 
-  const onError = (err: NativeSyntheticEvent<ImageErrorEventData>) => {
-    setIsLoading(false);
-  };
+    const onError = (err: NativeSyntheticEvent<ImageErrorEventData>) => {
+        setIsLoading(false);
+    };
 
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      {/* {isLoading && (
+    return (
+        <View
+            style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center'
+            }}
+        >
+            {/* {isLoading && (
         <ActivityIndicator
           style={{position: 'absolute'}}
           color="#ffffff"
           size={25}
         />
       )} */}
-      <Animated.Image
-        source={uri}
-        onError={onError}
-        onLoad={finishLoading}
-        resizeMode="contain"
-        style={image}
-      />
-    </View>
-  );
+            <Animated.Image
+                source={uri}
+                onError={onError}
+                onLoad={finishLoading}
+                resizeMode="contain"
+                style={image}
+            />
+        </View>
+    );
 };

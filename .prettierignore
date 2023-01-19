@@ -1,0 +1,12 @@
+.eslintrc.js
+.bundle
+ios
+android
+node_modules
+.env
+babel.config.js
+jest.config.js
+react-native.config.js
+metro.config.js
+tsconfig.json
+app.json

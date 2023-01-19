@@ -1,12 +1,12 @@
-import {AnyAction} from 'redux';
-import {ThunkAction} from 'redux-thunk';
-import {IUser} from 'state/user/types';
-import {IMenu} from 'utils/types/menu';
+import { AnyAction } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { IUser } from 'state/user/types';
+import { IMenu } from 'utils/types/menu';
 
 //#region State Interface
 
 export interface MenuState {
-  menus: IMenu[];
+    menus: IMenu[];
 }
 
 //#endregion
@@ -14,9 +14,9 @@ export interface MenuState {
 //#region Actions interfaces
 
 export interface SaveMenuAction extends AnyAction {
-  payload: {
-    menu: IMenu;
-  };
+    payload: {
+        menu: IMenu;
+    };
 }
 
 //#endregion
@@ -36,10 +36,10 @@ export type SaveMenu = (menu: IMenu) => SaveMenuAction;
 //#region Thunk interfaces
 
 export type SaveMenuAsyncThunk = ThunkAction<
-  Promise<void>,
-  {},
-  {},
-  SaveMenuAction
+    Promise<void>,
+    {},
+    {},
+    SaveMenuAction
 >;
 
 //#endregion
@@ -53,7 +53,7 @@ export type SaveMenuAsync = (data: IUser) => SaveMenuAsyncThunk;
 //#region Action type enum
 
 export enum MENU_ACTIONS {
-  SAVE_MENU = 'SAVE_MENU',
+    SAVE_MENU = 'SAVE_MENU'
 }
 
 //#endregion

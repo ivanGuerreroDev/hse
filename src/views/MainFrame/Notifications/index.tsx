@@ -1,34 +1,34 @@
-import React, {Component} from 'react';
-import {Button, View} from 'react-native';
-import {connect} from 'react-redux';
-import {RootState} from 'state/store/store';
-import {DocumentoFactory} from 'utils/formulariodinamico/DocumentoFactory';
-import {IDocumento, IFormulario} from 'utils/types/formulariodinamico';
+import React, { Component } from 'react';
+import { Button, View } from 'react-native';
+import { connect } from 'react-redux';
+import { RootState } from 'state/store/store';
+import { DocumentoFactory } from 'utils/formulariodinamico/DocumentoFactory';
+import { IDocumento, IFormulario } from 'utils/types/formulariodinamico';
 import {
-  CompositeNavigationProp,
-  NavigationProp,
+    CompositeNavigationProp,
+    NavigationProp
 } from '@react-navigation/native';
 import {
-  MainFrameStackParamList,
-  RootMainStackParamList,
+    MainFrameStackParamList,
+    RootMainStackParamList
 } from 'utils/types/navigations';
 
 import Layout from 'views/MainFrame/layaut';
 
 type Props = {
-  formularios: IFormulario[];
-  documentos: IDocumento[];
-  navigation: CompositeNavigationProp<
-    NavigationProp<MainFrameStackParamList, 'Documents'>,
-    NavigationProp<RootMainStackParamList>
-  >;
+    formularios: IFormulario[];
+    documentos: IDocumento[];
+    navigation: CompositeNavigationProp<
+        NavigationProp<MainFrameStackParamList, 'Documents'>,
+        NavigationProp<RootMainStackParamList>
+    >;
 };
 
 class Notifications extends Component<Props> {
-  render() {
-    return (
-      <Layout>
-{/*         <View>
+    render() {
+        return (
+            <Layout>
+                {/*         <View>
           {this.props.formularios.map((formulario, index) => (
             <Button
               key={index * 2}
@@ -54,16 +54,16 @@ class Notifications extends Component<Props> {
             />
           ))}
         </View> */}
-      </Layout>
-    );
-  }
+            </Layout>
+        );
+    }
 }
 
 const mapStateToProps = (state: RootState) => {
-  return {
-    formularios: state.formularios.formularios,
-    documentos: state.documentos.documentos,
-  };
+    return {
+        formularios: state.formularios.formularios,
+        documentos: state.documentos.documentos
+    };
 };
 
 export default connect(mapStateToProps, null)(Notifications);

@@ -1,21 +1,21 @@
-import {AnyAction} from 'redux';
-import {AuthenticationResultType} from '@aws-sdk/client-cognito-identity-provider';
+import { AnyAction } from 'redux';
+import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
 
 //#region State interface
 
 export interface IUser {
-  Empresa: string;
-  Username: string;
-  UserTokens: AuthenticationResultType;
+    Empresa: string;
+    Username: string;
+    UserTokens: AuthenticationResultType;
 }
 
 export interface UserState {
-  userList: IUser[];
-  rememberUser: IUser | undefined;
+    userList: IUser[];
+    rememberUser: IUser | undefined;
 }
 
 export interface CurrentUserState {
-  user: IUser | undefined;
+    user: IUser | undefined;
 }
 
 //#endregion
@@ -25,10 +25,10 @@ export interface CurrentUserState {
 export interface ForgiveUserAction extends AnyAction {}
 
 export interface SaveUserAction extends AnyAction {
-  payload: {
-    user: IUser;
-    remember: boolean;
-  };
+    payload: {
+        user: IUser;
+        remember: boolean;
+    };
 }
 
 //#endregion
@@ -50,8 +50,8 @@ export type SaveUser = (user: IUser, remember: boolean) => SaveUserAction;
 //#region Action type enum
 
 export enum USER_ACTIONS {
-  FORGIVE_USER='FORGIVE_USER',
-  SAVE_USER='SAVE_USER',
+    FORGIVE_USER = 'FORGIVE_USER',
+    SAVE_USER = 'SAVE_USER'
 }
 
 //#endregion

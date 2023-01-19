@@ -1,12 +1,12 @@
-import {AnyAction} from 'redux';
-import {ThunkAction} from 'redux-thunk';
-import {IPerfil} from 'utils/types/perfil';
-import {IUser} from 'state/user/types';
+import { AnyAction } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { IPerfil } from 'utils/types/perfil';
+import { IUser } from 'state/user/types';
 
 //#region State Interface
 
 export interface PerfilState {
-  perfiles: IPerfil[];
+    perfiles: IPerfil[];
 }
 
 //#endregion
@@ -14,9 +14,9 @@ export interface PerfilState {
 //#region Actions interfaces
 
 export interface SavePerfilAction extends AnyAction {
-  payload: {
-    perfil: IPerfil;
-  };
+    payload: {
+        perfil: IPerfil;
+    };
 }
 
 //#endregion
@@ -36,10 +36,10 @@ export type SavePerfil = (perfil: IPerfil) => SavePerfilAction;
 //#region Thunk interfaces
 
 export type SavePerfilAsyncThunk = ThunkAction<
-  Promise<void>,
-  {},
-  {},
-  SavePerfilAction
+    Promise<void>,
+    {},
+    {},
+    SavePerfilAction
 >;
 
 //#endregion
@@ -53,7 +53,7 @@ export type SavePerfilAsync = (data: IUser) => SavePerfilAsyncThunk;
 //#region Action type enum
 
 export enum PERFIL_ACTIONS {
-  SAVE_PERFIL = 'SAVE_PERFIL',
+    SAVE_PERFIL = 'SAVE_PERFIL'
 }
 
 //#endregion

@@ -1,12 +1,12 @@
-import {AnyAction} from 'redux';
-import {ThunkAction} from 'redux-thunk';
-import {IUser} from 'state/user/types';
-import {IInspecciones} from 'utils/types/menu';
+import { AnyAction } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { IUser } from 'state/user/types';
+import { IInspecciones } from 'utils/types/menu';
 
 //#region State Interface
 
 export interface InspeccionState {
-  inspecciones: IInspecciones[];
+    inspecciones: IInspecciones[];
 }
 
 //#endregion
@@ -14,9 +14,9 @@ export interface InspeccionState {
 //#region Actions interfaces
 
 export interface SaveInspeccionAction extends AnyAction {
-  payload: {
-    inspeccion: IInspecciones;
-  };
+    payload: {
+        inspeccion: IInspecciones;
+    };
 }
 
 //#endregion
@@ -36,10 +36,10 @@ export type SaveInspeccion = (inspeccion: IInspecciones) => InspeccionAction;
 //#region Thunk interfaces
 
 export type SaveInspeccionAsyncThunk = ThunkAction<
-  Promise<void>,
-  {},
-  {},
-  SaveInspeccionAction
+    Promise<void>,
+    {},
+    {},
+    SaveInspeccionAction
 >;
 
 //#endregion
@@ -53,7 +53,7 @@ export type SaveInspeccionAsync = (data: IUser) => SaveInspeccionAsyncThunk;
 //#region Action type enum
 
 export enum INSPECCION_ACTIONS {
-  SAVE_INSPECCION = 'SAVE_INSPECCION',
+    SAVE_INSPECCION = 'SAVE_INSPECCION'
 }
 
 //#endregion

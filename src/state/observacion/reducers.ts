@@ -1,28 +1,30 @@
 import {
-  ObservacionState,
-  ObservacionAction,
-  OBSERVACION_ACTIONS,
+    ObservacionState,
+    ObservacionAction,
+    OBSERVACION_ACTIONS
 } from './types';
 
 const initialObservacionState: ObservacionState = {
-  observaciones: [],
+    observaciones: []
 };
 
 export const observacionReducer = (
-  state: ObservacionState = initialObservacionState,
-  action: ObservacionAction,
+    state: ObservacionState = initialObservacionState,
+    action: ObservacionAction
 ): ObservacionState => {
-  switch (action.type) {
-    case OBSERVACION_ACTIONS.SAVE_OBSERVACION:
-      const {observacion} = action.payload;
-      return {
-        observaciones: [
-          ...state.observaciones.filter(item => item.Id !== observacion.Id),
-          observacion,
-        ],
-      };
+    switch (action.type) {
+        case OBSERVACION_ACTIONS.SAVE_OBSERVACION:
+            const { observacion } = action.payload;
+            return {
+                observaciones: [
+                    ...state.observaciones.filter(
+                        (item) => item.Id !== observacion.Id
+                    ),
+                    observacion
+                ]
+            };
 
-    default:
-      return state;
-  }
+        default:
+            return state;
+    }
 };

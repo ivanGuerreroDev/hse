@@ -1,17 +1,17 @@
 export const lightTheme = {
-  Header: {
-    barStyle: 'dark-content',
-    statusBarProps: {
-      backgroundColor: 'transparent',
+    Header: {
+        barStyle: 'dark-content',
+        statusBarProps: {
+            backgroundColor: 'transparent'
+        }
     },
-  },
-  Text: {
-    style: {
-      fontSize: 15,
+    Text: {
+        style: {
+            fontSize: 15
+        }
     },
-  },
-  Input: {
-    /* labelStyle: {
+    Input: {
+        /* labelStyle: {
       paddingLeft: 5,
       fontSize: 10,
       color: '#00000099',
@@ -33,5 +33,5 @@ export const lightTheme = {
       fontSize: 15,
       fontFamily: 'Roboto-Medium',
     }, */
-  },
+    }
 };

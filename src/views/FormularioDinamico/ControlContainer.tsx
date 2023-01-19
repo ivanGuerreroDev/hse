@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
-import {View} from 'react-native';
+import React, { Component } from 'react';
+import { View } from 'react-native';
 import ControlComponent from './ControlComponent';
 
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootMainStackParamList} from 'types/navigations';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootMainStackParamList } from 'types/navigations';
 
-import {ControlBridge} from 'utils/formulariodinamico/ControlBridge';
+import { ControlBridge } from 'utils/formulariodinamico/ControlBridge';
 
 import CheckControl from './Controls/CheckControl';
 import LabelControl from './Controls/LabelControl';
@@ -17,96 +17,110 @@ import SignControl from './Controls/SignControl';
 import SelectMultipleControl from './Controls/SelectMultiple-Control';
 
 type MapControlBridgesProps = {
-  controlBridges: ControlBridge[];
-  path: string;
+    controlBridges: ControlBridge[];
+    path: string;
 };
 
 type NavigationProps = {
-  navigation: StackNavigationProp<RootMainStackParamList, 'FormularioDinamico'>;
+    navigation: StackNavigationProp<
+        RootMainStackParamList,
+        'FormularioDinamico'
+    >;
 };
 
 type Props = MapControlBridgesProps & NavigationProps;
 
 export default class ControlContainer extends Component<Props> {
-  render() {
-    const {controlBridges, navigation, path, scrollRef} = this.props;
+    render() {
+        const { controlBridges, navigation, path, scrollRef } = this.props;
 
-    const componentsArr: JSX.Element[] = mapControlBridges(
-      controlBridges,
-      path,
-    )
-    const ControlComponents = componentsArr?.map((controlBridge, index) => {
-      let Control = controlComponent(controlBridge);
-      return (
-        <View key={'controlview-'+index} style={{zIndex: componentsArr.length - index}}>
-          <Control
-            key={'control-'+index}
-            controlBridge={controlBridge}
-            navigation={navigation}
-            scrollRef={(componentsArr.length - 1) === index ? scrollRef : null}
-            children={
-              <ControlContainer key={'controlContainer-'+index} {...this.props} key={index} path={controlBridge.Path} />
-            }
-          />
-        </View>
-      );
+        const componentsArr: JSX.Element[] = mapControlBridges(
+            controlBridges,
+            path
+        );
+        const ControlComponents = componentsArr?.map((controlBridge, index) => {
+            let Control = controlComponent(controlBridge);
+            return (
+                <View
+                    key={'controlview-' + index}
+                    style={{ zIndex: componentsArr.length - index }}
+                >
+                    <Control
+                        key={'control-' + index}
+                        controlBridge={controlBridge}
+                        navigation={navigation}
+                        scrollRef={
+                            componentsArr.length - 1 === index
+                                ? scrollRef
+                                : null
+                        }
+                        children={
+                            <ControlContainer
+                                key={'controlContainer-' + index}
+                                {...this.props}
+                                key={index}
+                                path={controlBridge.Path}
+                            />
+                        }
+                    />
+                </View>
+            );
+        });
 
-    });
-
-    return <View>{ControlComponents}</View>;
-  }
+        return <View>{ControlComponents}</View>;
+    }
 }
 
 type MapControlBridgesType = (
-  controlBridges: ControlBridge[],
-  path: string,
+    controlBridges: ControlBridge[],
+    path: string
 ) => ControlBridge[];
 const mapControlBridges: MapControlBridgesType = (
-  controlBridges: ControlBridge[],
-  path: string,
+    controlBridges: ControlBridge[],
+    path: string
 ) => {
-  return controlBridges
-    .filter(controlBridge =>
-      new RegExp(`^${path}.[0-9]+$`).test(controlBridge.Path),
-    )
-    .sort((a, b) => a.Control.order - b.Control.order);
+    return controlBridges
+        .filter((controlBridge) =>
+            new RegExp(`^${path}.[0-9]+$`).test(controlBridge.Path)
+        )
+        .sort((a, b) => a.Control.order - b.Control.order);
 };
 
 type ControlComponentSelectType = (
-  controlBridge: ControlBridge,
+    controlBridge: ControlBridge
 ) => typeof ControlComponent;
 const controlComponent: ControlComponentSelectType = (
-  controlBridge: ControlBridge
+    controlBridge: ControlBridge
 ) => {
-  let controlType = ControlComponent;
-  switch (controlBridge.Control.type) {
-    case 'Check':
-      controlType = CheckControl;
-      break;
-    case 'Label':
-      controlType = LabelControl;
-      break;
-    case 'List':
-      controlType = ListControl;
-      break;
-    case 'Remarks':
-      controlType = RemarksControl;
-      break;
-    case 'Text':
-      controlType = TextControl;
-      break;
-    case 'Select':
-      controlType = SelectControl;
-      break;
-    case 'Firma':
-      controlType = SignControl;
-      break;
-    case 'SelectMultiple':
-      controlType = SelectMultipleControl;
-      break;
-    default:
-      break;
-  }
+    let controlType = ControlComponent;
+    switch (controlBridge.Control.type) {
+        case 'Check':
+            controlType = CheckControl;
+            break;
+        case 'Label':
+            controlType = LabelControl;
+            break;
+        case 'List':
+            controlType = ListControl;
+            break;
+        case 'Remarks':
+            controlType = RemarksControl;
+            break;
+        case 'Text':
+            controlType = TextControl;
+            break;
+        case 'Select':
+            controlType = SelectControl;
+            break;
+        case 'Firma':
+            controlType = SignControl;
+            break;
+        case 'SelectMultiple':
+            controlType = SelectMultipleControl;
+            break;
+        default:
+            break;
+    }
 
-  return controlType;
+    return controlType;
 };

@@ -1,1 +1,10 @@
-export type ControlType = 'Check' | 'Label' | 'List' | 'Page' | 'Remarks' | 'Text' | 'Select' | 'Firma' | 'SelectMultiple';
+export type ControlType =
+    | 'Check'
+    | 'Label'
+    | 'List'
+    | 'Page'
+    | 'Remarks'
+    | 'Text'
+    | 'Select'
+    | 'Firma'
+    | 'SelectMultiple';

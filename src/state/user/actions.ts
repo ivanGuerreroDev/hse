@@ -1,31 +1,31 @@
 import {
-  USER_ACTIONS,
-  ForgiveUser,
-  ForgiveUserAction,
-  IUser,
-  SaveUser,
-  SaveUserAction,
+    USER_ACTIONS,
+    ForgiveUser,
+    ForgiveUserAction,
+    IUser,
+    SaveUser,
+    SaveUserAction
 } from './types';
 
 export const forgiveUser: ForgiveUser = (): ForgiveUserAction => {
-  let action: ForgiveUserAction = {
-    type: USER_ACTIONS.FORGIVE_USER,
-  };
+    let action: ForgiveUserAction = {
+        type: USER_ACTIONS.FORGIVE_USER
+    };
 
-  return action;
+    return action;
 };
 
 export const saveUser: SaveUser = (
-  user: IUser,
-  remember: boolean,
+    user: IUser,
+    remember: boolean
 ): SaveUserAction => {
-  let action: SaveUserAction = {
-    type: USER_ACTIONS.SAVE_USER,
-    payload: {
-      user: user,
-      remember: remember,
-    },
-  };
+    let action: SaveUserAction = {
+        type: USER_ACTIONS.SAVE_USER,
+        payload: {
+            user: user,
+            remember: remember
+        }
+    };
 
-  return action;
+    return action;
 };

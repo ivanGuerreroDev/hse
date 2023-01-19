@@ -1,4 +1,4 @@
-import {Dimensions, Platform, StatusBar} from 'react-native';
+import { Dimensions, Platform, StatusBar } from 'react-native';
 
 const STATUSBAR_DEFAULT_HEIGHT = 20;
 const STATUSBAR_X_HEIGHT = 44;
@@ -24,30 +24,30 @@ const IP14PRO_HEIGHT = 852;
 const IP14PROMAX_WIDTH = 430;
 const IP14PROMAX_HEIGHT = 932;
 
-const {height: W_HEIGHT, width: W_WIDTH} = Dimensions.get('window');
+const { height: W_HEIGHT, width: W_WIDTH } = Dimensions.get('window');
 
 let statusBarHeight = STATUSBAR_DEFAULT_HEIGHT;
 
 if (Platform.OS === 'ios' && !Platform.isPad && !Platform.isTVOS) {
-  if (W_WIDTH === X_WIDTH && W_HEIGHT === X_HEIGHT) {
-    statusBarHeight = STATUSBAR_X_HEIGHT;
-  } else if (W_WIDTH === XSMAX_WIDTH && W_HEIGHT === XSMAX_HEIGHT) {
-    statusBarHeight = STATUSBAR_X_HEIGHT;
-  } else if (W_WIDTH === IP12_WIDTH && W_HEIGHT === IP12_HEIGHT) {
-    statusBarHeight = STATUSBAR_IP12_HEIGHT;
-  } else if (W_WIDTH === IP12MAX_WIDTH && W_HEIGHT === IP12MAX_HEIGHT) {
-    statusBarHeight = STATUSBAR_IP12MAX_HEIGHT;
-  } else if (W_WIDTH === IP14PROMAX_WIDTH && W_HEIGHT === IP14PROMAX_HEIGHT) {
-    statusBarHeight = STATUSBAR_IP14PRO_HEIGHT;
-  } else if (W_WIDTH === IP14PRO_WIDTH && W_HEIGHT === IP14PRO_HEIGHT) {
-    statusBarHeight = STATUSBAR_IP14PRO_HEIGHT;
-  }
+    if (W_WIDTH === X_WIDTH && W_HEIGHT === X_HEIGHT) {
+        statusBarHeight = STATUSBAR_X_HEIGHT;
+    } else if (W_WIDTH === XSMAX_WIDTH && W_HEIGHT === XSMAX_HEIGHT) {
+        statusBarHeight = STATUSBAR_X_HEIGHT;
+    } else if (W_WIDTH === IP12_WIDTH && W_HEIGHT === IP12_HEIGHT) {
+        statusBarHeight = STATUSBAR_IP12_HEIGHT;
+    } else if (W_WIDTH === IP12MAX_WIDTH && W_HEIGHT === IP12MAX_HEIGHT) {
+        statusBarHeight = STATUSBAR_IP12MAX_HEIGHT;
+    } else if (W_WIDTH === IP14PROMAX_WIDTH && W_HEIGHT === IP14PROMAX_HEIGHT) {
+        statusBarHeight = STATUSBAR_IP14PRO_HEIGHT;
+    } else if (W_WIDTH === IP14PRO_WIDTH && W_HEIGHT === IP14PRO_HEIGHT) {
+        statusBarHeight = STATUSBAR_IP14PRO_HEIGHT;
+    }
 }
 
 export function getStatusBarHeight() {
-  return Platform.select({
-    ios: 0,
-    android: StatusBar.currentHeight,
-    default: 0,
-  });
+    return Platform.select({
+        ios: 0,
+        android: StatusBar.currentHeight,
+        default: 0
+    });
 }

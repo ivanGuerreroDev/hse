@@ -1,24 +1,26 @@
-import {InspeccionState, InspeccionAction, INSPECCION_ACTIONS} from './types';
+import { InspeccionState, InspeccionAction, INSPECCION_ACTIONS } from './types';
 
 const initialInspeccionState: InspeccionState = {
-  inspecciones: [],
+    inspecciones: []
 };
 
 export const inspeccionReducer = (
-  state: InspeccionState = initialInspeccionState,
-  action: InspeccionAction,
+    state: InspeccionState = initialInspeccionState,
+    action: InspeccionAction
 ): InspeccionState => {
-  switch (action.type) {
-    case INSPECCION_ACTIONS.SAVE_INSPECCION:
-      const {inspeccion} = action.payload;
-      return {
-        inspecciones: [
-          ...state.inspecciones.filter(item => item.Id !== inspeccion.Id),
-          inspeccion,
-        ],
-      };
+    switch (action.type) {
+        case INSPECCION_ACTIONS.SAVE_INSPECCION:
+            const { inspeccion } = action.payload;
+            return {
+                inspecciones: [
+                    ...state.inspecciones.filter(
+                        (item) => item.Id !== inspeccion.Id
+                    ),
+                    inspeccion
+                ]
+            };
 
-    default:
-      return state;
-  }
+        default:
+            return state;
+    }
 };

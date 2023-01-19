@@ -1,12 +1,12 @@
-import {AnyAction} from 'redux';
-import {ThunkAction} from 'redux-thunk';
-import {IUser} from 'state/user/types';
-import {IObservaciones} from 'utils/types/menu';
+import { AnyAction } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { IUser } from 'state/user/types';
+import { IObservaciones } from 'utils/types/menu';
 
 //#region State Interface
 
 export interface ObservacionState {
-  observaciones: IObservaciones[];
+    observaciones: IObservaciones[];
 }
 
 //#endregion
@@ -14,9 +14,9 @@ export interface ObservacionState {
 //#region Actions interfaces
 
 export interface SaveObservacionAction extends AnyAction {
-  payload: {
-    observacion: IObservaciones;
-  };
+    payload: {
+        observacion: IObservaciones;
+    };
 }
 
 //#endregion
@@ -30,7 +30,7 @@ export type ObservacionAction = SaveObservacionAction;
 //#region Actions func types
 
 export type SaveObservacion = (
-  obsercacion: IObservaciones,
+    obsercacion: IObservaciones
 ) => ObservacionAction;
 
 //#endregion
@@ -38,10 +38,10 @@ export type SaveObservacion = (
 //#region Thunk interfaces
 
 export type SaveObservacionAsyncThunk = ThunkAction<
-  Promise<void>,
-  {},
-  {},
-  SaveObservacionAction
+    Promise<void>,
+    {},
+    {},
+    SaveObservacionAction
 >;
 
 //#endregion
@@ -55,7 +55,7 @@ export type SaveObservacionAsync = (data: IUser) => SaveObservacionAsyncThunk;
 //#region Action type enum
 
 export enum OBSERVACION_ACTIONS {
-  SAVE_OBSERVACION = 'SAVE_OBSERVACION',
+    SAVE_OBSERVACION = 'SAVE_OBSERVACION'
 }
 
 //#endregion

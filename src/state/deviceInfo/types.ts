@@ -1,12 +1,12 @@
-import {AnyAction} from 'redux';
+import { AnyAction } from 'redux';
 import { GeolocationInfo, StaticDeviceInfo } from 'utils/types/deviceInfo';
 // import { NetInfoCellularGeneration, NetInfoStateType, NetInfoState} from '@react-native-community/netinfo';
 
 //#region State interface
 
 export interface DeviceInfoState {
-  info: StaticDeviceInfo;
-  geolocation: GeolocationInfo;
+    info: StaticDeviceInfo;
+    geolocation: GeolocationInfo;
 }
 
 //#endregion
@@ -14,34 +14,40 @@ export interface DeviceInfoState {
 //#region Actions interfaces
 
 export interface UpdateStaticDeviceInfoAction extends AnyAction {
-  payload: StaticDeviceInfo;
+    payload: StaticDeviceInfo;
 }
 
 export interface UpdateGeolocationAction extends AnyAction {
-  payload: GeolocationInfo;
+    payload: GeolocationInfo;
 }
 
 //#endregion
 
 //#region Combined actions interfaces type
 
-export type DeviceInfoAction = UpdateStaticDeviceInfoAction | UpdateGeolocationAction;
+export type DeviceInfoAction =
+    | UpdateStaticDeviceInfoAction
+    | UpdateGeolocationAction;
 
 //#endregion
 
 //#region Actions func types
 
-export type UpdateStaticDeviceInfo = (info: StaticDeviceInfo) => UpdateStaticDeviceInfoAction;
+export type UpdateStaticDeviceInfo = (
+    info: StaticDeviceInfo
+) => UpdateStaticDeviceInfoAction;
 
-export type UpdateGeolocation = (geolocation: GeolocationInfo) => UpdateGeolocationAction;
+export type UpdateGeolocation = (
+    geolocation: GeolocationInfo
+) => UpdateGeolocationAction;
 
 //#endregion
 
 //#region Action type enum
 
 export enum DEVICEINFO_ACTIONS {
-  UPDATESTATICDEVICEINFO_DEVICE_INFO='UPDATESTATICDEVICEINFO_DEVICE_INFO',
-  UPDATEGEOLOCATION_DEVICEINFO='UPDATEGEOLOCATION_DEVICEINFO'
+    UPDATESTATICDEVICEINFO_DEVICE_INFO = 'UPDATESTATICDEVICEINFO_DEVICE_INFO',
+    UPDATEGEOLOCATION_DEVICEINFO = 'UPDATEGEOLOCATION_DEVICEINFO'
 }
 
 //#endregion
