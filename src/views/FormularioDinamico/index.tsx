@@ -408,7 +408,7 @@ class FormularioDinamico extends Component<Props, State> {
                     style={{ flex: 1, paddingTop: 0 }}
                     enabled
                 >
-                    <View style={{ overflow: 'hidden', paddingBottom: '4%' }}>
+                    <View style={{ overflow: 'hidden', paddingBottom: '4%', backgroundColor: '#fff' }}>
                         <View style={styles.tabsBar}>
                             <Tab
                                 value={this.state.tabIndex}
@@ -515,7 +515,8 @@ const styles = StyleSheet.create({
     },
     controlsContent: {
         flex: 1,
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
+        backgroundColor: '#fff'
     },
     footerBar: {
         flex: 0,
