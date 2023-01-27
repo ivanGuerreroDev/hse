@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import { Tab, TabItemProps } from 'react-native-elements';
 
 type Props = TabItemProps & {
+    app: String,
     title?:
         | string
         | React.ReactElement<
@@ -28,7 +29,7 @@ export const TabItem: FunctionComponent<Props> = (props: Props) => {
 
     return (
         <CTabItem
-            containerStyle={[defaultStyles.container, selectedStyles.container]}
+            containerStyle={[defaultStyles.container, selectedStyles.container, props.app === 'HSE' ? defaultStyles.hseColor : props.app === 'Producción' ? defaultStyles.produccionColor : null]}
             titleStyle={[defaultStyles.title, selectedStyles.title]}
         />
     );
@@ -36,8 +37,14 @@ export const TabItem: FunctionComponent<Props> = (props: Props) => {
 
 const defaultStyles = StyleSheet.create({
     container: {
-        backgroundColor: '#FDAE01',
+        backgroundColor: '#cbcbcb',
         borderTopWidth: 0
+    },
+    hseColor:{
+        backgroundColor: '#FDAE01'
+    },
+    produccionColor: {
+        backgroundColor: '#55b25f'
     },
     title: {
         color: 'white',

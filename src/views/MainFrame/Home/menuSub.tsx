@@ -19,10 +19,11 @@ import MenuCard from './menuCard';
 
 import { connect } from 'react-redux';
 import { RootState } from 'state/store/store';
-import { ICapacitacion, IObservaciones, IInspecciones } from 'utils/types/menu';
+import { ICapacitacion, IObservaciones, IInspecciones, ICombustibles } from 'utils/types/menu';
 import { IFormulario } from 'utils/types/formulariodinamico';
 
 type StateProps = {
+    combustibles: ICombustibles[] | any[];
     submenuList: IObservaciones[] | any[];
     submenuCard: ICapacitacion[] | any[];
     submenuAccordion: IInspecciones[] | any[];
@@ -35,11 +36,13 @@ type Navigation = {
         NavigationProp<MainFrameStackParamList, 'SubMenu'>,
         NavigationProp<RootMainStackParamList>
     >;
+    app: String;
 };
 
 type Props = StateProps & Navigation;
 class SubMenu extends Component<Props> {
     state = {
+        combustibles: this.props.combustibles,
         list: this.props.submenuList,
         accordion: this.props.submenuAccordion[0],
         card: this.props.submenuCard[0]
@@ -48,7 +51,8 @@ class SubMenu extends Component<Props> {
         return (
             <Layaut
                 Titulo={this.props.route.params.titulo}
-                navigation={() => this.props.navigation.goBack()}
+                navigation={this.props.navigation}
+                app={this.props.app}
             >
                 <ScrollView>
                     <View style={styles.container}>
@@ -58,6 +62,7 @@ class SubMenu extends Component<Props> {
                                     List={this.state.list}
                                     formularios={this.props.formularios}
                                     navigation={this.props.navigation}
+                                    app={this.props.app}
                                 />
                             </View>
                         )}
@@ -67,6 +72,17 @@ class SubMenu extends Component<Props> {
                                     Accordion={this.state.accordion}
                                     formularios={this.props.formularios}
                                     navigation={this.props.navigation}
+                                    app={this.props.app}
+                                />
+                            </View>
+                        )}
+                        {this.props.route.params.titulo === 'Combustibles' && (
+                            <View>
+                                <MenuList
+                                    List={this.state.combustibles}
+                                    formularios={this.props.formularios}
+                                    navigation={this.props.navigation}
+                                    app={this.props.app}
                                 />
                             </View>
                         )}
@@ -76,6 +92,7 @@ class SubMenu extends Component<Props> {
                                 <MenuCard
                                     Card={this.state.card}
                                     navigation={this.props.navigation}
+                                    app={this.props.app}
                                 />
                             </View>
                         )}
@@ -91,6 +108,7 @@ const mapStateToProps = (state: RootState) => {
         submenuList: state.observacion.observaciones,
         submenuCard: state.capacitacion.capacitaciones,
         submenuAccordion: state.inspeccion.inspecciones,
+        combustibles: state.combustibles.combustibles,
         formularios: state.formularios.formularios
     };
 };

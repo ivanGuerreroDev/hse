@@ -17,6 +17,7 @@ import SignControl from './Controls/SignControl';
 import SelectMultipleControl from './Controls/SelectMultiple-Control';
 
 type MapControlBridgesProps = {
+    app: String;
     controlBridges: ControlBridge[];
     path: string;
 };
@@ -54,6 +55,7 @@ export default class ControlContainer extends Component<Props> {
                                 ? scrollRef
                                 : null
                         }
+                        app={this.props.app}
                         children={
                             <ControlContainer
                                 key={'controlContainer-' + index}

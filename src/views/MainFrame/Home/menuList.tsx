@@ -20,14 +20,15 @@ type Props = {
         NavigationProp<MainFrameStackParamList, 'SubMenu'>,
         NavigationProp<RootMainStackParamList>
     >;
+    app: String;
 };
 
 class MenuList extends Component<Props> {
     state = {
-        List: Object.values(this.props.List).map(
+        List: Object.values(this?.props?.List)?.map(
             (abuelo: any, i) =>
                 abuelo && {
-                    Observacion: abuelo.map(
+                    Observacion: abuelo?.map(
                         (item: any) =>
                             item && {
                                 Encabezado: item,
@@ -35,14 +36,15 @@ class MenuList extends Component<Props> {
                                     (x) => x._id === item.Formulario
                                 )
                             }
-                    )
+                    ) || []
                 }
-        )
+        ) || []
     };
     render() {
+        const {app} = this.props
         return (
             <View style={styles.container}>
-                {this.state.List[0].Observacion.map((item: any, i: any) => (
+                {this.state?.List?.[0]?.Observacion.map((item: any, i: any) => (
                     <ListItem
                         key={i}
                         Component={TouchableScale}
@@ -58,7 +60,8 @@ class MenuList extends Component<Props> {
                                         documento:
                                             DocumentoFactory.createFromFormulario(
                                                 item.Formulario[0]
-                                            )
+                                            ),
+                                        app: app
                                     }
                                 );
                             }

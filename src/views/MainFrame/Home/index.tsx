@@ -2,20 +2,20 @@ import React, { Component } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 //import 'utils/geolocation';
 
-import menu from './menu';
-import submenu from './menuSub';
+import Menu from './menu';
+import Submenu from './menuSub';
 
 const Stack = createStackNavigator();
 
-class Home extends Component {
-    render() {
-        return (
-            <Stack.Navigator headerMode="none">
-                <Stack.Screen name="Menu" component={menu} />
-                <Stack.Screen name="SubMenu" component={submenu} />
-            </Stack.Navigator>
-        );
-    }
+const Home = (props: any) => {
+    const MenuComp = (compProps: any) => <Menu {...props} {...compProps}/>
+    const SubmenuComp = (compProps: any) => <Submenu {...props} {...compProps}/>
+    return (
+        <Stack.Navigator headerMode="none">
+            <Stack.Screen name="Menu" component={MenuComp} />
+            <Stack.Screen name="SubMenu" component={SubmenuComp} />
+        </Stack.Navigator>
+    );
 }
 
 export default Home;

@@ -15,16 +15,16 @@ import Profile from './Profile';
 const Tab = createBottomTabNavigator<MainFrameStackParamList>();
 
 function HomeComponent (props: any) {
-    return <Home app='HSE' {...props}/>
+    return <Home app='Producción' {...props}/>
 }
 function DocumentsComponent (props: any) {
-    return <Documents app='HSE' {...props}/>
+    return <Documents app='Producción' {...props}/>
 }
 function QueriesComponent (props: any) {
-    return <Queries app='HSE' {...props}/>
+    return <Queries app='Producción' {...props}/>
 }
 function ProfileComponent (props: any) {
-    return <Profile app='HSE' {...props}/>
+    return <Profile app='Producción' {...props}/>
 }
 
 class MainFrame extends Component {
@@ -47,7 +47,7 @@ class MainFrame extends Component {
                                     source={
                                         !props.focused
                                             ? require('components/Assets/DownMenu/modulos.png')
-                                            : require('components/Assets/DownMenu/mod_color.png')
+                                            : require('components/Assets/DownMenu/mod_color_produccion.png')
                                     }
                                     style={styles.icon}
                                     resizeMode="contain"
@@ -63,7 +63,7 @@ class MainFrame extends Component {
                 />
                 <Tab.Screen
                     name="Documents"
-                    component={DocumentsComponent }
+                    component={DocumentsComponent}
                     options={{
                         tabBarLabel: '',
                         tabBarIcon: (props) => (
@@ -73,7 +73,7 @@ class MainFrame extends Component {
                                     source={
                                         !props.focused
                                             ? require('components/Assets/DownMenu/documentos.png')
-                                            : require('components/Assets/DownMenu/documentos_color.png')
+                                            : require('components/Assets/DownMenu/documentos_color_produccion.png')
                                     }
                                     style={styles.iconDocs}
                                     resizeMode="contain"
@@ -100,7 +100,7 @@ class MainFrame extends Component {
                             <View style={styles.view}>
                                 {/* <Icon type="metarial" name="category" color={props.color} /> */}
                                 <View style={{
-                                    backgroundColor : '#fdae01',
+                                    backgroundColor : '#55b25f',
                                     height: 50,
                                     width: 50,
                                     justifyContent: 'center',
@@ -120,7 +120,7 @@ class MainFrame extends Component {
 
                 <Tab.Screen
                     name="Notifications"
-                    component={QueriesComponent }
+                    component={QueriesComponent}
                     options={{
                         tabBarLabel: '',
                         tabBarIcon: (props) => (
@@ -130,7 +130,7 @@ class MainFrame extends Component {
                                     source={
                                         !props.focused
                                             ? require('components/Assets/DownMenu/notificaciones.png')
-                                            : require('components/Assets/DownMenu/notificaciones_color.png')
+                                            : require('components/Assets/DownMenu/notificaciones_color_produccion.png')
                                     }
                                     style={styles.iconNot}
                                     resizeMode="contain"
@@ -148,7 +148,7 @@ class MainFrame extends Component {
                 />
                 <Tab.Screen
                     name="Profile"
-                    component={ProfileComponent }
+                    component={ProfileComponent}
                     options={{
                         tabBarLabel: '',
                         tabBarIcon: (props) => (
@@ -158,7 +158,7 @@ class MainFrame extends Component {
                                     source={
                                         !props.focused
                                             ? require('components/Assets/DownMenu/perfil.png')
-                                            : require('components/Assets/DownMenu/perfil_color.png')
+                                            : require('components/Assets/DownMenu/perfil_color_produccion.png')
                                     }
                                     style={styles.iconNot}
                                     resizeMode="contain"

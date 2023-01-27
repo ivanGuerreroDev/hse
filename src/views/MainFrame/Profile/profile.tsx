@@ -32,17 +32,14 @@ type DispatchProps = {
     forgiveUser: ForgiveUser;
 };
 
-type Props = StateProps & DispatchProps;
+type Props = StateProps & DispatchProps & {
+    app: String;
+};
 class Profile extends Component<Props> {
     state = {
         geo: store.getState().geolocation
     };
     render() {
-        console.log(this.state.geo);
-        console.log(
-            Geolocation.getCurrentPosition((info) => console.log(info))
-        );
-
         // //SOLO GPS:
         // const age = (1000*60*30);
         // const time = (1000*1*20);
@@ -60,11 +57,11 @@ class Profile extends Component<Props> {
         // },{ enableHighAccuracy: true, timeout: time, maximumAge: age });
 
         return (
-            <Layout>
+            <Layout app={this.props.app}>
                 {this.props.perfil[this.props.perfil.length - 1] && (
                     <>
                         <View style={{ alignItems: 'flex-end', paddingEnd: 5 }}>
-                            <Text style={styles.vtext}>V. 2.0</Text>
+                            <Text style={styles.vtext}>V. 2.1.0</Text>
                         </View>
                         <View style={styles.avatar}>
                             <Avatar

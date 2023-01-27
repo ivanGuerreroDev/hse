@@ -35,6 +35,10 @@ import { SaveObservacionAsync } from 'state/observacion/types';
 // Inspecciones
 import { saveInspeccionAsyncThunk } from 'state/inspeccion/thunk';
 import { SaveInspeccionAsync } from 'state/inspeccion/types';
+// Combustibles
+import { saveCombustiblesAsyncThunk } from 'state/combustibles/thunk';
+import { SaveCombustiblesAsync } from 'state/combustibles/types';
+
 import { validate, clean } from 'rut.js';
 
 import { getUser, signIn } from '../../utils/cognito/cognito-wrapper';
@@ -57,6 +61,7 @@ type DispatchProps = {
     saveCapacitacionAsyncThunk: SaveCapacitacionAsync;
     saveObservacionAsyncThunk: SaveObservacionAsync;
     saveInspeccionAsyncThunk: SaveInspeccionAsync;
+    saveCombustiblesAsyncThunk: SaveCombustiblesAsync;
 };
 
 type Props = StateProps & DispatchProps;
@@ -160,6 +165,7 @@ class SignIn extends Component<Props> {
                         this.props.saveCapacitacionAsyncThunk(user);
                         this.props.saveObservacionAsyncThunk(user);
                         this.props.saveInspeccionAsyncThunk(user);
+                        this.props.saveCombustiblesAsyncThunk(user);
                         resolve(user);
                     }
                 }
@@ -357,7 +363,9 @@ const mapDispatchToProps = (
         saveObservacionAsyncThunk: (user: IUser) =>
             dispatch(saveObservacionAsyncThunk(user)),
         saveInspeccionAsyncThunk: (user: IUser) =>
-            dispatch(saveInspeccionAsyncThunk(user))
+            dispatch(saveInspeccionAsyncThunk(user)),
+        saveCombustiblesAsyncThunk: (user: IUser) =>
+            dispatch(saveCombustiblesAsyncThunk(user))
     };
 };
 

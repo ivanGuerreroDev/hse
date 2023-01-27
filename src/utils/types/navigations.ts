@@ -39,6 +39,7 @@ export type RootMainStackParamList = {
     FormularioDinamico: {
         documento: IDocumento;
         readOnly?: boolean;
+        app: String
     };
     Modal: JSX.Element;
     Capacitaciones: {
@@ -48,4 +49,6 @@ export type RootMainStackParamList = {
     List: {
         participantes: any;
     };
+    SwitchApp: undefined;
+    Produccion: undefined;
 };

@@ -36,11 +36,6 @@ class Capacitaciones extends Component<Props> {
     };
 
     render() {
-        console.log(
-            'chacha',
-            this.props.route.params.selected.map((x: any) => x.Selected)
-        );
-
         return (
             <Layaut
                 Titulo={this.props.route.params.selected.map(

@@ -8,7 +8,8 @@
         "start": "react-native start",
         "test": "jest",
         "lint": "tsc --noEmit && eslint --ext .js,.jsx,.ts,.tsx ./",
-        "prettier:write": "npx prettier --write **/*.{js,jsx,ts,tsx,json} && npx prettier --write *.{js,jsx,ts,tsx,json}"
+        "prettier:write": "npx prettier --write **/*.{js,jsx,ts,tsx,json} && npx prettier --write *.{js,jsx,ts,tsx,json}",
+        "postinstall": "patch-package"
     },
     "dependencies": {
         "@aws-sdk/client-cognito-identity-provider": "^3.38.0",
@@ -26,6 +27,7 @@
         "crypto-js": "^4.1.1",
         "date-fns": "^2.25.0",
         "jmespath": "^0.15.0",
+        "lodash-es": "^4.17.21",
         "lottie-ios": "^3.4.4",
         "lottie-react-native": "^5.1.4",
         "react": "18.1.0",
@@ -73,6 +75,7 @@
         "@types/jest": "^27.0.2",
         "@types/jmespath": "^0.15.0",
         "@types/lodash": "^4.14.176",
+        "@types/lodash-es": "^4.17.6",
         "@types/node": "^18.11.8",
         "@types/react": "^18.0.26",
         "@types/react-native": "^0.70.8",
@@ -88,6 +91,8 @@
         "eslint-plugin-react": "^7.32.1",
         "jest": "^27.3.1",
         "metro-react-native-babel-preset": "^0.72.3",
+        "patch-package": "^6.5.1",
+        "postinstall-postinstall": "^2.1.0",
         "prettier": "^2.8.3",
         "prop-types": "^15.6.2",
         "react-test-renderer": "18.1.0",

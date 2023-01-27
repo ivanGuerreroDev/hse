@@ -23,7 +23,9 @@ type Navigation = {
     >;
 };
 
-type Props = StateProps & Navigation;
+type Props = StateProps & Navigation & {
+    app: String;
+};
 class MenuCard extends Component<Props> {
     state = {
         MenuCard: Object.keys(
@@ -68,6 +70,7 @@ class MenuCard extends Component<Props> {
     };
 
     render() {
+        const {app} = this.props
         return (
             <View style={styles.container}>
                 {this.state.MenuCard.map((item: any, i: any) => (

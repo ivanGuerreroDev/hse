@@ -20,11 +20,12 @@ import { FadeInImage } from 'components/FadeImage/FadeInImage';
 type Props = {
     navigation: StackNavigationProp<MainFrameStackParamList>;
     menu: IMenu[] | any[];
+    app: String;
 };
 class Menu extends Component<Props> {
     render() {
         return (
-            <Layout>
+            <Layout app={this.props.app}>
                 <View style={styles.container}>
                     <FlatList
                         style={styles.list}
@@ -39,6 +40,8 @@ class Menu extends Component<Props> {
                                     ? require('components/Assets/Menu/inspecciones.png')
                                     : item.NombreMenu === 'Capacitaciones'
                                     ? require('components/Assets/Menu/capacitaciones.png')
+                                    : item.NombreMenu === 'Combustibles'
+                                    ? require('components/Assets/Menu/combustibles.png')
                                     : '';
 
                             let tintColor;
@@ -47,6 +50,7 @@ class Menu extends Component<Props> {
                                 tintColor = '#808080';
                                 opacity = 0.7;
                             }
+                            if(this.props.app !== item.Sistema) return null
                             return (
                                 <TouchableOpacity
                                     style={{ ...styles.card, opacity }}

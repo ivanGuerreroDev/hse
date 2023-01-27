@@ -27,6 +27,7 @@ import {
 } from 'state/formulariodinamico/types';
 import { DocumentoStatus, IDocumento } from 'types/formulariodinamico';
 import { IUser } from 'state/user/types';
+import { toHash } from 'ajv/dist/compile/util';
 
 type StateProps = {
     documentos: IDocumento[];
@@ -44,6 +45,7 @@ type Props = StateProps &
             NavigationProp<MainFrameStackParamList, 'Documents'>,
             NavigationProp<RootMainStackParamList>
         >;
+        app: String;
     };
 
 class Documents extends Component<Props> {
@@ -52,7 +54,7 @@ class Documents extends Component<Props> {
     };
 
     renderList() {
-        const { currentUser, documentos, navigation, deleteDocumento } =
+        const { currentUser, documentos, navigation, deleteDocumento, app } =
             this.props;
         const filteredDocumentos = (filter: DocumentoStatus) =>
             documentos
@@ -77,7 +79,8 @@ class Documents extends Component<Props> {
                                 documento={item}
                                 onCardPress={() =>
                                     navigation.navigate('FormularioDinamico', {
-                                        documento: item
+                                        documento: item,
+                                        app: app
                                     })
                                 }
                                 // leftOption={
@@ -130,7 +133,8 @@ class Documents extends Component<Props> {
                                 onCardPress={() =>
                                     navigation.navigate('FormularioDinamico', {
                                         documento: item,
-                                        readOnly: true
+                                        readOnly: true,
+                                        app: app
                                     })
                                 }
                                 rightOption={
@@ -172,7 +176,8 @@ class Documents extends Component<Props> {
                                 onCardPress={() =>
                                     navigation.navigate('FormularioDinamico', {
                                         documento: item,
-                                        readOnly: true
+                                        readOnly: true,
+                                        app: app
                                     })
                                 }
                                 rightOption={
@@ -205,7 +210,7 @@ class Documents extends Component<Props> {
 
     render() {
         return (
-            <Layout>
+            <Layout app={this.props.app}>
                 <View style={{ overflow: 'hidden', paddingBottom: 3 }}>
                     <View style={styles.tabContainer}>
                         <Tab
@@ -216,9 +221,9 @@ class Documents extends Component<Props> {
                                 borderBottomWidth: 2
                             }}
                         >
-                            <TabItem title="Borrador" />
-                            <TabItem title="Salida" />
-                            <TabItem title="Enviados" />
+                            <TabItem title="Borrador" app={this.props.app}/>
+                            <TabItem title="Salida" app={this.props.app} />
+                            <TabItem title="Enviados" app={this.props.app} />
                         </Tab>
                     </View>
                 </View>

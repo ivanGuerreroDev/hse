@@ -4,7 +4,9 @@ import { Header, Text, Icon } from 'react-native-elements';
 
 type Props = {
     Titulo: String;
-    navigation: () => void;
+    navigation: any;
+    children: any;
+    app: String;
 };
 
 class Layaut extends Component<Props> {
@@ -14,12 +16,15 @@ class Layaut extends Component<Props> {
         return (
             <View style={styles.container}>
                 <Header
-                    containerStyle={styles.header}
+                    containerStyle={{
+                        ...styles.header,
+                        backgroundColor: this.props.app === 'HSE' ? '#FDAE01' : this.props.app === 'Producción' ? '#55b25f' : '#cbcbcb',
+                    }}
                     leftComponent={
                         <View style={styles.containerHeader}>
                             <TouchableOpacity
                                 style={styles.headergoBack}
-                                onPress={this.props.navigation}
+                                onPress={this.props.navigation.goBack}
                             >
                                 <Icon
                                     name="arrow-left"

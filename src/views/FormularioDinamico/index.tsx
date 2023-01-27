@@ -81,6 +81,7 @@ type State = {
     thisisonlyforforcerender: any;
     goConf: boolean;
     appState: any;
+    app: String;
 };
 
 type DispatchProps = {
@@ -97,7 +98,9 @@ type NavigationProps = {
     route: RouteProp<RootMainStackParamList, 'FormularioDinamico'>;
 };
 
-type Props = DispatchProps & NavigationProps;
+type Props = DispatchProps & NavigationProps & {
+    app: String
+};
 
 const options: GeolocationOptions = {
     timeout: 25 * 1000, //ms: seconds * 1000,
@@ -126,15 +129,16 @@ class FormularioDinamico extends Component<Props, State> {
         thisisonlyforforcerender: undefined,
         goConf: false,
         appState: AppState.currentState,
+        app: this.props.route.params.app,
         listener:
             Platform.OS === 'android'
                 ? addListener(({ locationEnabled }) => {
-                      if (locationEnabled) {
-                          this.checkLocation();
-                      } else {
-                          this.handleSend();
-                      }
-                  })
+                    if (locationEnabled) {
+                        this.checkLocation();
+                    } else {
+                        this.handleSend();
+                    }
+                })
                 : null
     };
 
@@ -142,7 +146,6 @@ class FormularioDinamico extends Component<Props, State> {
         super(props);
         this.changeEventListener = null;
         const { documento, readOnly } = props.route.params;
-
         this.documentoFactory = new DocumentoFactory(documento);
         this.documentoFactory.isReadOnly = readOnly || false;
         this.documentoFactory.onOutputValueChange =
@@ -189,7 +192,6 @@ class FormularioDinamico extends Component<Props, State> {
         const { Documento } = this.documentoFactory;
         store.dispatch(updateGeolocation(position));
         Documento.geolocation = position;
-        //console.log("@@ documento ", Documento.pages[1])
         this.handleSend();
     };
 
@@ -290,7 +292,7 @@ class FormularioDinamico extends Component<Props, State> {
         };
 
         const TabItems = getPagesBridge().map((pageBridge, index) => (
-            <TabItem key={index} title={pageBridge.property('title')} />
+            <TabItem key={index} title={pageBridge.property('title')} app={this.state.app}/>
         ));
 
         let FooterButtons: JSX.Element[] = [];
@@ -303,7 +305,7 @@ class FormularioDinamico extends Component<Props, State> {
                     title="Eliminar"
                     iconPosition="top"
                     titleStyle={{ fontSize: 12 }}
-                    buttonStyle={{ backgroundColor: '#FDAE01' }}
+                    buttonStyle={{ backgroundColor: this.state.app === 'HSE' ? '#FDAE01' : this.state.app === 'Producción' ? '#55b25f' : '#cbcbcb' }}
                     icon={<Icon type="material" name="delete" color="white" />}
                     onPress={() => {
                         deleteDocumento(Documento._id);
@@ -317,7 +319,7 @@ class FormularioDinamico extends Component<Props, State> {
                     title="Cancelar Envío"
                     iconPosition="top"
                     titleStyle={{ fontSize: 12 }}
-                    buttonStyle={{ backgroundColor: '#FDAE01' }}
+                    buttonStyle={{ backgroundColor: this.state.app === 'HSE' ? '#FDAE01' : this.state.app === 'Producción' ? '#55b25f' : '#cbcbcb' }}
                     icon={<Icon type="material" name="cancel" color="white" />}
                     onPress={() => {
                         // changeStatusDocumento(Documento._id, DocumentoStatus.draft);
@@ -332,7 +334,7 @@ class FormularioDinamico extends Component<Props, State> {
                     title="Enviar"
                     iconPosition="top"
                     titleStyle={{ fontSize: 12 }}
-                    buttonStyle={{ backgroundColor: '#FDAE01' }}
+                    buttonStyle={{ backgroundColor: this.state.app === 'HSE' ? '#FDAE01' : this.state.app === 'Producción' ? '#55b25f' : '#cbcbcb' }}
                     icon={<Icon type="material" name="send" color="white" />}
                     onPress={() => {
                         let messages =
@@ -344,7 +346,7 @@ class FormularioDinamico extends Component<Props, State> {
                                 [
                                     {
                                         text: 'Aceptar',
-                                        onPress: () => {}
+                                        onPress: () => { }
                                     }
                                 ],
                                 { cancelable: true }
@@ -358,7 +360,7 @@ class FormularioDinamico extends Component<Props, State> {
                                 [
                                     {
                                         text: 'Cancelar',
-                                        onPress: () => {}
+                                        onPress: () => { }
                                     },
                                     {
                                         text: 'Aceptar',
@@ -370,11 +372,13 @@ class FormularioDinamico extends Component<Props, State> {
                     }}
                 />
             );
-
         return (
             <>
                 <Header
-                    containerStyle={styles.header}
+                    containerStyle={{
+                        ...styles.header,
+                        backgroundColor: this.state.app === 'HSE' ? '#FDAE01' : this.state.app === 'Producción' ? '#55b25f' : '#cbcbcb'
+                    }}
                     leftComponent={
                         <TouchableOpacity
                             onPress={() => {
@@ -432,14 +436,21 @@ class FormularioDinamico extends Component<Props, State> {
                             path={getPagesBridge()[this.state.tabIndex].Path}
                             navigation={this.props.navigation}
                             scrollRef={this.formScroll}
+                            app={this.state.app}
                         />
                     </ScrollView>
 
-                    <View style={styles.footerBar}>
+                    <View style={{
+                        ...styles.footerBar,
+                        backgroundColor: this.state.app === 'HSE' ? '#FDAE01' : this.state.app === 'Producción' ? '#55b25f' : '#cbcbcb'
+                    }}>
                         {FooterButtons.map((button, index) => (
                             <View
                                 key={index}
-                                style={styles.footerButtonContainer}
+                                style={{
+                                    ...styles.footerButtonContainer,
+                                    backgroundColor: this.state.app === 'HSE' ? '#FDAE01' : this.state.app === 'Producción' ? '#55b25f' : '#cbcbcb'
+                                }}
                             >
                                 {button}
                             </View>
@@ -473,7 +484,6 @@ const styles = StyleSheet.create({
         flex: 1
     },
     header: {
-        backgroundColor: '#FDAE01',
         justifyContent: 'space-around',
         opacity: 1
     },
@@ -511,12 +521,10 @@ const styles = StyleSheet.create({
         flex: 0,
         flexDirection: 'row',
         marginTop: 2,
-        backgroundColor: '#FDAE01'
     },
     footerButtonContainer: {
         flex: 1,
         alignItems: 'center',
-        marginBottom: 15,
-        backgroundColor: '#FDAE01'
+        marginBottom: 15
     }
 });

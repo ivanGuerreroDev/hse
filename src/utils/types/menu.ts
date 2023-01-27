@@ -10,6 +10,20 @@ export interface IInspecciones {
     Tipos: string;
     Inspecciones: string;
 }
+export interface ICombustibles {
+    Id: string;
+    expand: string;
+    Tipos: string;
+    Combustibles: string;
+}
+
+export interface IContadorUC {
+    UnidadConsumo: String;
+    UltimoRegistro: number;
+    HoraDistanciaMaxima: number;
+    UnidadMedida: string;
+}
+
 export interface IObservaciones {
     Id: string;
     titulo: string;

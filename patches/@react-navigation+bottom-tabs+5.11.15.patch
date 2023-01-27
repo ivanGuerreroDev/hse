@@ -1,0 +1,51 @@
+diff --git a/node_modules/@react-navigation/bottom-tabs/src/utils/useIsKeyboardShown.tsx b/node_modules/@react-navigation/bottom-tabs/src/utils/useIsKeyboardShown.tsx
+index 4ab974c..44a4a42 100644
+--- a/node_modules/@react-navigation/bottom-tabs/src/utils/useIsKeyboardShown.tsx
++++ b/node_modules/@react-navigation/bottom-tabs/src/utils/useIsKeyboardShown.tsx
+@@ -7,23 +7,18 @@ export default function useIsKeyboardShown() {
+   React.useEffect(() => {
+     const handleKeyboardShow = () => setIsKeyboardShown(true);
+     const handleKeyboardHide = () => setIsKeyboardShown(false);
+-
++    let keyboardWillShow: any, keyboardWillHide: any;
+     if (Platform.OS === 'ios') {
+-      Keyboard.addListener('keyboardWillShow', handleKeyboardShow);
+-      Keyboard.addListener('keyboardWillHide', handleKeyboardHide);
++      keyboardWillShow = Keyboard.addListener('keyboardWillShow', handleKeyboardShow);
++      keyboardWillHide = Keyboard.addListener('keyboardWillHide', handleKeyboardHide);
+     } else {
+-      Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
+-      Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
++      keyboardWillShow = Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
++      keyboardWillHide = Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
+     }
+ 
+     return () => {
+-      if (Platform.OS === 'ios') {
+-        Keyboard.removeListener('keyboardWillShow', handleKeyboardShow);
+-        Keyboard.removeListener('keyboardWillHide', handleKeyboardHide);
+-      } else {
+-        Keyboard.removeListener('keyboardDidShow', handleKeyboardShow);
+-        Keyboard.removeListener('keyboardDidHide', handleKeyboardHide);
+-      }
++      keyboardWillShow.remove();
++      keyboardWillHide.remove();
+     };
+   }, []);
+ 
+diff --git a/node_modules/@react-navigation/bottom-tabs/src/utils/useWindowDimensions.tsx b/node_modules/@react-navigation/bottom-tabs/src/utils/useWindowDimensions.tsx
+index 8000a59..f28e8a4 100644
+--- a/node_modules/@react-navigation/bottom-tabs/src/utils/useWindowDimensions.tsx
++++ b/node_modules/@react-navigation/bottom-tabs/src/utils/useWindowDimensions.tsx
+@@ -28,9 +28,9 @@ export default function useWindowDimensions() {
+     // So make sure to update the dimensions
+     onChange({ window: Dimensions.get('window') });
+ 
+-    Dimensions.addEventListener('change', onChange);
++    const dimensionsHandler = Dimensions.addEventListener('change', onChange);
+ 
+-    return () => Dimensions.removeEventListener('change', onChange);
++    return () => dimensionsHandler.remove();
+   }, []);
+ 
+   return dimensions;

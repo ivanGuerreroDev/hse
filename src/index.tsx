@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Platform, Alert, ToastAndroid} from 'react-native'
 import axios from 'axios';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -35,10 +36,16 @@ import { SaveObservacionAsync } from 'state/observacion/types';
 import { saveInspeccionAsyncThunk } from 'state/inspeccion/thunk';
 import { SaveInspeccionAsync } from 'state/inspeccion/types';
 
+// Combustibles
+import { saveCombustiblesAsyncThunk } from 'state/combustibles/thunk';
+import { SaveCombustiblesAsync } from 'state/combustibles/types';
+
 import Lottie from 'components/Lottie';
 
 import Auth from 'views/Auth';
+import SwitchApp from 'views/MainFrame/SwitchApp';
 import MainFrame from 'views/MainFrame';
+import Produccion from 'views/MainFrame/Produccion';
 import FormularioDinamico from 'views/FormularioDinamico';
 import Modal from 'components/Modal';
 import Capacitaciones from 'views/Capacitaciones';
@@ -64,6 +71,7 @@ type DispatchProps = {
     saveCapacitacionAsyncThunk: SaveCapacitacionAsync;
     saveObservacionAsyncThunk: SaveObservacionAsync;
     saveInspeccionAsyncThunk: SaveInspeccionAsync;
+    saveCombustiblesAsyncThunk: SaveCombustiblesAsync;
 };
 
 type Props = StateProps & DispatchProps;
@@ -118,6 +126,9 @@ class Index extends Component<Props> {
                                 props.saveInspeccionAsyncThunk(
                                     props.rememberUser
                                 );
+                                props.saveCombustiblesAsyncThunk(
+                                    props.rememberUser
+                                );
                                 props.saveFormulariosAsync(props.rememberUser);
                             } else {
                                 props.forgiveUser();
@@ -144,7 +155,7 @@ class Index extends Component<Props> {
                 }
                 this.setState({ isValidate: false });
             }
-        }).finally(() => {});
+        }).finally(() => { });
     }
 
     render() {
@@ -180,7 +191,9 @@ class Index extends Component<Props> {
           }),*/
                 }}
             >
-                <MainStack.Screen name="MainFrame" component={MainFrame} />
+                <MainStack.Screen name="SwitchApp" component={SwitchApp} />
+                <MainStack.Screen name="MainFrame" component={MainFrame}/>
+                <MainStack.Screen name="Produccion" component={Produccion}/>
                 <MainStack.Screen
                     name="FormularioDinamico"
                     component={FormularioDinamico}
@@ -233,7 +246,9 @@ const mapDispatchToProps = (
         saveObservacionAsyncThunk: (user: IUser) =>
             dispatch(saveObservacionAsyncThunk(user)),
         saveInspeccionAsyncThunk: (user: IUser) =>
-            dispatch(saveInspeccionAsyncThunk(user))
+            dispatch(saveInspeccionAsyncThunk(user)),
+        saveCombustiblesAsyncThunk: (user: IUser) =>
+            dispatch(saveCombustiblesAsyncThunk(user))
     };
 };
 

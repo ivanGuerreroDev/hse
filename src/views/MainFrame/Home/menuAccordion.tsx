@@ -20,6 +20,7 @@ type Props = {
         NavigationProp<MainFrameStackParamList, 'SubMenu'>,
         NavigationProp<RootMainStackParamList>
     >;
+    app: String
 };
 
 class MenuAccordion extends Component<Props> {
@@ -68,6 +69,7 @@ class MenuAccordion extends Component<Props> {
     }
 
     render() {
+        const {app} = this.props
         return (
             <View style={styles.container}>
                 {this.state.MenuAccordion.map((item: any, i: any) => (
@@ -110,7 +112,8 @@ class MenuAccordion extends Component<Props> {
                                                 documento:
                                                     DocumentoFactory.createFromFormulario(
                                                         subitem.Formulario[0]
-                                                    )
+                                                    ),
+                                                app: app
                                             }
                                         );
                                     }

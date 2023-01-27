@@ -1,22 +1,30 @@
 import React from 'react';
 import ControlComponent, { Props } from '../ControlComponent';
-import { Modal, ScrollView, View } from 'react-native';
+import { Modal, ScrollView, View,Platform, Alert, ToastAndroid } from 'react-native';
 import { Input, Text } from 'react-native-elements';
 import { capitalize } from 'utils';
 import { StyleSheet } from 'react-native';
-export default class TextControl extends ControlComponent {
+import { connect } from 'react-redux';
+import { RootState } from 'state/store/store';
+
+class TextControl extends ControlComponent {
     state = {
         filter: '',
         onEdit: false,
         color: '',
-        cargo: ''
+        cargo: '',
+        isReceptor: false,
+        errorMessage: ''
     };
 
     constructor(props: Props) {
         super(props);
+        const {controlBridge} = props;
         props.controlBridge.OutputValue = props.controlBridge.property('data')
             ? props.controlBridge.property('data')
             : props.controlBridge.OutputValue;
+        
+        this.state.isReceptor = controlBridge?.Control?.keywords? controlBridge?.Control?.keywords.filter(e => e?.value === 'contador_estanque').length > 0 : false
     }
     /**
      * controla la renderizacion del componente al traer la propiedad data
@@ -33,6 +41,42 @@ export default class TextControl extends ControlComponent {
             return false;
         }
         return true;
+    }
+
+    validateMaxReceptor () {
+        const {controlBridge, contadorUC} = this.props;
+        const selectedUC = controlBridge?.factory?.bridgeList?.[0]?.control?.controls?.find(control=>control?.keywords?.filter(e=>e?.value === 'receptor')?.length > 0)?.outputValue
+        if(!selectedUC || selectedUC === ''){
+            if (Platform.OS === 'ios') {
+                Alert.alert('Es necesario seleccionar unidad de consumo.');
+            } else {
+                ToastAndroid.show(
+                    'Es necesario seleccionar unidad de consumo.',
+                    ToastAndroid.LONG
+                );
+            }
+            controlBridge.OutputValue = ''
+        }else{
+            const lastUCData = contadorUC.find((contador: any)=>contador.UnidadConsumo===selectedUC)
+            const isNew = lastUCData.UltimoRegistro === 0
+            let newData = controlBridge.property('data')
+                ? controlBridge.property('data')
+                : controlBridge.OutputValue;
+            let valid = true;
+            if(!isNew){
+                valid = lastUCData.UltimoRegistro < newData && newData <= (lastUCData.UltimoRegistro + lastUCData.HoraDistanciaMaxima);
+            }   
+            if(!valid){
+                this.setState({
+                    errorMessage: 'Número ingresado es incorrecto'
+                })
+                controlBridge.OutputValue = ''
+            }else{
+                this.setState({
+                    errorMessage: ''
+                })
+            }
+        }
     }
 
     render() {
@@ -82,21 +126,23 @@ export default class TextControl extends ControlComponent {
             });
 
         let errorMessage: string =
-            controlBridge.property('validate') &&
+            this.state.errorMessage === '' ? controlBridge.property('validate') &&
             controlBridge.OutputValue !== undefined
                 ? controlBridge.validateOutputValue() || ''
-                : '';
+                : ''
+            : this.state.errorMessage;
 
         const errorHeight: number = errorMessage && !this.state.onEdit ? 15 : 0;
 
         let newData = controlBridge.property('data')
             ? controlBridge.property('data')
             : controlBridge.OutputValue;
-
+        const isReceptor = this.state.isReceptor
         return !controlBridge.property('autocomplete') ? (
             <View style={{ paddingBottom: 25 - errorHeight }}>
                 <Input
                     label={controlBridge.property('title')}
+                    keyboardType={this.props.app === 'Producción' && isReceptor ? "numeric" : 'default'}
                     placeholder={controlBridge.property('placeholder')}
                     errorMessage={errorMessage}
                     onChangeText={(value) => {
@@ -106,6 +152,9 @@ export default class TextControl extends ControlComponent {
                     value={newData}
                     onBlur={() => {
                         this.setState({ onEdit: false });
+                        if(isReceptor){
+                            this.validateMaxReceptor()
+                        }
                     }}
                     inputContainerStyle={{
                         borderColor: '#0000001F',
@@ -225,6 +274,16 @@ export default class TextControl extends ControlComponent {
         );
     }
 }
+const mapStateToProps = (state: RootState) => {
+    return {
+        combustibles: state.combustibles.combustibles,
+        contadorUC: state.combustibles.contadorUC
+    };
+};
+
+const mapDispatchToProps = {};
+export default connect(mapStateToProps, mapDispatchToProps)(TextControl);
+
 
 const styles = StyleSheet.create({
     dropdown: {
@@ -254,3 +313,4 @@ const styles = StyleSheet.create({
         fontSize: 16
     }
 });
+ 

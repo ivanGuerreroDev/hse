@@ -1,20 +1,22 @@
 import React, { Component } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import profile from './profile';
-import changePass from './changePass';
+import Profile from './profile';
+import ChangePass from './changePass';
 
 const Stack = createStackNavigator();
-
-class Profile extends Component {
+type Props = {
+    app: String
+}
+class ProfileView extends Component<Props> {
     render() {
         return (
             <Stack.Navigator headerMode="none">
-                <Stack.Screen name="profile" component={profile} />
-                <Stack.Screen name="changePass" component={changePass} />
+                <Stack.Screen name="profile" component={(compProps) => <Profile {...this.props} {...compProps} />} />
+                <Stack.Screen name="changePass" component={(compProps) => <ChangePass {...this.props} {...compProps} />} />
             </Stack.Navigator>
         );
     }
 }
 
-export default Profile;
+export default ProfileView;

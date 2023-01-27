@@ -18,6 +18,7 @@ const config = {
     storage,
     whitelist: [
         'inspeccion',
+        'combustibles',
         'observacion',
         'capacitacion',
         'menus',

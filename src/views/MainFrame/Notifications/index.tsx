@@ -22,12 +22,13 @@ type Props = {
         NavigationProp<MainFrameStackParamList, 'Documents'>,
         NavigationProp<RootMainStackParamList>
     >;
+    app: String;
 };
 
 class Notifications extends Component<Props> {
     render() {
         return (
-            <Layout>
+            <Layout app={this.props.app}>
                 {/*         <View>
           {this.props.formularios.map((formulario, index) => (
             <Button

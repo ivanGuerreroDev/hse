@@ -5,6 +5,7 @@ import { menuReducer } from 'state/menu/reducers';
 import { capacitacionReducer } from 'state/capacitacion/reducers';
 import { observacionReducer } from 'state/observacion/reducers';
 import { inspeccionReducer } from 'state/inspeccion/reducers';
+import { combustiblesReducer } from 'state/combustibles/reducers';
 import {
     documentosReducer,
     formulariosReducer,
@@ -35,6 +36,7 @@ export default combineReducers({
     capacitacion: capacitacionReducer,
     observacion: observacionReducer,
     inspeccion: inspeccionReducer,
+    combustibles: combustiblesReducer,
     pendingManager: pendingManagerReducer,
     sendingManager: sendingManagerReducer,
     settings: settingsReducer,
