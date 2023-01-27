@@ -61,7 +61,7 @@ class Profile extends Component<Props> {
                 {this.props.perfil[this.props.perfil.length - 1] && (
                     <>
                         <View style={{ alignItems: 'flex-end', paddingEnd: 5 }}>
-                            <Text style={styles.vtext}>V. 2.1.0</Text>
+                            <Text style={styles.vtext}>V. 2.1.1</Text>
                         </View>
                         <View style={styles.avatar}>
                             <Avatar
