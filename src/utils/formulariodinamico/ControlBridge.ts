@@ -115,6 +115,7 @@ export class ControlBridge {
 
     getDataValueCode(): any {
         if (this.dataCode) {
+            console.log("@@ this.dataCode ", this.dataCode)
             return this.excecuteValueCode(this.dataCode);
         } else {
             return null;

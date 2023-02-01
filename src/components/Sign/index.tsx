@@ -48,9 +48,8 @@ const SignComponent = (props: Props) => {
             });
         });
     }, []);
-
     return (
-        <SafeAreaView style={{ backgroundColor: 'fff', flex: 1 }}>
+        <View style={{ backgroundColor: 'fff', flex: 1 }}>
             <Header
                 backgroundColor="#FDAE01"
                 containerStyle={{
@@ -65,10 +64,20 @@ const SignComponent = (props: Props) => {
                         onPress={() => onCancel()}
                     />
                 }
-                centerComponent={{
-                    text: controlBridge?.getDataValueCode(),
-                    style: { color: '#fff', fontSize: 22 }
-                }}
+                centerComponent={
+                    <View style={{ flexDirection: 'row' }}>
+                        <Text style={{
+                            color: 'white',
+                            fontSize: 18,
+                            fontWeight: 'bold',
+                            textAlign: 'center',
+                            flexShrink: 1,
+                            flex: 1 
+                        }}>
+                            {controlBridge?.getDataValueCode()}
+                        </Text>
+                    </View>
+                }
             />
             <View style={styles.container}>
                 <View style={styles.row}>
@@ -118,7 +127,7 @@ const SignComponent = (props: Props) => {
                     />
                 </View>
             </View>
-        </SafeAreaView>
+        </View>
     );
 };
 const mapStateToProps = (state: RootState) => {
