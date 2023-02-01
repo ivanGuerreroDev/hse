@@ -8,6 +8,10 @@ import {
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 
+import { connect } from 'react-redux';
+import { RootState } from 'state/store/store';
+import { IMenu } from 'utils/types/menu';
+
 type Props = {
 	navigation: {
 		navigate: any;
@@ -15,33 +19,62 @@ type Props = {
 		popToTop: any;
 		canGoBack: any
 	};
+	menu: IMenu[] | any[];
+	from: String;
 };
 
 class SwitchApp extends Component<Props> {
+	state = {
+		hasHSE: this.props?.menu?.[0]?.filter((menu: any) => menu?.Sistema === 'HSE')?.length > 0,
+		hasProduccion: this.props?.menu?.[0]?.filter((menu: any) => menu?.Sistema === 'Producción')?.length > 0
+	};
+	constructor(props: Props) {
+		super(props);
+	}
+	componentDidMount(): void {
+		if (this.state.hasHSE && !this.state.hasProduccion) {
+			this.props.navigation.navigate('MainFrame')
+		}
+		if (!this.state.hasHSE && this.state.hasProduccion) {
+			this.props.navigation.navigate('Produccion')
+		}
+		if(this.props.from === 'HSE'){this.props.navigation.navigate('Produccion')}
+		if(this.props.from === 'Producción'){this.props.navigation.navigate('MainFrame')}
+	}
+
 	render() {
 		const { navigation } = this.props;
-		if(navigation.canGoBack()){
+		if (navigation.canGoBack()) {
 			navigation.popToTop()
 		}
-		
+
 		return (
 			<View style={styles.container}>
-				<Pressable onPress={() => navigation.navigate('MainFrame')}>
-					<View style={[styles.containerAppBox, { backgroundColor: '#fdae01' }]}>
-						<Image
-							source={require('components/Assets/DownMenu/hse-iso.png')}
-							style={styles.icon}
-							resizeMode="contain"
-						/>
-						<Text style={styles.text}>hse</Text>
-					</View>
-				</Pressable>
-				<Pressable onPress={() => navigation.navigate('Produccion')}>
-					<View style={[styles.containerAppBox, { backgroundColor: '#55b25f' }]}>
-						<Icon size={50} style={styles.icon} type="metarial" name="settings" color={'#fff'} />
-						<Text style={[styles.text, { fontSize: 30 }]}>Producción</Text>
-					</View>
-				</Pressable>
+				{
+					this.state.hasHSE && (
+						<Pressable onPress={() => navigation.navigate('MainFrame')}>
+							<View style={[styles.containerAppBox, { backgroundColor: '#fdae01' }]}>
+								<Image
+									source={require('components/Assets/DownMenu/hse-iso.png')}
+									style={styles.icon}
+									resizeMode="contain"
+								/>
+								<Text style={styles.text}>hse</Text>
+							</View>
+						</Pressable>
+					)
+				}
+				{
+					this.state.hasProduccion && (
+						<Pressable onPress={() => navigation.navigate('Produccion')}>
+							<View style={[styles.containerAppBox, { backgroundColor: '#55b25f' }]}>
+								<Icon size={50} style={styles.icon} type="metarial" name="settings" color={'#fff'} />
+								<Text style={[styles.text, { fontSize: 30 }]}>Producción</Text>
+							</View>
+						</Pressable>
+					)
+				}
+
 			</View>
 		);
 	}
@@ -51,7 +84,8 @@ const styles = StyleSheet.create({
 	container: {
 		justifyContent: 'center',
 		alignItems: 'center',
-		flex: 1
+		flex: 1,
+		backgroundColor: '#fff'
 	},
 	containerAppBox: {
 		height: 150,
@@ -81,4 +115,12 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default SwitchApp;
+const mapStateToProps = (state: RootState) => {
+	return {
+		menu: state.menus.menus
+	};
+};
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SwitchApp);

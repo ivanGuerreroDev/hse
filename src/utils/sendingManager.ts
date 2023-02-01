@@ -32,6 +32,7 @@ import { Platform } from 'react-native';
 import { formatRFC3339 } from 'date-fns';
 import { getCredentials } from 'utils';
 import ImageResizer from 'react-native-image-resizer';
+import { saveCombustiblesAsyncThunk } from 'state/combustibles/thunk';
 
 export const createPendingTask = (documento: IDocumento): void => {
     const checkResourceIsInUse = (resource: IResource): boolean => {
@@ -102,9 +103,13 @@ stateMonitor(
             )
                 uploadDocumento(newSendingTask[0].documentoId);
         });
-
         if (newValue.length === 0) {
             store.dispatch(stopSending());
+            if(store?.getState()?.currentUser?.user){
+                saveCombustiblesAsyncThunk(
+                    store.getState().currentUser.user
+                );
+            }
         }
     }
 );

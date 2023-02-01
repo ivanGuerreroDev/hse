@@ -160,6 +160,7 @@ class FormularioDinamico extends Component<Props, State> {
 
     sendForm(Documento: any, navigation: any) {
         changeStatusDocumento(Documento._id, DocumentoStatus.sending);
+        console.log(Documento.pages[0].controls)
         createPendingTask(Documento);
         this.setState({ goConf: false });
         isNetworkAllowed() ? this.successAlert(false) : this.successAlert(true);

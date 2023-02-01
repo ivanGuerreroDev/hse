@@ -92,7 +92,7 @@ class MainFrame extends Component {
 
                 <Tab.Screen
                     name="SwitchApp"
-                    component={SwitchApp}
+                    component={(props)=><SwitchApp from={'HSE'}  {...props}/>}
                     options={{
                         tabBarVisible: false,
                         tabBarLabel: '',

@@ -37,6 +37,7 @@ export const saveCombustiblesAsyncThunk: SaveCombustiblesAsync = (
                     }
                 }); 
                 dispatch(saveContadorUC(contadorUCRsp.data));
+                
             } catch (error) {
                 console.error(error);
                 reject(error);
