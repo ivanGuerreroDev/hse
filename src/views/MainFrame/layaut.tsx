@@ -32,6 +32,8 @@ import { saveInspeccionAsyncThunk } from 'state/inspeccion/thunk';
 // Inspecciones
 import { saveCombustiblesAsyncThunk } from 'state/combustibles/thunk';
 
+import { isNetworkAllowed } from 'utils/network';
+
 type customProps = {
     children: any;
     app: String;
@@ -64,70 +66,76 @@ class Layout extends Component<Props> {
 
     refreshUserData() {
         const { props } = this;
-        this.setState({
-            isLoading: true
-        });
-        if (
-            props?.currentUser &&
-            props?.currentUser?.UserTokens?.RefreshToken
-        ) {
-            refreshToken(
-                props.currentUser.UserTokens.RefreshToken,
-                props.currentUser.Empresa
-            )
-                .then((result) => {
-                    if (props.currentUser) {
-                        let user: IUser = {
-                            ...props.currentUser,
-                            UserTokens: {
-                                ...props.currentUser.UserTokens,
-                                AccessToken:
-                                    result.AuthenticationResult
-                                        ?.AccessToken,
-                                IdToken:
-                                    result.AuthenticationResult?.IdToken
-                            }
-                        };
-                        axios.defaults.headers.common[
-                            'Authorization'
-                        ] = `Bearer ${user.UserTokens.AccessToken}`;
-                        props.saveUser(user, true);
-                        props.savePerfilesAsync(props.currentUser);
-                        props.saveMenusAsyncThunk(props.currentUser);
-                        props.saveCapacitacionAsyncThunk(
-                            props.currentUser
-                        );
-                        props.saveObservacionAsyncThunk(
-                            props.currentUser
-                        );
-                        props.saveInspeccionAsyncThunk(
-                            props.currentUser
-                        );
-                        props.saveCombustiblesAsyncThunk(
-                            props.currentUser
-                        );
-                        props.saveFormulariosAsync(props.currentUser);
-                    }
-                })
-                .catch((err) => {
-                    console.error(err);
-                    if (Platform.OS === 'ios') {
-                        Alert.alert('No se pudo actualizar');
-                    } else {
-                        ToastAndroid.show(
-                            'No se pudo actualizar',
-                            ToastAndroid.SHORT
-                        );
-                    }
-                }).finally(()=>{
-                    this.setState({
-                        isLoading: false
-                    });
-                })
-        }else{
+        if(isNetworkAllowed()){
             this.setState({
-                isLoading: false
+                isLoading: true
             });
+            if (
+                props?.currentUser &&
+                props?.currentUser?.UserTokens?.RefreshToken
+            ) {
+                refreshToken(
+                    props.currentUser.UserTokens.RefreshToken,
+                    props.currentUser.Empresa
+                )
+                    .then((result) => {
+                        if (props.currentUser) {
+                            let user: IUser = {
+                                ...props.currentUser,
+                                UserTokens: {
+                                    ...props.currentUser.UserTokens,
+                                    AccessToken:
+                                        result.AuthenticationResult
+                                            ?.AccessToken,
+                                    IdToken:
+                                        result.AuthenticationResult?.IdToken
+                                }
+                            };
+                            axios.defaults.headers.common[
+                                'Authorization'
+                            ] = `Bearer ${user.UserTokens.AccessToken}`;
+                            props.saveUser(user, true);
+                            props.savePerfilesAsync(props.currentUser);
+                            props.saveMenusAsyncThunk(props.currentUser);
+                            props.saveCapacitacionAsyncThunk(
+                                props.currentUser
+                            );
+                            props.saveObservacionAsyncThunk(
+                                props.currentUser
+                            );
+                            props.saveInspeccionAsyncThunk(
+                                props.currentUser
+                            );
+                            props.saveCombustiblesAsyncThunk(
+                                props.currentUser
+                            );
+                            props.saveFormulariosAsync(props.currentUser);
+                        }
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                        if (Platform.OS === 'ios') {
+                            Alert.alert('No se pudo actualizar');
+                        } else {
+                            ToastAndroid.show(
+                                'No se pudo actualizar',
+                                ToastAndroid.SHORT
+                            );
+                        }
+                    }).finally(()=>{
+                        this.setState({
+                            isLoading: false
+                        });
+                    })
+            }else{
+                this.setState({
+                    isLoading: false
+                });
+            }
+        }else{
+            const errorMsg = 'No ha sido posible conectarse a internet...'
+            if (Platform.OS === 'ios') {  Alert.alert(errorMsg);} 
+            else { ToastAndroid.show( errorMsg, ToastAndroid.SHORT);}
         }
     }
     
