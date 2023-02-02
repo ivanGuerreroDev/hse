@@ -14,6 +14,7 @@ class TextControl extends ControlComponent {
         color: '',
         cargo: '',
         isReceptor: false,
+        isQuantity: false,
         errorMessage: ''
     };
 
@@ -23,7 +24,7 @@ class TextControl extends ControlComponent {
         props.controlBridge.OutputValue = props.controlBridge.property('data')
             ? props.controlBridge.property('data')
             : props.controlBridge.OutputValue;
-        
+        this.state.isQuantity = controlBridge?.Control?.keywords? controlBridge?.Control?.keywords.filter(e => e?.value === 'cantidad').length > 0 : false
         this.state.isReceptor = controlBridge?.Control?.keywords? controlBridge?.Control?.keywords.filter(e => e?.value === 'contador_estanque').length > 0 : false
     }
     /**
@@ -138,11 +139,19 @@ class TextControl extends ControlComponent {
             ? controlBridge.property('data')
             : controlBridge.OutputValue;
         const isReceptor = this.state.isReceptor
+        const isQuantity = this.state.isQuantity
         return !controlBridge.property('autocomplete') ? (
             <View style={{ paddingBottom: 25 - errorHeight }}>
                 <Input
                     label={controlBridge.property('title')}
-                    keyboardType={this.props.app === 'Producción' && isReceptor ? "numeric" : 'default'}
+                    keyboardType={
+                        this.props.app === 'Producción' && (
+                            isReceptor
+                            || isQuantity
+                        )
+                        
+                            ? "numeric" : 'default'
+                    }
                     placeholder={controlBridge.property('placeholder')}
                     errorMessage={errorMessage}
                     onChangeText={(value) => {

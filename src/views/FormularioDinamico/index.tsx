@@ -12,7 +12,7 @@ import {
     KeyboardAvoidingView,
     TouchableOpacity
 } from 'react-native';
-import { Button, Header, Icon, Tab, Text } from 'react-native-elements';
+import { Button, Header, Icon, Tab, Text, LinearProgress  } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TabItem } from './TabItemComponent';
 import ControlContainer from './ControlContainer';
@@ -82,6 +82,7 @@ type State = {
     goConf: boolean;
     appState: any;
     app: String;
+    loading: boolean;
 };
 
 type DispatchProps = {
@@ -130,6 +131,7 @@ class FormularioDinamico extends Component<Props, State> {
         goConf: false,
         appState: AppState.currentState,
         app: this.props.route.params.app,
+        loading: false,
         listener:
             Platform.OS === 'android'
                 ? addListener(({ locationEnabled }) => {
@@ -160,10 +162,9 @@ class FormularioDinamico extends Component<Props, State> {
 
     sendForm(Documento: any, navigation: any) {
         changeStatusDocumento(Documento._id, DocumentoStatus.sending);
-        console.log(Documento.pages[0].controls)
         createPendingTask(Documento);
-        this.setState({ goConf: false });
         isNetworkAllowed() ? this.successAlert(false) : this.successAlert(true);
+        this.setState({ goConf: false, loading: false });
         navigation.goBack();
     }
 
@@ -207,6 +208,7 @@ class FormularioDinamico extends Component<Props, State> {
         console.error(error.message);
         console.error(error.PERMISSION_DENIED);
         console.error(error.POSITION_UNAVAILABLE);
+        this.setState({ loading: false });
         if (error.POSITION_UNAVAILABLE === 2) {
             if (Platform.OS !== 'ios') {
                 requestResolutionSettings(configLocation);
@@ -225,10 +227,14 @@ class FormularioDinamico extends Component<Props, State> {
                     );
                 }
             })
-            .catch((error) => console.error(error));
+            .catch((error) => {
+                this.setState({ loading: false });
+                console.error(error)
+            });
     }
 
     checkLocation() {
+        this.setState({ loading: true });
         checkLocationPermission()
             .then((result) => {
                 if (result === RESULTS.GRANTED || result === RESULTS.LIMITED) {
@@ -253,7 +259,8 @@ class FormularioDinamico extends Component<Props, State> {
                                     text: 'Aceptar',
                                     onPress: async () => {
                                         this.setState({
-                                            goConf: true
+                                            goConf: true,
+                                            loading: false
                                         });
                                         Linking.openURL(
                                             'App-Prefs:Privacy&path=LOCATION'
@@ -267,7 +274,10 @@ class FormularioDinamico extends Component<Props, State> {
                     }
                 }
             })
-            .catch((error) => console.error(error));
+            .catch((error) => {
+                console.error(error)
+                this.setState({ loading: false });
+            });
     }
 
     componentDidMount(): void {
@@ -306,7 +316,9 @@ class FormularioDinamico extends Component<Props, State> {
                     title="Eliminar"
                     iconPosition="top"
                     titleStyle={{ fontSize: 12 }}
+                    disabled={this.state.loading}
                     buttonStyle={{ backgroundColor: this.state.app === 'HSE' ? '#FDAE01' : this.state.app === 'Producción' ? '#55b25f' : '#cbcbcb' }}
+                    disabledStyle={{backgroundColor: 'transparent'}}
                     icon={<Icon type="material" name="delete" color="white" />}
                     onPress={() => {
                         deleteDocumento(Documento._id);
@@ -321,6 +333,7 @@ class FormularioDinamico extends Component<Props, State> {
                     iconPosition="top"
                     titleStyle={{ fontSize: 12 }}
                     buttonStyle={{ backgroundColor: this.state.app === 'HSE' ? '#FDAE01' : this.state.app === 'Producción' ? '#55b25f' : '#cbcbcb' }}
+                    disabledStyle={{backgroundColor: 'transparent'}}
                     icon={<Icon type="material" name="cancel" color="white" />}
                     onPress={() => {
                         // changeStatusDocumento(Documento._id, DocumentoStatus.draft);
@@ -334,8 +347,10 @@ class FormularioDinamico extends Component<Props, State> {
                 <Button
                     title="Enviar"
                     iconPosition="top"
+                    disabled={this.state.loading}
                     titleStyle={{ fontSize: 12 }}
                     buttonStyle={{ backgroundColor: this.state.app === 'HSE' ? '#FDAE01' : this.state.app === 'Producción' ? '#55b25f' : '#cbcbcb' }}
+                    disabledStyle={{backgroundColor: 'transparent'}}
                     icon={<Icon type="material" name="send" color="white" />}
                     onPress={() => {
                         let messages =
@@ -440,7 +455,11 @@ class FormularioDinamico extends Component<Props, State> {
                             app={this.state.app}
                         />
                     </ScrollView>
-
+                    {
+                        this.state.loading && (
+                            <LinearProgress color="primary" /> 
+                        )
+                    }
                     <View style={{
                         ...styles.footerBar,
                         backgroundColor: this.state.app === 'HSE' ? '#FDAE01' : this.state.app === 'Producción' ? '#55b25f' : '#cbcbcb'

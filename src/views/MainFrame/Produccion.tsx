@@ -6,28 +6,51 @@ import {
 } from '@react-navigation/bottom-tabs';
 import { MainFrameStackParamList } from 'utils/types/navigations';
 
+import { connect } from 'react-redux';
+import { RootState } from 'state/store/store';
+import { IMenu } from 'utils/types/menu';
+
 import SwitchApp from './SwitchApp';
 import Home from './Home';
 import Documents from './Documents';
 import Queries from './Notifications';
 import Profile from './Profile';
 
+
 const Tab = createBottomTabNavigator<MainFrameStackParamList>();
 
-function HomeComponent (props: any) {
-    return <Home app='Producción' {...props}/>
+function HomeComponent(props: any) {
+    return <Home app='Producción' {...props} />
 }
-function DocumentsComponent (props: any) {
-    return <Documents app='Producción' {...props}/>
+function DocumentsComponent(props: any) {
+    return <Documents app='Producción' {...props} />
 }
-function QueriesComponent (props: any) {
-    return <Queries app='Producción' {...props}/>
+function QueriesComponent(props: any) {
+    return <Queries app='Producción' {...props} />
 }
-function ProfileComponent (props: any) {
-    return <Profile app='Producción' {...props}/>
+function ProfileComponent(props: any) {
+    return <Profile app='Producción' {...props} />
 }
+function SwitchAppComponent(props: any) {
+    return <SwitchApp from={'Producción'}  {...props} />
+}
+type Props = {
+    navigation: {
+        navigate: any;
+        push: any;
+        popToTop: any;
+        canGoBack: any
+    };
+    menu: IMenu[] | any[];
+};
 
-class MainFrame extends Component {
+class MainFrame extends Component<Props> {
+    state = {
+        hasHSE: this.props?.menu?.[0]?.filter((menu: any) => menu?.Sistema === 'HSE')?.length > 0
+    };
+    constructor(props: Props) {
+		super(props);
+	}
     render() {
         return (
             <Tab.Navigator
@@ -89,34 +112,38 @@ class MainFrame extends Component {
                         )
                     }}
                 />
+                {
+                    this.state.hasHSE && (
+                        <Tab.Screen
+                            name="SwitchApp"
+                            component={SwitchAppComponent}
+                            options={{
+                                tabBarVisible: false,
+                                tabBarLabel: '',
+                                tabBarIcon: (props) => (
+                                    <View style={styles.view}>
+                                        {/* <Icon type="metarial" name="category" color={props.color} /> */}
+                                        <View style={{
+                                            backgroundColor: '#55b25f',
+                                            height: 50,
+                                            width: 50,
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            borderRadius: 200
+                                        }}>
+                                            <Image
+                                                source={require('components/Assets/DownMenu/icon-zimexa.png')}
+                                                style={styles.icon}
+                                                resizeMode="contain"
+                                            />
+                                        </View>
+                                    </View>
+                                )
+                            }}
+                        />
+                    )
+                }
 
-                <Tab.Screen
-                    name="SwitchApp"
-                    component={(props)=><SwitchApp from={'Producción'}  {...props}/>}
-                    options={{
-                        tabBarVisible: false,
-                        tabBarLabel: '',
-                        tabBarIcon: (props) => (
-                            <View style={styles.view}>
-                                {/* <Icon type="metarial" name="category" color={props.color} /> */}
-                                <View style={{
-                                    backgroundColor : '#55b25f',
-                                    height: 50,
-                                    width: 50,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    borderRadius: 200
-                                }}>
-                                    <Image
-                                        source={require('components/Assets/DownMenu/icon-zimexa.png')}
-                                        style={styles.icon}
-                                        resizeMode="contain"
-                                    />
-                                </View>
-                            </View>
-                        )
-                    }}
-                />
 
                 <Tab.Screen
                     name="Notifications"
@@ -188,8 +215,6 @@ const tabBarOptions: BottomTabBarOptions = {
     }
 };
 
-export default MainFrame;
-
 const styles = StyleSheet.create({
     view: {
         paddingTop: 15,
@@ -225,3 +250,13 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     }
 });
+
+const mapStateToProps = (state: RootState) => {
+    return {
+        menu: state.menus.menus
+    };
+};
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainFrame);

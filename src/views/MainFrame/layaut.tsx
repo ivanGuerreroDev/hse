@@ -94,9 +94,6 @@ class Layout extends Component<Props> {
                             axios.defaults.headers.common[
                                 'Authorization'
                             ] = `Bearer ${user.UserTokens.AccessToken}`;
-                            props.saveUser(user, true);
-                            props.savePerfilesAsync(props.currentUser);
-                            props.saveMenusAsyncThunk(props.currentUser);
                             props.saveCapacitacionAsyncThunk(
                                 props.currentUser
                             );

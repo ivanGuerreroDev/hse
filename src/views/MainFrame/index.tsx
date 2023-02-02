@@ -12,22 +12,36 @@ import Documents from './Documents';
 import Queries from './Notifications';
 import Profile from './Profile';
 
+import { connect } from 'react-redux';
+import { RootState } from 'state/store/store';
+import { IMenu } from 'utils/types/menu';
+
 const Tab = createBottomTabNavigator<MainFrameStackParamList>();
 
-function HomeComponent (props: any) {
-    return <Home app='HSE' {...props}/>
+function HomeComponent(props: any) {
+    return <Home app='HSE' {...props} />
 }
-function DocumentsComponent (props: any) {
-    return <Documents app='HSE' {...props}/>
+function DocumentsComponent(props: any) {
+    return <Documents app='HSE' {...props} />
 }
-function QueriesComponent (props: any) {
-    return <Queries app='HSE' {...props}/>
+function QueriesComponent(props: any) {
+    return <Queries app='HSE' {...props} />
 }
-function ProfileComponent (props: any) {
-    return <Profile app='HSE' {...props}/>
+function ProfileComponent(props: any) {
+    return <Profile app='HSE' {...props} />
 }
 
-class MainFrame extends Component {
+function SwitchAppComponent(props: any) {
+    return <SwitchApp from={'HSE'}  {...props} />
+}
+
+class MainFrame extends Component<Props> {
+    state = {
+        hasProduccion: this.props?.menu?.[0]?.filter((menu: any) => menu?.Sistema === 'Producción')?.length > 0
+    };
+    constructor(props: Props) {
+        super(props);
+    }
     render() {
         return (
             <Tab.Navigator
@@ -63,7 +77,7 @@ class MainFrame extends Component {
                 />
                 <Tab.Screen
                     name="Documents"
-                    component={DocumentsComponent }
+                    component={DocumentsComponent}
                     options={{
                         tabBarLabel: '',
                         tabBarIcon: (props) => (
@@ -89,34 +103,37 @@ class MainFrame extends Component {
                         )
                     }}
                 />
-
-                <Tab.Screen
-                    name="SwitchApp"
-                    component={(props)=><SwitchApp from={'HSE'}  {...props}/>}
-                    options={{
-                        tabBarVisible: false,
-                        tabBarLabel: '',
-                        tabBarIcon: (props) => (
-                            <View style={styles.view}>
-                                {/* <Icon type="metarial" name="category" color={props.color} /> */}
-                                <View style={{
-                                    backgroundColor : '#fdae01',
-                                    height: 50,
-                                    width: 50,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    borderRadius: 200
-                                }}>
-                                    <Image
-                                        source={require('components/Assets/DownMenu/icon-zimexa.png')}
-                                        style={styles.icon}
-                                        resizeMode="contain"
-                                    />
-                                </View>
-                            </View>
-                        )
-                    }}
-                />
+                {
+                    this.state.hasProduccion && (
+                        <Tab.Screen
+                            name="SwitchApp"
+                            component={SwitchAppComponent}
+                            options={{
+                                tabBarVisible: false,
+                                tabBarLabel: '',
+                                tabBarIcon: (props) => (
+                                    <View style={styles.view}>
+                                        {/* <Icon type="metarial" name="category" color={props.color} /> */}
+                                        <View style={{
+                                            backgroundColor : '#fdae01',
+                                            height: 50,
+                                            width: 50,
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            borderRadius: 200
+                                        }}>
+                                            <Image
+                                                source={require('components/Assets/DownMenu/icon-zimexa.png')}
+                                                style={styles.icon}
+                                                resizeMode="contain"
+                                            />
+                                        </View>
+                                    </View>
+                                )
+                            }}
+                        />
+                    )
+                }
 
                 <Tab.Screen
                     name="Notifications"
@@ -188,7 +205,15 @@ const tabBarOptions: BottomTabBarOptions = {
     }
 };
 
-export default MainFrame;
+const mapStateToProps = (state: RootState) => {
+    return {
+        menu: state.menus.menus
+    };
+};
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainFrame);
 
 const styles = StyleSheet.create({
     view: {

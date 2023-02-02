@@ -30,12 +30,29 @@ class SwitchApp extends Component<Props> {
 	};
 	constructor(props: Props) {
 		super(props);
+		this.checkSystems = this.checkSystems.bind(this);
 	}
 	componentDidMount(): void {
-		if (this.state.hasHSE && !this.state.hasProduccion) {
+		this.checkSystems();
+	}
+
+	componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<{}>, snapshot?: any): void {
+		if(prevProps?.menu !== this.props?.menu){
+			this.setState({
+				hasHSE: this.props?.menu?.[0]?.filter((menu: any) => menu?.Sistema === 'HSE')?.length > 0,
+				hasProduccion: this.props?.menu?.[0]?.filter((menu: any) => menu?.Sistema === 'Producción')?.length > 0
+			})
+		}
+		this.checkSystems();
+	}
+
+	checkSystems () {
+		const hasHSE = this.props?.menu?.[0]?.filter((menu: any) => menu?.Sistema === 'HSE')?.length > 0;
+		const hasProduccion = this.props?.menu?.[0]?.filter((menu: any) => menu?.Sistema === 'Producción')?.length > 0;
+		if (hasHSE && !hasProduccion) {
 			this.props.navigation.navigate('MainFrame')
 		}
-		if (!this.state.hasHSE && this.state.hasProduccion) {
+		if (!hasHSE && hasProduccion) {
 			this.props.navigation.navigate('Produccion')
 		}
 		if(this.props.from === 'HSE'){this.props.navigation.navigate('Produccion')}
@@ -55,11 +72,10 @@ class SwitchApp extends Component<Props> {
 						<Pressable onPress={() => navigation.navigate('MainFrame')}>
 							<View style={[styles.containerAppBox, { backgroundColor: '#fdae01' }]}>
 								<Image
-									source={require('components/Assets/DownMenu/hse-iso.png')}
-									style={styles.icon}
+									source={require('components/Assets/logo_hse_blanco.png')}
+									style={styles.hselogo}
 									resizeMode="contain"
 								/>
-								<Text style={styles.text}>hse</Text>
 							</View>
 						</Pressable>
 					)
@@ -68,8 +84,11 @@ class SwitchApp extends Component<Props> {
 					this.state.hasProduccion && (
 						<Pressable onPress={() => navigation.navigate('Produccion')}>
 							<View style={[styles.containerAppBox, { backgroundColor: '#55b25f' }]}>
-								<Icon size={50} style={styles.icon} type="metarial" name="settings" color={'#fff'} />
-								<Text style={[styles.text, { fontSize: 30 }]}>Producción</Text>
+							<Image
+									source={require('components/Assets/logo_produccion.png')}
+									style={styles.prodlogo}
+									resizeMode="contain"
+								/>
 							</View>
 						</Pressable>
 					)
@@ -88,8 +107,9 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff'
 	},
 	containerAppBox: {
-		height: 150,
+		height: 180,
 		width: 300,
+		padding: 30,
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -103,9 +123,12 @@ const styles = StyleSheet.create({
 		shadowRadius: 2.62,
 		elevation: 4,
 	},
-	icon: {
-		width: 50,
-		height: 50,
+	prodlogo: {
+		width: 250,
+		marginRight: 10
+	},
+	hselogo: {
+		width: 180,
 		marginRight: 10
 	},
 	text: {
