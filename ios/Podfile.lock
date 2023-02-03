@@ -74,7 +74,7 @@ PODS:
   - fmt (6.2.1)
   - glog (0.3.5)
   - libevent (2.1.12)
-  - lottie-ios (3.4.4)
+  - lottie-ios (3.4.0)
   - lottie-react-native (5.1.4):
     - lottie-ios (~> 3.4.0)
     - React-Core
@@ -308,9 +308,9 @@ PODS:
     - React-Core
   - react-native-cameraroll (4.1.2):
     - React-Core
-  - react-native-config (1.4.12):
-    - react-native-config/App (= 1.4.12)
-  - react-native-config/App (1.4.12):
+  - react-native-config (1.4.4):
+    - react-native-config/App (= 1.4.4)
+  - react-native-config/App (1.4.4):
     - React-Core
   - react-native-geolocation (2.1.0):
     - React-Core
@@ -324,7 +324,7 @@ PODS:
     - React-Core
   - react-native-sensitive-info (5.5.8):
     - React
-  - react-native-webview (11.26.0):
+  - react-native-webview (11.26.1):
     - React-Core
   - React-perflogger (0.70.6)
   - React-RCTActionSheet (0.70.6):
@@ -406,7 +406,7 @@ PODS:
     - React-Core
   - RNPermissions (3.6.1):
     - React-Core
-  - RNReanimated (2.14.1):
+  - RNReanimated (2.14.4):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -433,10 +433,10 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.18.2):
+  - RNScreens (3.19.0):
     - React-Core
     - React-RCTImage
-  - RNSVG (12.5.0):
+  - RNSVG (12.5.1):
     - React-Core
   - RNVectorIcons (9.2.0):
     - React-Core
@@ -689,7 +689,7 @@ SPEC CHECKSUMS:
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  lottie-ios: 8f97d3271e155c2d688875c29cd3c74908aef5f8
+  lottie-ios: 69495122151a378fdc7d1bb4c5930347e37baf1f
   lottie-react-native: b702fab740cdb952a8e2354713d3beda63ff97b0
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   Permission-Camera: bf6791b17c7f614b6826019fcfdcc286d3a107f6
@@ -713,14 +713,14 @@ SPEC CHECKSUMS:
   react-native-background-upload: 7c608537f87106c93530a3a19a853afd55466823
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
   react-native-cameraroll: 2957f2bce63ae896a848fbe0d5352c1bd4d20866
-  react-native-config: 5e3e0c7798522b1a0d7641f7ffa5363044e16397
+  react-native-config: 72d948053a442779b3178fddd571e37f118ef606
   react-native-geolocation: 69f4fd37650b8e7fee91816d395e62dd16f5ab8d
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-image-resizer: d9fb629a867335bdc13230ac2a58702bb8c8828f
   react-native-netinfo: 3d3769f0d65de15c83a9bf1346f8be71de5a24bf
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
   react-native-sensitive-info: 400c6e3d27945e15c8cddb5b4b92233c85ee06f8
-  react-native-webview: 994b9f8fbb504d6314dc40d83f94f27c6831b3bf
+  react-native-webview: 9f111dfbcfc826084d6c507f569e5e03342ee1c1
   React-perflogger: 8c79399b0500a30ee8152d0f9f11beae7fc36595
   React-RCTActionSheet: 7316773acabb374642b926c19aef1c115df5c466
   React-RCTAnimation: 5341e288375451297057391227f691d9b2326c3d
@@ -740,9 +740,9 @@ SPEC CHECKSUMS:
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNPermissions: dcdb7b99796bbeda6975a6e79ad519c41b251b1c
-  RNReanimated: 8125b2324ba03108136ab5dd506fc49b2454da24
-  RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
-  RNSVG: 6adc5c52d2488a476248413064b7f2832e639057
+  RNReanimated: 6668b0587bebd4b15dd849b99e5a9c70fc12ed95
+  RNScreens: ea4cd3a853063cda19a4e3c28d2e52180c80f4eb
+  RNSVG: d7d7bc8229af3842c9cfc3a723c815a52cdd1105
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: 99caf8d5ab45e9d637ee6e0174ec16fbbb01bcfc

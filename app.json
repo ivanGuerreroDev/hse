@@ -2,7 +2,9 @@
   "name": "Zimexa HSE",
   "displayName": "Zimexa HSE",
   "ios": {
-    "bundleIdentifier": "cl.innoapsion.zimexa.hse.ios"
+    "bundleIdentifier": "cl.innoapsion.zimexa.hse.ios",
+    "name": "zimexahse",
+    "displayName": "Zimexa HSE",
   },
   "android": {
     "package": "cl.innoapsion.zimexa.hse"
