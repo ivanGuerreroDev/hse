@@ -159,14 +159,22 @@ class SignIn extends Component<Props> {
                             Username: userData.Username,
                             UserTokens: signin.AuthenticationResult
                         };
-                        this.props.saveFormulariosAsync(user);
-                        this.props.savePerfilesAsync(user);
-                        this.props.saveMenusAsyncThunk(user);
-                        this.props.saveCapacitacionAsyncThunk(user);
-                        this.props.saveObservacionAsyncThunk(user);
-                        this.props.saveInspeccionAsyncThunk(user);
-                        this.props.saveCombustiblesAsyncThunk(user);
-                        resolve(user);
+                        this.props.saveFormulariosAsync(user)
+                        this.props.saveCapacitacionAsyncThunk(user)
+                        this.props.saveObservacionAsyncThunk(user)
+                        this.props.saveInspeccionAsyncThunk(user)
+                        this.props.saveCombustiblesAsyncThunk(user)
+                        Promise.all([
+                            this.props.savePerfilesAsync(user),
+                            this.props.saveMenusAsyncThunk(user),
+                        ]).then(r=>{
+                            console.log("fetched all")
+                            resolve(user);
+                        }).catch(e=>{
+                            console.error(e)
+                            reject(e)
+                        })
+                        
                     }
                 }
                 this.setState({ percentage: 100 });

@@ -89,6 +89,7 @@ class Index extends Component<Props> {
             while (!isNetworkMounted()) {
                 await new Promise((resolve) => setTimeout(resolve, 100));
             }
+            this.setState({isLoading: true})
             if (isNetworkAllowed()) {
                 if (
                     props.rememberUser &&
@@ -141,11 +142,11 @@ class Index extends Component<Props> {
                         .finally(() => {
                             this.setState({
                                 isValidate: false,
-                                isLoading: true
+                                isLoading: false
                             });
                         });
                 } else {
-                    this.setState({ isValidate: false });
+                    this.setState({ isValidate: false, isLoading:false });
                 }
             } else {
                 if (props.rememberUser) {
@@ -153,7 +154,7 @@ class Index extends Component<Props> {
                 } else {
                     props.forgiveUser();
                 }
-                this.setState({ isValidate: false });
+                this.setState({ isValidate: false, isLoading:false });
             }
         }).finally(() => { });
     }
