@@ -28,7 +28,7 @@ workflows:
           $PLIST_BUDDY -c "Add :ITSAppUsesNonExemptEncryption bool false" $PLIST
       - name: Install CocoaPods dependencies
         script: |
-          cd ios && pod update
+          cd ios && pod install
       - name: Set up provisioning profiles settings on Xcode project
         script: xcode-project use-profiles
       - name: Build ipa for distribution
