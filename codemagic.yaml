@@ -30,7 +30,7 @@ workflows:
         script: |
           cd ios && pod install
       - name: Set up provisioning profiles settings on Xcode project
-        script: xcode-project use-profiles
+        script: xcode-project use-profiles --project ios/*.xcodeproj
       - name: Build ipa for distribution
         script: |
           xcode-project build-ipa \
