@@ -312,7 +312,7 @@ class SignIn extends Component<Props> {
                         }
                         title="Recuérdame"
                         containerStyle={styles.checkbox}
-                        checkedColor="#FDAE01"
+                        checkedColor="#ff6920"
                         textStyle={{ fontWeight: 'normal', fontSize: 12 }}
                         size={20}
                     />
@@ -344,7 +344,7 @@ class SignIn extends Component<Props> {
                         </TouchableOpacity>
                     ) : (
                         <View style={{ alignItems: 'center' }}>
-                            <ActivityIndicator size="large" color="#FDAE01" />
+                            <ActivityIndicator size="large" color="#ff6920" />
                         </View>
                     )}
                 </View>
@@ -425,11 +425,11 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         justifyContent: 'flex-start',
-        color: '#FDAE01',
+        color: '#ff6920',
         fontSize: 12
     },
     goButton: {
-        backgroundColor: '#FDAE01',
+        backgroundColor: '#ff6920',
         borderRadius: 4,
         justifyContent: 'center',
         height: 40

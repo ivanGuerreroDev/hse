@@ -65,7 +65,7 @@ export const styles = StyleSheet.create({
         paddingBottom: 90
     },
     goButton: {
-        backgroundColor: '#FDAE01',
+        backgroundColor: '#ff6920',
         borderRadius: 8,
         justifyContent: 'center',
         height: 40

@@ -259,7 +259,7 @@ export const styles = StyleSheet.create({
     },
     buttonText: {
         justifyContent: 'flex-end',
-        color: '#FDAE01',
+        color: '#ff6920',
         fontSize: 12
     },
     goContainer: {
@@ -268,7 +268,7 @@ export const styles = StyleSheet.create({
         paddingBottom: 70
     },
     goButton: {
-        backgroundColor: '#FDAE01',
+        backgroundColor: '#ff6920',
         borderRadius: 8,
         justifyContent: 'center',
         height: 40
