@@ -149,7 +149,7 @@ class Layout extends Component<Props> {
                         <View style={styles.containerHeader}>
                             <FadeInImage
                                 uri={this.state.logo}
-                                image={{ ...styles.headerLogo, height: this.props.app === 'HSE' ? 35 : this.props.app === 'Producción' ? 40 : 40, }}
+                                image={{ ...styles.headerLogo, height: this.props.app === 'HSE' ? 26 : this.props.app === 'Producción' ? 26 : 26, }}
 
                             />
                         </View>
@@ -221,7 +221,8 @@ const styles = StyleSheet.create({
         paddingTop: 0,
         opacity: 1,
         borderBottomWidth: 0,
-        height: 70
+        height: 80,
+        
     },
     headergoBack: {
         marginRight: '50%'

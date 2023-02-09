@@ -30,6 +30,7 @@ class Layaut extends Component<Props> {
                                     name="arrow-left"
                                     type="fontisto"
                                     color="#FFFFFF"
+                                    size={16}
                                 />
                             </TouchableOpacity>
                         </View>
@@ -37,7 +38,7 @@ class Layaut extends Component<Props> {
                     centerComponent={{
                         text: this.props.Titulo,
                         style: styles.titulo
-                    }}
+                    }}  
                     rightComponent={{}}
                     statusBarProps={{ barStyle: 'light-content' }}
                 />

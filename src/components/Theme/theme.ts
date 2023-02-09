@@ -8,7 +8,7 @@ export const lightTheme = {
             backgroundColor: 'transparent'
         },
         containerStyle: {
-          paddingVertical: Platform.OS === 'ios' ? 15 : 0
+          //paddingVertical: Platform.OS === 'ios' ? 70 : 'auto'
         }
     },
     Text: {
