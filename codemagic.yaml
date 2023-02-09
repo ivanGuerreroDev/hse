@@ -11,7 +11,6 @@ workflows:
         bundle_identifier: cl.innoapsion.zimexa.hse.ios
       groups:
         - appstore_credentials
-        - apple_api
       vars:
         APP_ID: 1625302603
         BUNDLE_ID: "cl.innoapsion.zimexa.hse.ios"
