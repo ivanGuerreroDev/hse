@@ -406,6 +406,7 @@ class FormularioDinamico extends Component<Props, State> {
                                 name="arrow-left"
                                 type="fontisto"
                                 color="#FFFFFF"
+                                size={16}
                             />
                         </TouchableOpacity>
                     }

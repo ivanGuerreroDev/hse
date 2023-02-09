@@ -31,6 +31,7 @@ class Layaut extends Component<Props> {
                                     name="arrow-left"
                                     type="fontisto"
                                     color="#FFFFFF"
+                                    size={16}
                                 />
                             </TouchableOpacity>
 
