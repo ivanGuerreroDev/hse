@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
         paddingTop: 0,
         opacity: 1,
         borderBottomWidth: 0,
-        height: 80,
+        height: Platform.OS === 'ios' ? 80 : 60,
         
     },
     headergoBack: {
