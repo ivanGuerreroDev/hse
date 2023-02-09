@@ -1,8 +1,14 @@
+import {
+  Platform
+} from 'react-native';
 export const lightTheme = {
     Header: {
         barStyle: 'dark-content',
         statusBarProps: {
             backgroundColor: 'transparent'
+        },
+        containerStyle: {
+          paddingVertical: Platform.OS === 'ios' ? 15 : 0
         }
     },
     Text: {
