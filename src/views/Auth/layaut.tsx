@@ -26,22 +26,14 @@ class Layaut extends Component {
                     }}
                     centerComponent={
                         <Image
-                            source={require('components/Assets/logo_hse.png')}
+                            source={require('components/Assets/Zimexa.png')}
                             style={styles.headerLogo}
-                            resizeMode="stretch"
+                            resizeMode="contain"
                         />
                     }
                 />
                 <View style={styles.content}>{this.props.children}</View>
 
-                <View style={styles.footer}>
-                    <Text style={styles.text}>Por</Text>
-                    <Image
-                        source={require('components/Assets/Zimexa.png')}
-                        style={styles.footerLogo}
-                        resizeMode="stretch"
-                    />
-                </View>
             </ScrollView>
         );
     }
@@ -65,8 +57,7 @@ const styles = StyleSheet.create({
     headerLogo: {
         flexDirection: 'row',
         justifyContent: 'center',
-        width: 220,
-        height: 100
+        height: 100,
     },
     content: {
         flex: 6,
