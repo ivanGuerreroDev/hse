@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
         width: '400%'
     },
     headergoBack: {
+        marginTop: 5,
         marginLeft: '5%',
         marginRight: '10%'
     },

@@ -12,7 +12,7 @@ import {
     KeyboardAvoidingView,
     TouchableOpacity
 } from 'react-native';
-import { Button, Header, Icon, Tab, Text, LinearProgress  } from 'react-native-elements';
+import { Button, Header, Icon, Tab, Text, LinearProgress } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TabItem } from './TabItemComponent';
 import ControlContainer from './ControlContainer';
@@ -303,7 +303,7 @@ class FormularioDinamico extends Component<Props, State> {
         };
 
         const TabItems = getPagesBridge().map((pageBridge, index) => (
-            <TabItem key={index} title={pageBridge.property('title')} app={this.state.app}/>
+            <TabItem key={index} title={pageBridge.property('title')} app={this.state.app} />
         ));
 
         let FooterButtons: JSX.Element[] = [];
@@ -318,7 +318,7 @@ class FormularioDinamico extends Component<Props, State> {
                     titleStyle={{ fontSize: 12 }}
                     disabled={this.state.loading}
                     buttonStyle={{ backgroundColor: this.state.app === 'HSE' ? '#FDAE01' : this.state.app === 'Producción' ? '#55b25f' : '#cbcbcb' }}
-                    disabledStyle={{backgroundColor: 'transparent'}}
+                    disabledStyle={{ backgroundColor: 'transparent' }}
                     icon={<Icon type="material" name="delete" color="white" />}
                     onPress={() => {
                         deleteDocumento(Documento._id);
@@ -333,7 +333,7 @@ class FormularioDinamico extends Component<Props, State> {
                     iconPosition="top"
                     titleStyle={{ fontSize: 12 }}
                     buttonStyle={{ backgroundColor: this.state.app === 'HSE' ? '#FDAE01' : this.state.app === 'Producción' ? '#55b25f' : '#cbcbcb' }}
-                    disabledStyle={{backgroundColor: 'transparent'}}
+                    disabledStyle={{ backgroundColor: 'transparent' }}
                     icon={<Icon type="material" name="cancel" color="white" />}
                     onPress={() => {
                         // changeStatusDocumento(Documento._id, DocumentoStatus.draft);
@@ -350,7 +350,7 @@ class FormularioDinamico extends Component<Props, State> {
                     disabled={this.state.loading}
                     titleStyle={{ fontSize: 12 }}
                     buttonStyle={{ backgroundColor: this.state.app === 'HSE' ? '#FDAE01' : this.state.app === 'Producción' ? '#55b25f' : '#cbcbcb' }}
-                    disabledStyle={{backgroundColor: 'transparent'}}
+                    disabledStyle={{ backgroundColor: 'transparent' }}
                     icon={<Icon type="material" name="send" color="white" />}
                     onPress={() => {
                         let messages =
@@ -396,19 +396,22 @@ class FormularioDinamico extends Component<Props, State> {
                         backgroundColor: this.state.app === 'HSE' ? '#FDAE01' : this.state.app === 'Producción' ? '#55b25f' : '#cbcbcb'
                     }}
                     leftComponent={
-                        <TouchableOpacity
-                            onPress={() => {
-                                deleteDocumento(Documento._id);
-                                navigation.goBack();
-                            }}
-                        >
-                            <Icon
-                                name="arrow-left"
-                                type="fontisto"
-                                color="#FFFFFF"
-                                size={16}
-                            />
-                        </TouchableOpacity>
+                        <View style={styles.containerHeader}>
+                            <TouchableOpacity
+                                style={styles.headergoBack}
+                                onPress={() => {
+                                    deleteDocumento(Documento._id);
+                                    navigation.goBack();
+                                }}
+                            >
+                                <Icon
+                                    name="arrow-left"
+                                    type="fontisto"
+                                    color="#FFFFFF"
+                                    size={16}
+                                />
+                            </TouchableOpacity>
+                        </View>
                     }
                     centerComponent={
                         <View style={styles.containerTitle}>
@@ -458,7 +461,7 @@ class FormularioDinamico extends Component<Props, State> {
                     </ScrollView>
                     {
                         this.state.loading && (
-                            <LinearProgress color="primary" /> 
+                            <LinearProgress color="primary" />
                         )
                     }
                     <View style={{
@@ -521,7 +524,13 @@ const styles = StyleSheet.create({
     },
     containerHeader: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        width: '400%'
+    },
+    headergoBack: {
+        marginTop: 5,
+        marginLeft: '5%',
+        marginRight: '10%'
     },
     safeContainer: {
         flex: 1,
